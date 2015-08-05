@@ -21,8 +21,8 @@ import android.view.MotionEvent;
 
 import org.heaven7.scrap.annotation.CalledByFramework;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * the group event callback of activity.
@@ -37,7 +37,7 @@ public final class ActivityEventCallbackGroup implements IActivityEventCallback 
 	private IActivityEventCallback mLastEventListener;
 	
 	public ActivityEventCallbackGroup() {
-		mListeners = new ArrayList<IActivityEventCallback>();
+		mListeners = new CopyOnWriteArrayList<IActivityEventCallback>();
 	}
 	
 	public void clear(){

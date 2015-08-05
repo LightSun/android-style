@@ -56,7 +56,16 @@ public class EntryScrapView extends CommonView {
     }
 
     @Override
+    protected void onDetach() {
+        super.onDetach();
+        showToast("EntryScrapView is detached!");
+    }
+
+    @Override
     protected void onAttach() {
+        //clear animation the previos set
+        ScrapHelper.setAnimateExecutor(null);
+
        final ViewHelper helper = getViewHelper();
         helper.setText(R.id.tv_title,"Scrap_Demos").setOnClickListener(R.id.iv_back, new View.OnClickListener() {
             @Override
@@ -117,6 +126,7 @@ public class EntryScrapView extends CommonView {
             }
         }
     };
+    // here use animator to perform animation between two ScrapViews.
     private AnimateExecutor animateExecutor = new AnimateExecutor() {
         @Override//use animator
         protected AnimateCategoryType getType(boolean enter, BaseScrapView previous, BaseScrapView current) {

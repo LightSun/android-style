@@ -78,7 +78,7 @@ public class TestLifeCycleScrapView extends CommonView {
                 ScrapLog.i("callback  onActivitySaveInstanceState","");
             }
             @Override
-            public void OnActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+            public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
                 ScrapLog.i("callback  OnActivityResult","");
             }
             //....etc methods

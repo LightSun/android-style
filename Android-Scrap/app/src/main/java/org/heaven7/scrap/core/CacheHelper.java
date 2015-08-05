@@ -52,7 +52,20 @@ import java.util.NoSuchElementException;
 	
 	public CacheHelper() {
 		mCachedViewMap = new HashMap<String, BaseScrapView>();
-		mViewStack = new ExpandArrayList2<BaseScrapView>();
+		mViewStack = new ExpandArrayList2<BaseScrapView>(){
+			@Override
+			public boolean add(BaseScrapView baseScrapView) {
+				if(!baseScrapView.isInBackStack())
+				    baseScrapView.setInBackStack(true);
+				return super.add(baseScrapView);
+			}
+			@Override
+			public void add(int index, BaseScrapView baseScrapView) {
+				if(!baseScrapView.isInBackStack())
+					baseScrapView.setInBackStack(true);
+				super.add(index, baseScrapView);
+			}
+		};
 		// set Comparator to prevent the same class
 		mViewStack.setComparator(DEFAULT_COMPARATOR);
 		mViewStack.setMode(ArrayList2.ExpandArrayList2.Mode.ClearPrevious);
@@ -161,7 +174,7 @@ import java.util.NoSuchElementException;
      * @param before  true to make the view before referencedView.false to after it.
      * @throws NoSuchElementException if the referencedView isn't in stack.
      */
-	public void addToStack(Class<? extends BaseScrapView> referencedClass, BaseScrapView target,
+	/*public*/ void addToStack(Class<? extends BaseScrapView> referencedClass, BaseScrapView target,
 			boolean before) {
 		//create a simulate BaseScrapView to indexOf
 		BaseScrapView referencedView = Reflector.from(referencedClass).constructor(Context.class)

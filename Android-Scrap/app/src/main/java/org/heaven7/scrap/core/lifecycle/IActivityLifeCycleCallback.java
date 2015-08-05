@@ -46,11 +46,11 @@ public interface IActivityLifeCycleCallback {
 	
 	void onActivityUserLeaveHint(Activity activity);
 	
-	void OnActivityResult(Activity activity, int requestCode, int resultCode,
+	void onActivityResult(Activity activity, int requestCode, int resultCode,
 						  Intent data);
 	
-	void OnActivityLowMemory(Activity activity);
+	void onActivityLowMemory(Activity activity);
 	
-	void OnActivityWindowFocusChanged(Activity activity, boolean hasFocus);
+	void onActivityWindowFocusChanged(Activity activity, boolean hasFocus);
 	
 }

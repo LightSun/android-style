@@ -214,7 +214,7 @@ public final class Transaction {
 	 * @param target the target view to add back stack.
 	 *  @throws NoSuchElementException if the anotherView  of another class can't find.
 	 */
-	public Transaction addBackBeforeAnother(Class<? extends BaseScrapView> another,BaseScrapView target) {
+	/*imdeterminate*/ Transaction addBackBeforeAnother(Class<? extends BaseScrapView> another,BaseScrapView target) {
 		if (target == null)
 			throw new NullPointerException();
 		if(mLastView != target)

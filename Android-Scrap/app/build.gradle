@@ -8,7 +8,7 @@ version = "1.0"
 def siteUrl = 'https://github.com/LightSun/android-scrap'    // project homepage
 def gitUrl = 'https://github.com/LightSun/android-scrap.git' // project git
 
-group = "com.heaven7.scrap"
+group = "org.heaven7.scrap"
 
 // default have
 android {
@@ -97,7 +97,7 @@ bintray {
     configurations = ['archives']
     pkg {
         repo = "maven"
-        name = "lesscode"                                                 // #CONFIG# project name in jcenter
+        name = "android-scrap"                                                 // #CONFIG# project name in jcenter
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]

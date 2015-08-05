@@ -58,7 +58,6 @@ public class ContainerActivity extends Activity{
 		ActivityController.get().attach(this, top, middle, bottom, savedInstanceState);
 		ActivityController.get().getLifeCycleDispatcher()
 		              .dispatchActivityOnCreate(this, savedInstanceState);
-		sendBroadcastReceiver(ScrapConstant.ACTION_ACTIVITY_ON_CREATE, savedInstanceState);
 	}
 	/** @return true if you want to use your self Layout.not use the default. */
 	protected boolean useSelfLayout(){
@@ -77,42 +76,36 @@ public class ContainerActivity extends Activity{
 		super.onPostCreate(savedInstanceState);
 		ActivityController.get().getLifeCycleDispatcher()
 		     .dispatchActivityOnPostCreate(this, savedInstanceState);
-		sendBroadcastReceiver(ScrapConstant.ACTION_ACTIVITY_ON_POST_CREATE,savedInstanceState);
 	}
 	@Override
 	protected void onStart() {
 		super.onStart();
 		ActivityController.get().getLifeCycleDispatcher()
 		     .dispatchActivityOnStart(this);
-		sendBroadcastReceiver(ScrapConstant.ACTION_ACTIVITY_ON_START);
 	}
 	@Override
 	protected void onResume() {
 		super.onResume();
 		ActivityController.get().getLifeCycleDispatcher()
 	     .dispatchActivityOnResume(this);
-		sendBroadcastReceiver(ScrapConstant.ACTION_ACTIVITY_ON_RESUME);
 	}
 	@Override
 	protected void onPause() {
 		super.onPause();
 		ActivityController.get().getLifeCycleDispatcher()
 	     .dispatchActivityOnPause(this);
-		sendBroadcastReceiver(ScrapConstant.ACTION_ACTIVITY_ON_PAUSE);
 	}
 	@Override
 	protected void onStop() {
 		super.onStop();
 		ActivityController.get().getLifeCycleDispatcher()
 	     .dispatchActivityOnStop(this);
-		sendBroadcastReceiver(ScrapConstant.ACTION_ACTIVITY_ON_STOP);
 	}
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		ActivityController.get().getLifeCycleDispatcher()
 	     .dispatchActivityOnDestroy(this);
-		sendBroadcastReceiver(ScrapConstant.ACTION_ACTIVITY_ON_DESTROY);
 	}
 	
 	@Override
@@ -214,20 +207,5 @@ public class ContainerActivity extends Activity{
 	public void finish() {
 		super.finish();
 		ActivityController.get().attach(null,null,null,null,null);
-	}
-
-	/**
-	 *  send receive intent with the action and {@link ScrapConstant#CATEGORY_SCRAP}
-	 * @param action
-	 */
-	private void sendBroadcastReceiver(String action){
-		sendBroadcastReceiver(action,null);
-	}
-	private void sendBroadcastReceiver(String action,Bundle bundle){
-		Intent intent = new Intent(action).addCategory(ScrapConstant.CATEGORY_SCRAP);
-		if(bundle!=null){
-			intent.putExtra(ScrapConstant.KEY_BUNDLE,bundle);
-		}
-		sendBroadcast(intent);
 	}
 }

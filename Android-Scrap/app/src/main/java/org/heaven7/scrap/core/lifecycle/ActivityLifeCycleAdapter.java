@@ -81,18 +81,18 @@ public  class ActivityLifeCycleAdapter implements IActivityLifeCycleCallback {
 	}
 
 	@Override
-	public void OnActivityResult(Activity activity, int requestCode,
+	public void onActivityResult(Activity activity, int requestCode,
 			int resultCode, Intent data) {
 		
 	}
 
 	@Override
-	public void OnActivityLowMemory(Activity activity) {
+	public void onActivityLowMemory(Activity activity) {
 		
 	}
 
 	@Override
-	public void OnActivityWindowFocusChanged(Activity activity, boolean hasFocus) {
+	public void onActivityWindowFocusChanged(Activity activity, boolean hasFocus) {
 		
 	}
 	

@@ -22,26 +22,24 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 
 import org.heaven7.scrap.annotation.CalledByFramework;
-
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import org.heaven7.scrap.util.CopyOnWriteArray;
 
 public final class ActivityLifeCycleDispatcher{
 
-	private final List<IActivityLifeCycleCallback> mCallbacks ;
+	private final CopyOnWriteArray<IActivityLifeCycleCallback> mCallbacks ;
 	
 	public ActivityLifeCycleDispatcher() {
-		mCallbacks = new CopyOnWriteArrayList<IActivityLifeCycleCallback>();
+		mCallbacks = new CopyOnWriteArray<IActivityLifeCycleCallback>();
 	}
 	
 	public void registerActivityLifeCycleCallback(IActivityLifeCycleCallback...callbacks){
-		List<IActivityLifeCycleCallback> mCallbacks = this.mCallbacks;
+		CopyOnWriteArray<IActivityLifeCycleCallback> mCallbacks = this.mCallbacks;
 		for(IActivityLifeCycleCallback callback : callbacks){
 			mCallbacks.add(callback);
 		}
 	}
 	public void unregisterActivityLifeCycleCallback(IActivityLifeCycleCallback...callbacks){
-		List<IActivityLifeCycleCallback> mCallbacks = this.mCallbacks;
+		CopyOnWriteArray<IActivityLifeCycleCallback> mCallbacks = this.mCallbacks;
 		for(IActivityLifeCycleCallback callback : callbacks){
 			mCallbacks.remove(callback);
 		}
@@ -54,105 +52,219 @@ public final class ActivityLifeCycleDispatcher{
 	//==============================//
 	@CalledByFramework
 	public void dispatchActivityOnCreate(Activity activity,Bundle savedInstanceState){
-		List<IActivityLifeCycleCallback> mCallbacks = this.mCallbacks;
-		for(IActivityLifeCycleCallback callback : mCallbacks){
-			callback.onActivityCreate(activity, savedInstanceState);
+		//activity.getWindow().getDecorView().getViewTreeObserver()
+		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
+		if (listeners != null && listeners.size() > 0) {
+			CopyOnWriteArray.Access<IActivityLifeCycleCallback> access = listeners.start();
+			try {
+				int count = access.size();
+				for (int i = 0; i < count; i++) {
+					access.get(i).onActivityCreate(activity,savedInstanceState);
+				}
+			} finally {
+				listeners.end();
+			}
 		}
 	}
 	@CalledByFramework
 	public void dispatchActivityOnPostCreate(Activity activity,Bundle savedInstanceState){
-		List<IActivityLifeCycleCallback> mCallbacks = this.mCallbacks;
-		for(IActivityLifeCycleCallback callback : mCallbacks){
-			callback.onActivityPostCreate(activity, savedInstanceState);
+
+		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
+		if (listeners != null && listeners.size() > 0) {
+			CopyOnWriteArray.Access<IActivityLifeCycleCallback> access = listeners.start();
+			try {
+				int count = access.size();
+				for (int i = 0; i < count; i++) {
+					access.get(i).onActivityPostCreate(activity, savedInstanceState);
+				}
+			} finally {
+				listeners.end();
+			}
 		}
 	}
 	@CalledByFramework
 	public void dispatchActivityOnStart(Activity activity) {
-		List<IActivityLifeCycleCallback> mCallbacks = this.mCallbacks;
-		for(IActivityLifeCycleCallback callback : mCallbacks){
-			callback.onActivityStart(activity);
+		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
+		if (listeners != null && listeners.size() > 0) {
+			CopyOnWriteArray.Access<IActivityLifeCycleCallback> access = listeners.start();
+			try {
+				int count = access.size();
+				for (int i = 0; i < count; i++) {
+					access.get(i).onActivityStart(activity);
+				}
+			} finally {
+				listeners.end();
+			}
 		}
 	}
 	@CalledByFramework
 	public void dispatchActivityOnResume(Activity activity) {
-		List<IActivityLifeCycleCallback> mCallbacks = this.mCallbacks;
-		for(IActivityLifeCycleCallback callback : mCallbacks){
-			callback.onActivityResume(activity);
+		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
+		if (listeners != null && listeners.size() > 0) {
+			CopyOnWriteArray.Access<IActivityLifeCycleCallback> access = listeners.start();
+			try {
+				int count = access.size();
+				for (int i = 0; i < count; i++) {
+					access.get(i).onActivityResume(activity);
+				}
+			} finally {
+				listeners.end();
+			}
 		}
 	}
 	@CalledByFramework
 	public void dispatchActivityOnPause(Activity activity) {
-		List<IActivityLifeCycleCallback> mCallbacks = this.mCallbacks;
-		for(IActivityLifeCycleCallback callback : mCallbacks){
-			callback.onActivityPause(activity);
+		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
+		if (listeners != null && listeners.size() > 0) {
+			CopyOnWriteArray.Access<IActivityLifeCycleCallback> access = listeners.start();
+			try {
+				int count = access.size();
+				for (int i = 0; i < count; i++) {
+					access.get(i).onActivityPause(activity);
+				}
+			} finally {
+				listeners.end();
+			}
 		}
 	}
 	@CalledByFramework
 	public void dispatchActivityOnStop(Activity activity) {
-		List<IActivityLifeCycleCallback> mCallbacks = this.mCallbacks;
-		for(IActivityLifeCycleCallback callback : mCallbacks){
-			callback.onActivityStop(activity);
+		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
+		if (listeners != null && listeners.size() > 0) {
+			CopyOnWriteArray.Access<IActivityLifeCycleCallback> access = listeners.start();
+			try {
+				int count = access.size();
+				for (int i = 0; i < count; i++) {
+					access.get(i).onActivityStop(activity);
+				}
+			} finally {
+				listeners.end();
+			}
 		}
 	}
 	@CalledByFramework
 	public void dispatchActivityOnDestroy(Activity activity) {
-		List<IActivityLifeCycleCallback> mCallbacks = this.mCallbacks;
-		for(IActivityLifeCycleCallback callback : mCallbacks){
-			callback.onActivityDestroy(activity);
+		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
+		if (listeners != null && listeners.size() > 0) {
+			CopyOnWriteArray.Access<IActivityLifeCycleCallback> access = listeners.start();
+			try {
+				int count = access.size();
+				for (int i = 0; i < count; i++) {
+					access.get(i).onActivityDestroy(activity);
+				}
+			} finally {
+				listeners.end();
+			}
 		}
 	}
 	@CalledByFramework
 	public void dispatchActivityOnConfigurationChanged(Activity activity, Configuration newConfig) {
-		List<IActivityLifeCycleCallback> mCallbacks = this.mCallbacks;
-		for(IActivityLifeCycleCallback callback : mCallbacks){
-			callback.onActivityConfigurationChanged(activity,newConfig);
+		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
+		if (listeners != null && listeners.size() > 0) {
+			CopyOnWriteArray.Access<IActivityLifeCycleCallback> access = listeners.start();
+			try {
+				int count = access.size();
+				for (int i = 0; i < count; i++) {
+					access.get(i).onActivityConfigurationChanged(activity, newConfig);
+				}
+			} finally {
+				listeners.end();
+			}
 		}
 	}
 	@CalledByFramework
 	public void dispatchActivityOnSaveInstanceState(Activity activity,
 			Bundle outState) {
-		List<IActivityLifeCycleCallback> mCallbacks = this.mCallbacks;
-		for(IActivityLifeCycleCallback callback : mCallbacks){
-			callback.onActivitySaveInstanceState(activity,outState);
+		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
+		if (listeners != null && listeners.size() > 0) {
+			CopyOnWriteArray.Access<IActivityLifeCycleCallback> access = listeners.start();
+			try {
+				int count = access.size();
+				for (int i = 0; i < count; i++) {
+					access.get(i).onActivitySaveInstanceState(activity, outState);
+				}
+			} finally {
+				listeners.end();
+			}
 		}
 	}
 	@CalledByFramework
 	public void dispatchActivityOnRestoreInstanceState(
 			Activity activity, Bundle savedInstanceState) {
-		List<IActivityLifeCycleCallback> mCallbacks = this.mCallbacks;
-		for(IActivityLifeCycleCallback callback : mCallbacks){
-			callback.onActivityRestoreInstanceState(activity,savedInstanceState);
+		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
+		if (listeners != null && listeners.size() > 0) {
+			CopyOnWriteArray.Access<IActivityLifeCycleCallback> access = listeners.start();
+			try {
+				int count = access.size();
+				for (int i = 0; i < count; i++) {
+					access.get(i).onActivityRestoreInstanceState(activity, savedInstanceState);
+				}
+			} finally {
+				listeners.end();
+			}
 		}
 	}
 	@CalledByFramework
 	public void dispatchActivityOnUserLeaveHint(Activity activity) {
-		List<IActivityLifeCycleCallback> mCallbacks = this.mCallbacks;
-		for(IActivityLifeCycleCallback callback : mCallbacks){
-			callback.onActivityUserLeaveHint(activity);
+		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
+		if (listeners != null && listeners.size() > 0) {
+			CopyOnWriteArray.Access<IActivityLifeCycleCallback> access = listeners.start();
+			try {
+				int count = access.size();
+				for (int i = 0; i < count; i++) {
+					access.get(i).onActivityUserLeaveHint(activity);
+				}
+			} finally {
+				listeners.end();
+			}
 		}
 	}
 	@CalledByFramework
 	public void dispatchActivityOnActivityResult(Activity activity,
 			int requestCode, int resultCode, Intent data) {
-		List<IActivityLifeCycleCallback> mCallbacks = this.mCallbacks;
-		for(IActivityLifeCycleCallback callback : mCallbacks){
-			callback.OnActivityResult(activity,requestCode,resultCode,data);
+		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
+		if (listeners != null && listeners.size() > 0) {
+			CopyOnWriteArray.Access<IActivityLifeCycleCallback> access = listeners.start();
+			try {
+				int count = access.size();
+				for (int i = 0; i < count; i++) {
+					access.get(i).onActivityResult(activity, requestCode, resultCode, data);
+				}
+			} finally {
+				listeners.end();
+			}
 		}
 	}
 	@CalledByFramework
 	public void dispatchActivityOnLowMemory(Activity activity) {
-		List<IActivityLifeCycleCallback> mCallbacks = this.mCallbacks;
-		for(IActivityLifeCycleCallback callback : mCallbacks){
-			callback.OnActivityLowMemory(activity);
+		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
+		if (listeners != null && listeners.size() > 0) {
+			CopyOnWriteArray.Access<IActivityLifeCycleCallback> access = listeners.start();
+			try {
+				int count = access.size();
+				for (int i = 0; i < count; i++) {
+					access.get(i).onActivityLowMemory(activity);
+				}
+			} finally {
+				listeners.end();
+			}
 		}
 	}
 
 	@CalledByFramework
 	public void dispatchActivityOnWindowFocusChanged(
 			Activity activity, boolean hasFocus) {
-		List<IActivityLifeCycleCallback> mCallbacks = this.mCallbacks;
-		for(IActivityLifeCycleCallback callback : mCallbacks){
-			callback.OnActivityWindowFocusChanged(activity,hasFocus);
+		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
+		if (listeners != null && listeners.size() > 0) {
+			CopyOnWriteArray.Access<IActivityLifeCycleCallback> access = listeners.start();
+			try {
+				int count = access.size();
+				for (int i = 0; i < count; i++) {
+					access.get(i).onActivityWindowFocusChanged(activity,hasFocus);
+				}
+			} finally {
+				listeners.end();
+			}
 		}
 	}
 	

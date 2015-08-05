@@ -17,10 +17,7 @@
 package org.heaven7.scrap.core;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,6 +25,8 @@ import android.view.View;
 
 import org.heaven7.scrap.annotation.CalledByFramework;
 import org.heaven7.scrap.core.event.IActivityEventCallback;
+import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleAdapter;
+import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
 import org.heaven7.scrap.util.ScrapHelper;
 import org.heaven7.scrap.util.Toaster;
 
@@ -63,7 +62,12 @@ public abstract class BaseScrapView {
 	/** the default back event processor it will be autonomic set by framework */
 	private IBackEventProcessor mDefaultBackEventProcessor;
 
-	private  BroadcastReceiver mLifeCycleReceiver;
+	/** the callback used to same as the Activity's common life cycle */
+	private IActivityLifeCycleCallback mLifecycleCallback;
+
+	/** when set to true , this ScrapView will be stack.
+	 * but if it can be replaced or cleared by another same classname of this.  */
+	private boolean mInBackStack;
 
 	/**
 	 */
@@ -81,55 +85,52 @@ public abstract class BaseScrapView {
 
 	}
 
-	private BroadcastReceiver createLifeCycleReceiver(){
-		return new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				String action = intent.getAction();
-				if(ScrapConstant.ACTION_ACTIVITY_ON_CREATE.equals(action)){
-					onActivityCreate(intent.getBundleExtra(ScrapConstant.KEY_BUNDLE));
-				}else if(ScrapConstant.ACTION_ACTIVITY_ON_POST_CREATE.equals(action)){
-					onActivityPostCreate(intent.getBundleExtra(ScrapConstant.KEY_BUNDLE));
-				}else if(ScrapConstant.ACTION_ACTIVITY_ON_START.equals(action)){
-					onActivityStart();
-				}else if(ScrapConstant.ACTION_ACTIVITY_ON_RESUME.equals(action)){
-					onActivityResume();
-				}else if(ScrapConstant.ACTION_ACTIVITY_ON_PAUSE.equals(action)){
-					onActivityPause();
-				}else if(ScrapConstant.ACTION_ACTIVITY_ON_STOP.equals(action)){
-					onActivityStop();
-				}else if(ScrapConstant.ACTION_ACTIVITY_ON_DESTROY.equals(action)){
-					onActivityDestroy();
-				}
-			}
-		};
-	}
 	/**
 	 * automatic called by framework,when this view is prepared to attach.
 	 */
 	@CalledByFramework("when this abstract view is prepared to attach and before attached!")
 	/*public*/ void registerActivityLifeCycleCallbacks() {
-		if(mLifeCycleReceiver == null)
-			mLifeCycleReceiver = createLifeCycleReceiver();
-		IntentFilter filter = new IntentFilter();
-		filter.addCategory(ScrapConstant.CATEGORY_SCRAP);
-		filter.addAction(ScrapConstant.ACTION_ACTIVITY_ON_CREATE);
-		filter.addAction(ScrapConstant.ACTION_ACTIVITY_ON_POST_CREATE);
-		filter.addAction(ScrapConstant.ACTION_ACTIVITY_ON_START);
-		filter.addAction(ScrapConstant.ACTION_ACTIVITY_ON_RESUME);
-		filter.addAction(ScrapConstant.ACTION_ACTIVITY_ON_PAUSE);
-		filter.addAction(ScrapConstant.ACTION_ACTIVITY_ON_STOP);
-		filter.addAction(ScrapConstant.ACTION_ACTIVITY_ON_DESTROY);
-		getContext().registerReceiver(mLifeCycleReceiver, filter);
+		if(mLifecycleCallback == null) {
+			mLifecycleCallback = new ActivityLifeCycleAdapter() {
+				@Override
+				public void onActivityCreate(Activity activity, Bundle savedInstanceState) {
+					BaseScrapView.this.onActivityCreate(savedInstanceState);
+				}
+
+				public void onActivityPostCreate(Activity activity, Bundle savedInstanceState) {
+					BaseScrapView.this.onActivityPostCreate(savedInstanceState);
+				}
+
+				public void onActivityStart(Activity activity) {
+					BaseScrapView.this.onActivityStart();
+				}
+
+				public void onActivityResume(Activity activity) {
+					BaseScrapView.this.onActivityResume();
+				}
+
+				public void onActivityPause(Activity activity) {
+					BaseScrapView.this.onActivityPause();
+				}
+
+				public void onActivityStop(Activity activity) {
+					BaseScrapView.this.onActivityStop();
+				}
+
+				public void onActivityDestroy(Activity activity) {
+					BaseScrapView.this.onActivityDestroy();
+				}
+			};
+		}
+		ScrapHelper.registerActivityLifeCycleCallback(mLifecycleCallback);
 	}
 	/**
 	 * automatic called by framework,when this view is prepared to detach.
 	 */
 	@CalledByFramework("when this abstract view is prepared to detach and before detached!")
 	/*public*/ void unregisterActivityLifeCycleCallbacks(){
-		if(mLifeCycleReceiver !=null ) {
-			getContext().unregisterReceiver(mLifeCycleReceiver);
-			mLifeCycleReceiver = null;
+		if(mLifecycleCallback != null) {
+			ScrapHelper.unregisterActivityLifeCycleCallback(mLifecycleCallback);
 		}
 	}
 
@@ -180,6 +181,15 @@ public abstract class BaseScrapView {
 	/** same as {@link View#getResources()} */
 	public Resources getResources(){
 		return getContext().getResources();
+	}
+
+	public boolean isInBackStack() {
+		return mInBackStack;
+	}
+	/** set whether or not in back stack  ,often called by framework*/
+	@CalledByFramework("often")
+	/*public*/ void setInBackStack(boolean mInBackStack) {
+		this.mInBackStack = mInBackStack;
 	}
 
 	/***

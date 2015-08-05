@@ -13,7 +13,6 @@ import org.heaven7.scrap.util.ScrapHelper;
  */
 public class TestVisivilityScrapView extends CommonView {
 
-
     public TestVisivilityScrapView(Context mContext) {
         super(mContext);
     }
