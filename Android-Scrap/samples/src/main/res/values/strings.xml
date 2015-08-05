@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Samples</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="test_back_please_click_back">to test Back event, please click back image or back key.</string>
+    <string name="test_back_please_click_button">to test Back event, please click button to jump to the next.
+    </string>
+    <string name="test_visibility_notice">please click the below three buttons to test the visibility of bottom,
+        b1 is visible , b2 is gone, b3 is toogle.
+    </string>
+
+</resources>
