@@ -207,6 +207,8 @@ public abstract class BaseScrapView {
 	 *  @param  scrap  the position of the view
 	 */
 	protected void replaceView(View view,ScrapPosition scrap){
+		if(view == null)
+			throw new NullPointerException("view cann't be null");
         mViewProcessor.replaceView(view, scrap);
 	}
 	@CalledByFramework

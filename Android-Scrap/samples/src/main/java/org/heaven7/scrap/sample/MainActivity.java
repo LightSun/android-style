@@ -15,7 +15,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //init volley
+        //init volley, because  i use Volley to load image.
         if(!init) {
             RequestManager.init(getApplicationContext());
         }
