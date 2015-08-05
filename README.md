@@ -16,7 +16,7 @@ but current you you must declare another activity as the entry activity.
   1.0  this is first import project.
 
 ## Demo
-in model android-scrap/sample.
+in model [android-scrap/sample](https://github.com/LightSun/android-scrap/tree/master/Android-Scrap/samples).
 
 ``` java
 //[1], want jump to target ScrapView ( child of BaseScrapView)
