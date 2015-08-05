@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import org.heaven7.scrap.annotation.CalledByFramework;
 import org.heaven7.scrap.core.anim.AnimateExecutor;
 import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleAdapter;
+import org.heaven7.scrap.util.ArrayList2;
 import org.heaven7.scrap.util.Reflector;
 
 import java.lang.ref.WeakReference;
@@ -58,7 +59,7 @@ import java.util.List;
  */
 public final class ActivityViewController implements Transaction.IJumper {
 
-    static boolean sDebug = true;
+    static boolean sDebug = false;
     /**
      * the top container of activity
      */
@@ -558,19 +559,28 @@ public final class ActivityViewController implements Transaction.IJumper {
 	/* package */ boolean onBackPressed() {
         // current a bug occoured. if scrapview first is in back stack. when back to it.
         // removed it from backstack.
-        //second it will not in back stack.
+        //second it will not in back stack. already fixed it
         if(sDebug){
             System.out.println(mCacheHelper.getStackList());
         }
         BaseScrapView view = mCacheHelper.pollStackTail();
+        if(sDebug){
+            System.out.println("tail 1: "+view);
+        }
         if (view != null && view == mCurrentView) {
             detachTarget(mCurrentView);
             mCurrentView = null;
             view = mCacheHelper.pollStackTail();
+            if(sDebug){
+                System.out.println("tail 2: "+view);
+            }
         }
         if (view != null) {
-            if(view.isInBackStack())
+            if(view.isInBackStack()) {
+                //here ignore the mode
+                mCacheHelper.mViewStack.setMode(ArrayList2.ExpandArrayList2.Mode.Normal);
                 mCacheHelper.addToStackTop(view);
+            }
             jumpTo(view);
             return true;
         }

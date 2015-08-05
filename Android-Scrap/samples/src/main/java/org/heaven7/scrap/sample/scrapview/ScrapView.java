@@ -76,4 +76,11 @@ public class ScrapView extends CommonView {
     protected void onDetach() {
         showToast("ScrapView "+id+ " is detached!");
     }
+
+    @Override
+    public String toString() {
+        return "ScrapView{" +
+                "id=" + id +
+                '}';
+    }
 }
