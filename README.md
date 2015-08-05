@@ -66,7 +66,7 @@ in model [android-scrap/sample](https://github.com/LightSun/android-scrap/tree/m
         }
     };
     
-     //set animate executor
+     //set animate executor (it used as the global)
      ScrapHelper.setAnimateExecutor(animateExecutor);
      
      //[4], event of activity 
