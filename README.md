@@ -137,7 +137,8 @@ in model [android-scrap/sample](https://github.com/LightSun/android-scrap/tree/m
 
 ## License
 
-    Copyright 2015   heaven7(donshine723@gmail.com)
+    Copyright 2015   
+                    heaven7(donshine723@gmail.com)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
