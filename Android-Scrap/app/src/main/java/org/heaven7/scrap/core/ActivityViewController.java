@@ -580,6 +580,7 @@ public final class ActivityViewController implements Transaction.IJumper {
                 //here ignore the mode
                 mCacheHelper.mViewStack.setMode(ArrayList2.ExpandArrayList2.Mode.Normal);
                 mCacheHelper.addToStackTop(view);
+                mCacheHelper.resetStackSetting();
             }
             jumpTo(view);
             return true;
