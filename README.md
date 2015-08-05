@@ -2,6 +2,7 @@
 this is one Activity Framework named android-scrap, a little like fragment.  
 it helps you to reduce number of activities  and avoid some problems of fragment.
 but current you you must declare another activity as the entry activity.
+The module 'app' is the library of scrap. and 'sample' is the demo.
 
 ## Features
 - One Activity
@@ -9,6 +10,7 @@ but current you you must declare another activity as the entry activity.
 - Support cache BaseScrapView and add it to the back stack.
 - Support listen to Activity's Lifecycle and event.
 - Support fast set properties of view ,named 'ViewHelper'.
+- Integreted google-Volley and expand it to support  file upload and circle/round image. and you can see it in demo.
 - Integrated QuickAdapter and multi item Adapter. based on [JoanZapata/base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper) and thanks for him.
 - the more to see in demo or source code
 
