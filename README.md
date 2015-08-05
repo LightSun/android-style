@@ -2,6 +2,7 @@
 this is one Activity Framework named android-scrap, a little like fragment.  
 it helps you to reduce number of activities  and avoid some problems of fragment.
 but current you you must declare another activity as the entry activity.
+The module 'app' is the library of scrap. and 'sample' is the demo.
 
 ## Features
 - One Activity
@@ -9,7 +10,8 @@ but current you you must declare another activity as the entry activity.
 - Support cache BaseScrapView and add it to the back stack.
 - Support listen to Activity's Lifecycle and event.
 - Support fast set properties of view ,named 'ViewHelper'.
-- Integrated QuickAdapter and multi item Adapter. based on [JoanZapata/base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper) and thanks for him.
+- Integreted google-Volley and expand it to support  file upload and circle/round image. and you can see it in demo.
+- Integrated QuickAdapter and expand it to support multi item Adapter. based on [JoanZapata/base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper) and thanks for him.
 - the more to see in demo or source code
 
 ## Changelog
@@ -27,6 +29,8 @@ but current you you must declare another activity as the entry activity.
    
 ## Demo
 in model [android-scrap/sample](https://github.com/LightSun/android-scrap/tree/master/Android-Scrap/samples).
+
+<img src="1.png"/>
 
 ``` java
 //[1], want jump to target ScrapView ( child of BaseScrapView)
@@ -62,7 +66,7 @@ in model [android-scrap/sample](https://github.com/LightSun/android-scrap/tree/m
         }
     };
     
-     //set animate executor
+     //set animate executor (it used as the global)
      ScrapHelper.setAnimateExecutor(animateExecutor);
      
      //[4], event of activity 
@@ -135,7 +139,8 @@ in model [android-scrap/sample](https://github.com/LightSun/android-scrap/tree/m
 
 ## License
 
-    Copyright 2011, 2012 Chris Banes
+    Copyright 2015   
+                    heaven7(donshine723@gmail.com)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
