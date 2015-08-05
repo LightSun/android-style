@@ -28,6 +28,8 @@ but current you you must declare another activity as the entry activity.
 ## Demo
 in model [android-scrap/sample](https://github.com/LightSun/android-scrap/tree/master/Android-Scrap/samples).
 
+<img src="1.png"/>
+
 ``` java
 //[1], want jump to target ScrapView ( child of BaseScrapView)
  ScrapHelper.jumpTo(new EntryScrapView(MainActivity.this));
