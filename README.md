@@ -8,7 +8,7 @@ but current you you must declare another activity as the entry activity.
 - Support animation between two children of the 'BaseScrapView'.
 - Support cache BaseScrapView and add it to the back stack.
 - Support listen to Activity's Lifecycle and event.
-- Support fast set properties of view ,named 'ViewHlper'.
+- Support fast set properties of view ,named 'ViewHelper'.
 - Integrated QuickAdapter and multi item Adapter. based on [JoanZapata/base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper) and thanks for him.
 - the more to see in demo or source code
 
@@ -80,7 +80,46 @@ in model [android-scrap/sample](https://github.com/LightSun/android-scrap/tree/m
         // unregister it.
         ScrapHelper.registerActivityEventCallback(callback);
         
-        //[5], ....etc in demos
+        //[5],QuickAdapter and ViewHelper. in a child of 'BaseScrapView'
+         @Override
+    protected void onAttach() {
+        super.onAttach();
+        showToast("CommonView is attached");
+        getViewHelper().setOnClickListener(R.id.iv_back, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        }).setOnClickListener(R.id.bt_1, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showToast("button1 was clicked");
+            }
+        }).setOnClickListener(R.id.bt_2, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showToast("button2 was clicked");
+            }
+        }).setOnClickListener(R.id.bt_3, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showToast("button3 was clicked");
+            }
+        });
+        //set the list view's data
+        //use QuickAdapter to fast set adapter.
+        addGirlDatas();
+        getViewHelper().setAdapter(R.id.lv, new QuickAdapter<GirlData>(R.layout.item_girl,mGirlData) {
+            @Override
+            protected void convert(Context context, int position, ViewHelper viewHelper, GirlData item) {
+                   viewHelper.setText(R.id.tv,item.name);
+                   viewHelper.setImageUrl(R.id.eniv, item.imageUrl, new ImageParam.Builder()
+                           .placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).circle().create());
+            }
+        });
+    }
+        
+        //[6], ....etc in demos
 
 ```
 
