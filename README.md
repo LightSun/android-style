@@ -14,7 +14,17 @@ but current you you must declare another activity as the entry activity.
 
 ## Changelog
   1.0  this is first import project.
+  
+## About me
+   * heaven7(donshine723@gmail.com or 978136772@qq.com)
+   * email: donshine723@gmail.com   
+   
+## issue
+   * if you have some problems while using this framework or have bug.please tell me!
 
+### How to use 
+   in gradle:  wait...
+   
 ## Demo
 in model [android-scrap/sample](https://github.com/LightSun/android-scrap/tree/master/Android-Scrap/samples).
 
