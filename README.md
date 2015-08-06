@@ -8,6 +8,7 @@ The module 'app' is the library of scrap. and 'sample' is the demo.
 - One Activity
 - Support animation between two children of the 'BaseScrapView'.
 - Support cache BaseScrapView and add it to the back stack.
+- Support multi modes of back stack.
 - Support listen to Activity's Lifecycle and event.
 - Support fast set properties of view ,named 'ViewHelper'.
 - Integreted google-Volley and expand it to support  file upload and circle/round image. and you can see it in demo.
@@ -22,7 +23,8 @@ The module 'app' is the library of scrap. and 'sample' is the demo.
    * email: donshine723@gmail.com or 978136772@qq.com   
    
 ## issue
-   * if you have some problems while using this framework or have bug.please tell me!
+   * if you have a good suggestion  about this, please tell me. Thanks! 
+   * This is just a beginning, may have bugs ,  so if you have any question , please tell me . i will do my best to resolve it. Thanks !
 
 ### How to use 
    in gradle:  wait...
