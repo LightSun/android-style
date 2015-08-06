@@ -170,6 +170,15 @@ public final class ActivityViewController implements Transaction.IJumper {
         return this;
     }
 
+    /***
+     * remove the mapping  of key in the cache.
+     * @param key
+     * @return  the mapping value
+     */
+    public BaseScrapView removeCache(String key){
+        return mCacheHelper.removeCacheView(key);
+    }
+
     /**
      * make the BaseScrapView in the cache for reuse.
      *
@@ -182,6 +191,7 @@ public final class ActivityViewController implements Transaction.IJumper {
     }
 
     /**
+     * make the BaseScrapView in the cache for reuse and the
      * default key is the view.getClass().getName()
      */
     public ActivityViewController cache(BaseScrapView view) {

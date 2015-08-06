@@ -79,6 +79,15 @@ public final class Transaction {
 		return this;
 	}
 
+	/***
+	 * remove the mapping  of key in the cache.
+	 * @param key
+	 * @return  the mapping value
+	 */
+	public BaseScrapView removeCache(String key){
+		return mHelper.removeCacheView(key);
+	}
+
 	/**
 	 * @see CacheHelper#cache(String, BaseScrapView)
 	 */

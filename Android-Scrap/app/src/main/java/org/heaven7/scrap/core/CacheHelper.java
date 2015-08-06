@@ -105,6 +105,12 @@ import java.util.NoSuchElementException;
 		return mCachedViewMap.get(key);
 	}
 
+	/** remove the mapping of the key
+	 * @param key  */
+	public BaseScrapView removeCacheView(String key){
+		return mCachedViewMap.remove(key);
+	}
+
 	/**
 	 *  add view to the top of stack. it means it will be first removed from next first back event.
 	 * @param view
