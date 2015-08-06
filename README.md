@@ -23,7 +23,8 @@ The module 'app' is the library of scrap. and 'sample' is the demo.
    * email: donshine723@gmail.com or 978136772@qq.com   
    
 ## issue
-   * if you have some problems while using this framework or have bug.please tell me!
+   * if you have a good suggestion  about this, please tell me. Thanks! 
+   * the is just a beginning, may have bugs ,  so if you have any question , please tell me . i will do my best to resolve it. Thanks !
 
 ### How to use 
    in gradle:  wait...
