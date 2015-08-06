@@ -3,7 +3,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 //indicate this is library' // jecnter 根节点需要添加
 
-version = "1.0"
+version = "1.0.0"
 
 def siteUrl = 'https://github.com/LightSun/android-scrap'    // project homepage
 def gitUrl = 'https://github.com/LightSun/android-scrap.git' // project git

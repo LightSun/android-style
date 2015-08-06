@@ -577,7 +577,7 @@ public final class ActivityViewController implements Transaction.IJumper {
         }
         if (view != null) {
             if(view.isInBackStack()) {
-                //here ignore the mode
+                //here ignore the mode,so first change and restore
                 mCacheHelper.mViewStack.setMode(ArrayList2.ExpandArrayList2.Mode.Normal);
                 mCacheHelper.addToStackTop(view);
                 mCacheHelper.resetStackSetting();

@@ -35,7 +35,8 @@ public final class ActivityLifeCycleDispatcher{
 	public void registerActivityLifeCycleCallback(IActivityLifeCycleCallback...callbacks){
 		CopyOnWriteArray<IActivityLifeCycleCallback> mCallbacks = this.mCallbacks;
 		for(IActivityLifeCycleCallback callback : callbacks){
-			mCallbacks.add(callback);
+			if(!mCallbacks.contains(callback))
+			     mCallbacks.add(callback);
 		}
 	}
 	public void unregisterActivityLifeCycleCallback(IActivityLifeCycleCallback...callbacks){

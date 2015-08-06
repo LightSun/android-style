@@ -71,9 +71,9 @@ public final class Transaction {
 		this.mHelper = mHelper;
 	}
 	
-	/** change the behaviour of the default back stack. 
+	/** change the behaviour of the default back stack.  after call {@link #commit()} the mode will restore.
 	 * @param mode which mode you want to. default is {@link ArrayList2.ExpandArrayList2.Mode#ClearPrevious}
-	 * @see {@link ArrayList2.ExpandArrayList2.Mode} */
+	 * @see ArrayList2.ExpandArrayList2.Mode */
 	public Transaction changeBackStackMode(ArrayList2.ExpandArrayList2.Mode mode){
 		mHelper.mViewStack.setMode(mode);
 		return this;

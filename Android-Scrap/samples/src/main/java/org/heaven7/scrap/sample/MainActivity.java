@@ -17,6 +17,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         //init volley, because  i use Volley to load image.
         if(!init) {
+            init = true;
             RequestManager.init(getApplicationContext());
         }
 
@@ -26,7 +27,7 @@ public class MainActivity extends Activity {
         findViewById(R.id.bt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //jump to the entry. and add it to the back stack's bottom..
+                //jump to the entry. and add it to the back stack's bottom..( just current back stack)
                 ScrapHelper.beginTransaction().addBackAsBottom(new EntryScrapView(MainActivity.this))
                         .jump().commit();
             }
