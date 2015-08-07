@@ -74,7 +74,9 @@ in model [android-scrap/sample](https://github.com/LightSun/android-scrap/tree/m
         }
     };
     
-     //set animate executor (it used as the global if once animateExecutor is null, this will be used! )
+     //set animate executor (it it the global's animate executor, it will be only used if 
+     //        once animateExecutor is null )
+     
      ScrapHelper.setAnimateExecutor(animateExecutor);
      
      //[4], event of activity 
