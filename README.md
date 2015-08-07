@@ -2,11 +2,11 @@
 this is one Activity Framework named android-scrap, a little like fragment.  
 it helps you to reduce number of activities  and avoid some problems of fragment.
 but current you you must declare another activity as the entry activity.
-The module 'app' is the library of scrap. and 'sample' is the demo.
+
 
 ## Features
 - One Activity
-- Support animation between two children of the 'BaseScrapView'.
+- Support animation(Animation or Animator or ViewPropertyAnimator) between two children of the 'BaseScrapView'.
 - Support cache BaseScrapView and add it to the back stack.
 - Support multi modes of back stack.
 - Support listen to Activity's Lifecycle and event.
@@ -16,7 +16,7 @@ The module 'app' is the library of scrap. and 'sample' is the demo.
 - the more to see in demo or source code
 
 ## Changelog
-  1.0  this is first import project.
+  1.0.0  support once animation when you jump, you can use it in Transaction.
   
 ## About me
    * heaven7 
@@ -38,9 +38,15 @@ in model [android-scrap/sample](https://github.com/LightSun/android-scrap/tree/m
 //[1], want jump to target ScrapView ( child of BaseScrapView)
  ScrapHelper.jumpTo(new EntryScrapView(MainActivity.this));
  
-//[2], want cache ,add back stack, and jump 
- ScrapHelper.beginTransaction().cache(new EntryScrapView(MainActivity.this)).addBackAsBottom()
-                        .jump().commit();
+//[2], want cache ,add back stack, and jump , with data and animation 
+//this animate executor only use once . 
+ Bundle b = new Bundle();
+ b.putInt("id",id+1);
+
+ crapHelper.beginTransaction().changeBackStackMode(ArrayList2.ExpandArrayList2.Mode.Normal)
+           .cache(new EntryScrapView(MainActivity.this)).addBackAsTop())
+           .animateExecutor(animateExecutor).withExtras(b).jump().commit();
+
                         
 //[3], animation between two children of the 'BaseScrapView'. 
  // here use animator to perform animation between two ScrapViews.
@@ -68,7 +74,9 @@ in model [android-scrap/sample](https://github.com/LightSun/android-scrap/tree/m
         }
     };
     
-     //set animate executor (it used as the global)
+     //set animate executor (it it the global's animate executor, it will be only used if 
+     //        once animateExecutor is null )
+     
      ScrapHelper.setAnimateExecutor(animateExecutor);
      
      //[4], event of activity 
