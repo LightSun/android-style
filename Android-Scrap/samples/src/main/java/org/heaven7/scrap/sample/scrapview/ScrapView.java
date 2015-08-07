@@ -34,7 +34,7 @@ public class ScrapView extends CommonView {
 
     @Override
     protected void onAttach() {
-        this.id = getBundle()==null ? 0 : getBundle().getInt("id");
+        this.id = getBundle() == null ? 0 : getBundle().getInt("id");
         if(id == 4){
             setIsLastScrapView(true);
         }
