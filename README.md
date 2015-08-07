@@ -6,7 +6,7 @@ The module 'app' is the library of scrap. and 'sample' is the demo.
 
 ## Features
 - One Activity
-- Support animation between two children of the 'BaseScrapView'.
+- Support animation(Animation or Animator or ViewPropertyAnimator) between two children of the 'BaseScrapView'.
 - Support cache BaseScrapView and add it to the back stack.
 - Support multi modes of back stack.
 - Support listen to Activity's Lifecycle and event.
