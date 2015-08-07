@@ -25,6 +25,9 @@ but current you you must declare another activity as the entry activity.
 ## issue
    * if you have a good suggestion  about this, please tell me. Thanks! 
    * This is just a beginning, may have bugs ,  so if you have any question , please tell me . i will do my best to resolve it. Thanks !
+   
+## hope
+i like technology. especially the open-source technology.And pevious i didn't contribute to it caused by i am a little lazy, but now i really want to do some for the open-source. So i hope to share and communicate with the all of you.
 
 ### How to use 
    in gradle:  wait...
