@@ -19,7 +19,7 @@ but current you you must declare another activity as the entry activity.
   1.0.0  support once animation when you jump, you can use it in Transaction.
   
 ## TODO
-  Support databinding . wait the databing of google lib is stable .
+  Support databinding . wait for the databing of google lib is stable .
    
 ## issue
    * if you have a good suggestion  about this, please tell me. Thanks! 
