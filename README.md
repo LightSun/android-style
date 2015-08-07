@@ -31,7 +31,7 @@ but current you you must declare another activity as the entry activity.
    * email: donshine723@gmail.com or 978136772@qq.com   
    
 ## hope
-i like technology. especially the open-source technology.And pevious i didn't contribute to it caused by i am a little lazy, but now i really want to do some for the open-source. So i hope to share and communicate with the all of you.
+i like technology. especially the open-source technology.And previous i didn't contribute to it caused by i am a little lazy, but now i really want to do some for the open-source. So i hope to share and communicate with the all of you.
 
 ### How to use 
    in gradle:  wait...
