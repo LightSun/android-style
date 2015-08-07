@@ -38,9 +38,15 @@ in model [android-scrap/sample](https://github.com/LightSun/android-scrap/tree/m
 //[1], want jump to target ScrapView ( child of BaseScrapView)
  ScrapHelper.jumpTo(new EntryScrapView(MainActivity.this));
  
-//[2], want cache ,add back stack, and jump 
- ScrapHelper.beginTransaction().cache(new EntryScrapView(MainActivity.this)).addBackAsBottom()
-                        .jump().commit();
+//[2], want cache ,add back stack, and jump , with data and animation 
+//this animate executor only once . 
+ Bundle b = new Bundle();
+ b.putInt("id",id+1);
+
+ crapHelper.beginTransaction().changeBackStackMode(ArrayList2.ExpandArrayList2.Mode.Normal)
+           .cache(new EntryScrapView(MainActivity.this)).addBackAsTop())
+           .animateExecutor(animateExecutor).withExtras(b).jump().commit();
+
                         
 //[3], animation between two children of the 'BaseScrapView'. 
  // here use animator to perform animation between two ScrapViews.
