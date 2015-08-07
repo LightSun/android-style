@@ -16,7 +16,7 @@ The module 'app' is the library of scrap. and 'sample' is the demo.
 - the more to see in demo or source code
 
 ## Changelog
-  1.0  this is first import project.
+  1.0.0  support once animation when you jump, you can use it in Transaction.
   
 ## About me
    * heaven7 
