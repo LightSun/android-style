@@ -57,6 +57,24 @@ public class ScrapHelper {
 	public static void jumpTo(BaseScrapView view ,Bundle data){
 		ActivityController.get().jumpTo(view, data);
 	}
+
+	/**
+	 * jump to the target view with data and animate executor.
+	 * @param target  the target to jump
+	 * @param data   the data to carry
+	 * @param executor   the animate executor to perform this jump(only use once)
+	 */
+	public static void jumpTo(BaseScrapView target,Bundle data,AnimateExecutor executor){
+		getActivityViewController().jumpTo(target,data,executor);
+	}
+	/**
+	 * jump to the target view with animate executor.
+	 * @param target  the target to jump
+	 * @param executor   the animate executor to perform this jump(only use once)
+	 */
+	public static void jumpTo(BaseScrapView target,AnimateExecutor executor){
+		getActivityViewController().jumpTo(target,null,executor);
+	}
 	
 	/**
 	 * open the transaction of {@link org.heaven7.scrap.core.ActivityViewController}, this is very useful.
@@ -168,6 +186,7 @@ public class ScrapHelper {
 
 	/**
 	 * set the animate executor when jump from one ScrapView to another.
+	 * @note this animate executor is used as  the global .
 	 * @param animateExecutor
 	 * @see  AnimateExecutor
 	 */

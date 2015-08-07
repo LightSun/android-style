@@ -16,6 +16,9 @@
  */
 package org.heaven7.scrap.core;
 
+import android.os.Bundle;
+
+import org.heaven7.scrap.core.anim.AnimateExecutor;
 import org.heaven7.scrap.util.ArrayList2;
 
 import java.util.NoSuchElementException;
@@ -49,6 +52,9 @@ public final class Transaction {
 	/** the jumper which can used to jump to target BaseScrapView */
 	private final IJumper mJumper;
 
+	private AnimateExecutor mAnimateExecutor;
+	private Bundle mBundle;
+
 	/**
 	 * the jumper which can used to jump to the target BaseScrapView
 	 * @author heaven7
@@ -56,10 +62,12 @@ public final class Transaction {
 	 */
 	protected interface IJumper {
 		/**
-		 *  jump to the target view 
-		 * @param view the view to jump
+		 * jump to the target view with data and animate executor
+		 * @param target  the scrap View to jump .
+		 * @param data    the data to carry
+		 * @param executor  the animate executor to perform this jump
 		 */
-		void jumpTo(BaseScrapView view);
+		void jumpTo(BaseScrapView target, Bundle data, AnimateExecutor executor);
 	}
 
 	/**
@@ -86,6 +94,19 @@ public final class Transaction {
 	 */
 	public BaseScrapView removeCache(String key){
 		return mHelper.removeCacheView(key);
+	}
+
+	/** set the animate executor to perform this jump, the animate executor will only be used
+	 * if then you call ...jump().commit(). */
+	public Transaction animateExecutor(AnimateExecutor executor){
+		this.mAnimateExecutor = executor;
+		return this;
+	}
+	/** set the extra data to carry to the target scrap view.the extra data will only be used
+	 *  if then you call ...jump().commit(). */
+	public Transaction withExtras(Bundle data){
+		this.mBundle = data;
+		return this;
 	}
 
 	/**
@@ -261,8 +282,10 @@ public final class Transaction {
 		mHelper.resetStackSetting();
 		if (mNeedJump) {
 			mNeedJump = false;
-			mJumper.jumpTo(mLastView);
+			mJumper.jumpTo(mLastView,mBundle,mAnimateExecutor);
 		}
 		mLastView = null;
+		mAnimateExecutor = null;
+		mBundle = null;
 	}
 }

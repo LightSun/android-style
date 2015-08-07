@@ -3,6 +3,7 @@ package org.heaven7.scrap.sample;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
 
 import org.heaven7.scrap.adapter.QuickAdapter;
@@ -63,8 +64,6 @@ public class EntryScrapView extends CommonView {
 
     @Override
     protected void onAttach() {
-        //clear animation the previos set
-        ScrapHelper.setAnimateExecutor(null);
 
        final ViewHelper helper = getViewHelper();
         helper.setText(R.id.tv_title,"Scrap_Demos").setOnClickListener(R.id.iv_back, new View.OnClickListener() {
@@ -102,9 +101,11 @@ public class EntryScrapView extends CommonView {
              * different view of BaseScrapView. and after call Transaction.commit().
              * the setting( contains mode )  will restore to the default.
              */
-                    ScrapView view =  new ScrapView(context,1);
+                    Bundle b = new Bundle();
+                    b.putInt("id",1);
                     ScrapHelper.beginTransaction().changeBackStackMode(ArrayList2.ExpandArrayList2.Mode.Normal)
-                            .addBackAsTop(view).jump().commit();
+                            .addBackAsTop(new ScrapView(context))
+                            .withExtras(b).jump().commit();
                  //   ScrapHelper.beginTransaction().cache() //if you want cache the view.
                     break;
                 case 2:
@@ -114,11 +115,18 @@ public class EntryScrapView extends CommonView {
                     ScrapHelper.jumpTo(new TestLifeCycleScrapView(context));
                     break;
                 case 4:
-                    //set animate executor
-                    ScrapHelper.setAnimateExecutor(animateExecutor);
-                    ScrapView view2 =  new ScrapView(context,1);
+
+                    /**
+                     * if you want to set global animate executor use underline. ScrapHelper.setAnimateExecutor(animateExecutor);
+                     */
+                    Bundle b2 = new Bundle();
+                    b2.putInt("id",1);
+                    //also use can use #setBundle to carray data
+                   // view2.setBundle(data);
                     ScrapHelper.beginTransaction().changeBackStackMode(ArrayList2.ExpandArrayList2.Mode.Normal)
-                            .addBackAsTop(view2).jump().commit();
+                            .addBackAsTop(new ScrapView(context))
+                            .animateExecutor(animateExecutor).withExtras(b2)
+                            .jump().commit();
                     break;
                 case 5:
                     ScrapHelper.jumpTo(new TestKeyEventScrapView(context));

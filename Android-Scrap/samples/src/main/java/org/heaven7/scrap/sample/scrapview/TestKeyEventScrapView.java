@@ -49,7 +49,7 @@ public class TestKeyEventScrapView extends CommonView {
     @Override
     protected void onDetach() {
         if(callback!=null){
-            ScrapHelper.registerActivityEventCallback(callback);
+            ScrapHelper.unregisterActivityEventCallback(callback);
             callback = null;
         }
     }

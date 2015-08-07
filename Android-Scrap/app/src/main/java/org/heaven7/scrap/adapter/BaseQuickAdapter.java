@@ -224,10 +224,10 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper> extends
 	 * item.
 	 * @param context
 	 * @param position the postion of adapterview. such as: listView
-	 * @param viewHelper the helper of view help you to fast set view's property
+	 * @param helper the helper of view help you to fast set view's property
 	 * @param item the data
 	 */
-	protected abstract void convert(Context context, int position, ViewHelper viewHelper,
+	protected abstract void convert(Context context, int position, ViewHelper helper,
 									T item);
 
 }

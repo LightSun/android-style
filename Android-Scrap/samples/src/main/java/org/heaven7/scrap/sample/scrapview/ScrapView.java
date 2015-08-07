@@ -1,6 +1,7 @@
 package org.heaven7.scrap.sample.scrapview;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
 
 import org.heaven7.scrap.core.ViewHelper;
@@ -17,9 +18,8 @@ public class ScrapView extends CommonView {
     public int id;
     private boolean mIsLastScrapView;
 
-    public ScrapView(Context mContext,int id) {
+    public ScrapView(Context mContext) {
         super(mContext);
-        this.id = id;
     }
 
     public void setIsLastScrapView(boolean last){
@@ -34,6 +34,11 @@ public class ScrapView extends CommonView {
 
     @Override
     protected void onAttach() {
+        this.id = getBundle()==null ? 0 : getBundle().getInt("id");
+        if(id == 4){
+            setIsLastScrapView(true);
+        }
+
         ScrapLog.i("ScrapView_onAttach","id = " + id);
 
         ViewHelper helper = getViewHelper();
@@ -54,10 +59,6 @@ public class ScrapView extends CommonView {
         helper.setOnClickListener(R.id.button, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ScrapView view = new ScrapView(v.getContext(),id+1);
-                if(view.id == 4){
-                    view.setIsLastScrapView(true);
-                }
                 /**
                  * if you use the same class ScrapView.class to create multi view  and  want add all of
                  * them to the default back stack, you must call changeBackStackMode(ArrayList2.
@@ -66,8 +67,12 @@ public class ScrapView extends CommonView {
                  * different view of BaseScrapView. and after call Transaction.commit().
                  * the setting( contains mode )  will restore to the default.
                  */
+                Bundle b = new Bundle();
+                b.putInt("id",id+1);
+
                 ScrapHelper.beginTransaction().changeBackStackMode(ArrayList2.ExpandArrayList2.Mode.Normal)
-                        .addBackAsTop(view).jump().commit();
+                        .addBackAsTop(new ScrapView(v.getContext()))
+                        .withExtras(b).jump().commit();
             }
         });
     }

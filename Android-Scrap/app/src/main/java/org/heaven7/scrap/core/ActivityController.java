@@ -123,7 +123,7 @@ public final class ActivityController {
 	
 	//=================== about jump ================= //
 	
-	/** jump to the target view with no data. */
+	/** jump to the target view with no data  */
 	public void jumpTo(BaseScrapView view ){
 		jumpTo(view, null);
 	}

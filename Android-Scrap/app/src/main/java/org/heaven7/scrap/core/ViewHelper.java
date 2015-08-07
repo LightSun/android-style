@@ -20,27 +20,18 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.text.util.Linkify;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.Adapter;
-import android.widget.AdapterView;
-import android.widget.Checkable;
-import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RatingBar;
-import android.widget.TextView;
 
 import com.android.volley.data.RequestManager;
 import com.android.volley.extra.ExpandNetworkImageView;
 import com.android.volley.extra.ImageParam;
-
-import org.heaven7.scrap.util.ViewCompatUtil;
 
 /**
  * for better use same view's method. cached it automatic for reuse.
@@ -52,7 +43,8 @@ public class ViewHelper {
 
 	private final SparseArray<View> mViewMap;
 	private final View mRootView;
-	
+	private final ViewHelperImpl mImpl;
+
 	/**
 	 * the loader to load image
 	 * @author heaven7
@@ -65,6 +57,7 @@ public class ViewHelper {
 	public ViewHelper(View root) {
 		this.mRootView = root;
 		mViewMap = new SparseArray<View>();
+		mImpl = new ViewHelperImpl(null);
 	}
 	
 	public View getRootView() {
@@ -75,22 +68,14 @@ public class ViewHelper {
 	}
 	
 	public ViewHelper setText(int viewId,CharSequence text){
-		TextView tv = getView(viewId);
-		tv.setText(text);
-		return this;
+		return view(viewId).setText(text).reverse(this);
 	}
 	/**
 	 * toogle the visibility of the view.such as: VISIBLE to gone or gone to VISIBLE
 	 * @param viewId  the id of view
 	 */
 	public ViewHelper toogleVisibility(int viewId){
-		View view = getView(viewId);
-		if(view.getVisibility() == View.VISIBLE){
-			view.setVisibility(View.GONE);
-		}else{
-			view.setVisibility(View.VISIBLE);
-		}
-		return this;
+		return view(viewId).toogleVisibility().reverse(this);
 	}
 
 	/** get the view in current layout . return null if the viewid can't find in current layout*/
@@ -115,9 +100,7 @@ public class ViewHelper {
 	 * @return The ViewHelper for chaining.
 	 */
 	public ViewHelper setImageResource(int viewId, int imageResId) {
-		ImageView view = retrieveView(viewId);
-		view.setImageResource(imageResId);
-		return this;
+		return  view(viewId).setImageResource(imageResId).reverse(this);
 	}
 	/**
 	 * Will set background color of a view.
@@ -129,9 +112,7 @@ public class ViewHelper {
 	 * @return The ViewHelper for chaining.
 	 */
 	public ViewHelper setBackgroundColor(int viewId, int color) {
-		View view = getView(viewId);
-		view.setBackgroundColor(color);
-		return this;
+		return view(viewId).setBackgroundColor(color).reverse(this);
 	}
 
 	/**
@@ -144,15 +125,11 @@ public class ViewHelper {
 	 * @return The ViewHelper for chaining.
 	 */
 	public ViewHelper setBackgroundRes(int viewId, int backgroundRes) {
-		View view = getView(viewId);
-		view.setBackgroundResource(backgroundRes);
-		return this;
+		return view(viewId).setBackgroundRes(backgroundRes).reverse(this);
 	}
 	
 	public ViewHelper setBackgroundDrawable(int viewId,Drawable drawable){
-		View view = getView(viewId);
-		ViewCompatUtil.setBackgroundCompatible(view, drawable);
-		return this;
+		return view(viewId).setBackgroundDrawable(drawable).reverse(this);
 	}
 	
 	/**
@@ -165,9 +142,7 @@ public class ViewHelper {
 	 * @return The ViewHelper for chaining.
 	 */
 	public ViewHelper setTextColor(int viewId, int textColor) {
-		TextView view = retrieveView(viewId);
-		view.setTextColor(textColor);
-		return this;
+		return view(viewId).setTextColor(textColor).reverse(this);
 	}
 
 	/**
@@ -180,9 +155,7 @@ public class ViewHelper {
 	 * @return The ViewHelper for chaining.
 	 */
 	public ViewHelper setTextColorRes(int viewId, int textColorRes) {
-		TextView view = retrieveView(viewId);
-		view.setTextColor(getContext().getResources().getColor(textColorRes));
-		return this;
+		return view(viewId).setTextColorRes(textColorRes).reverse(this);
 	}
 	
 	/**
@@ -195,9 +168,7 @@ public class ViewHelper {
 	 * @return The ViewHelper for chaining.
 	 */
 	public ViewHelper setImageDrawable(int viewId, Drawable drawable) {
-		ImageView view = retrieveView(viewId);
-		view.setImageDrawable(drawable);
-		return this;
+		return view(viewId).setImageDrawable(drawable).reverse(this);
 	}
 
 	/**
@@ -212,9 +183,7 @@ public class ViewHelper {
 	 * @return The ViewHelper for chaining.
 	 */
 	public ViewHelper setImageUrl(int viewId, String imageUrl,IImageLoader loader) {
-		ImageView view = retrieveView(viewId);
-		loader.load(imageUrl, view);
-		return this;
+		return view(viewId).setImageUrl(imageUrl,loader).reverse(this);
 	}
 	/** use volley extra to load image（this support circle image and round）.
 	 * <li>@Note RequestManager must call {@link RequestManager#init(Context)} before this.
@@ -224,10 +193,7 @@ public class ViewHelper {
 	 * @see {@link ImageParam.Builder#circle()} and etc methods.
 	 * */
 	public ViewHelper setImageUrl(int viewId,String url,ImageParam param){
-		ExpandNetworkImageView view = retrieveView(viewId);
-		view.setImageParam(param);
-		view.setImageUrl(url, RequestManager.getImageLoader());
-		return this;
+		return view(viewId).setImageUrl(url,param).reverse(this);
 	}
 	
 	/**
@@ -235,9 +201,7 @@ public class ViewHelper {
 	 * times.
 	 */
 	public ViewHelper setImageBitmap(int viewId, Bitmap bitmap) {
-		ImageView view = retrieveView(viewId);
-		view.setImageBitmap(bitmap);
-		return this;
+		return view(viewId).setImageBitmap(bitmap).reverse(this);
 	}
 
 	/**
@@ -246,8 +210,7 @@ public class ViewHelper {
 	 */
 	@SuppressLint("NewApi")
 	public ViewHelper setAlpha(int viewId, float value) {
-		ViewCompatUtil.setAlpha(retrieveView(viewId), value);
-		return this;
+		return view(viewId).setAlpha(value).reverse(this);
 	}
 	
 
@@ -261,9 +224,7 @@ public class ViewHelper {
 	 * @return The ViewHelper for chaining.
 	 */
 	public ViewHelper setVisibility(int viewId, boolean visible) {
-		View view = retrieveView(viewId);
-		view.setVisibility(visible ? View.VISIBLE : View.GONE);
-		return this;
+		return view(viewId).setVisibility(visible).reverse(this);
 	}
 
 	
@@ -275,9 +236,7 @@ public class ViewHelper {
 	 * @return The ViewHelper for chaining.
 	 */
 	public ViewHelper linkify(int viewId) {
-		TextView view = retrieveView(viewId);
-		Linkify.addLinks(view, Linkify.ALL);
-		return this;
+		return view(viewId).linkify().reverse(this);
 	}
 	private <T extends View> T retrieveView(int viewId) {
 		return getView(viewId);
@@ -286,17 +245,12 @@ public class ViewHelper {
 	/** Add links into a TextView,
 	 * @param  linkifyMask ,see {@link Linkify#ALL} and etc.*/
 	public ViewHelper linkify(int viewId,int linkifyMask) {
-		TextView view = retrieveView(viewId);
-		Linkify.addLinks(view, linkifyMask);
-		return this;
+		return view(viewId).linkify(linkifyMask).reverse(this);
 	}
 
 	/** Apply the typeface to the given viewId, and enable subpixel rendering. */
 	public ViewHelper setTypeface(int viewId, Typeface typeface) {
-		TextView view = retrieveView(viewId);
-		view.setTypeface(typeface);
-		view.setPaintFlags(view.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG);
-		return this;
+		return view(viewId).setTypeface(typeface).reverse(this);
 	}
 
 	/**
@@ -320,9 +274,7 @@ public class ViewHelper {
 	 * @return The ViewHelper for chaining.
 	 */
 	public ViewHelper setProgress(int viewId, int progress) {
-		ProgressBar view = retrieveView(viewId);
-		view.setProgress(progress);
-		return this;
+		return view(viewId).setProgress(progress).reverse(this);
 	}
 
 	/**
@@ -337,10 +289,7 @@ public class ViewHelper {
 	 * @return The ViewHelper for chaining.
 	 */
 	public ViewHelper setProgress(int viewId, int progress, int max) {
-		ProgressBar view = retrieveView(viewId);
-		view.setMax(max);
-		view.setProgress(progress);
-		return this;
+		return view(viewId).setProgress(progress,max).reverse(this);
 	}
 
 	/**
@@ -352,10 +301,8 @@ public class ViewHelper {
 	 *            The max value of a ProgressBar.
 	 * @return The ViewHelper for chaining.
 	 */
-	public ViewHelper setMax(int viewId, int max) {
-		ProgressBar view = retrieveView(viewId);
-		view.setMax(max);
-		return this;
+	public ViewHelper setProgressMax(int viewId, int max) {
+		return view(viewId).setProgressMax(max).reverse(this);
 	}
 
 	/**
@@ -368,9 +315,7 @@ public class ViewHelper {
 	 * @return The ViewHelper for chaining.
 	 */
 	public ViewHelper setRating(int viewId, float rating) {
-		RatingBar view = retrieveView(viewId);
-		view.setRating(rating);
-		return this;
+		return view(viewId).setRating(rating).reverse(this);
 	}
 
 	/**
@@ -385,10 +330,7 @@ public class ViewHelper {
 	 * @return The ViewHelper for chaining.
 	 */
 	public ViewHelper setRating(int viewId, float rating, int max) {
-		RatingBar view = retrieveView(viewId);
-		view.setMax(max);
-		view.setRating(rating);
-		return this;
+		return view(viewId).setRating(rating,max).reverse(this);
 	}
 
 	/**
@@ -401,9 +343,7 @@ public class ViewHelper {
 	 * @return The ViewHelper for chaining.
 	 */
 	public ViewHelper setTag(int viewId, Object tag) {
-		View view = retrieveView(viewId);
-		view.setTag(tag);
-		return this;
+		return view(viewId).setTag(tag).reverse(this);
 	}
 
 	/**
@@ -418,9 +358,7 @@ public class ViewHelper {
 	 * @return The ViewHelper for chaining.
 	 */
 	public ViewHelper setTag(int viewId, int key, Object tag) {
-		View view = retrieveView(viewId);
-		view.setTag(key, tag);
-		return this;
+		return view(viewId).setTag(key,tag).reverse(this);
 	}
 
 	/**
@@ -433,16 +371,12 @@ public class ViewHelper {
 	 * @return The ViewHelper for chaining.
 	 */
 	public ViewHelper setChecked(int viewId, boolean checked) {
-		Checkable view = (Checkable) retrieveView(viewId);
-		view.setChecked(checked);
-		return this;
+		return view(viewId).setTag(checked).reverse(this);
 	}
 	
 	/** set OnCheckedChangeListener to CompoundButton or it's children. */
 	public ViewHelper setOnCheckedChangeListener(int viewId, OnCheckedChangeListener l){
-		CompoundButton view = retrieveView(viewId);
-		view.setOnCheckedChangeListener(l);
-		return this;
+		return view(viewId).setOnCheckedChangeListener(l).reverse(this);
 	}
 
 	/**
@@ -456,9 +390,7 @@ public class ViewHelper {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ViewHelper setAdapter(int viewId, Adapter adapter) {
-		AdapterView view = retrieveView(viewId);
-		view.setAdapter(adapter);
-		return this;
+		return view(viewId).setAdapter(adapter).reverse(this);
 	}
 
 	/**
@@ -472,9 +404,7 @@ public class ViewHelper {
 	 */
 	public ViewHelper setOnClickListener(int viewId,
 			View.OnClickListener listener) {
-		View view = retrieveView(viewId);
-		view.setOnClickListener(listener);
-		return this;
+		return view(viewId).setOnClickListener(listener).reverse(this);
 	}
 
 	/**
@@ -488,9 +418,7 @@ public class ViewHelper {
 	 */
 	public ViewHelper setOnTouchListener(int viewId,
 			View.OnTouchListener listener) {
-		View view = retrieveView(viewId);
-		view.setOnTouchListener(listener);
-		return this;
+		return view(viewId).setOnTouchListener(listener).reverse(this);
 	}
 
 	/**
@@ -504,9 +432,18 @@ public class ViewHelper {
 	 */
 	public ViewHelper setOnLongClickListener(int viewId,
 			View.OnLongClickListener listener) {
-		View view = retrieveView(viewId);
-		view.setOnLongClickListener(listener);
-		return this;
+		return view(viewId).setOnLongClickListener(listener).reverse(this);
 	}
-	
+
+	/***
+	 *  view the target,after call this you can call multi setXXX methods on the target view.
+	 *  such as: <pre>
+	 *      ViewHelper.view(xx).setText("sss").setOnclickListener(new OnClickListener()...);
+	 *  </pre>
+	 * @param viewId the id of target view
+	 * @return  ViewHelperImpl
+	 */
+	public ViewHelperImpl view(int viewId){
+		return mImpl.view(getView(viewId));
+	}
 }
