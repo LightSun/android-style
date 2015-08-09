@@ -28,7 +28,7 @@ it helps you to reduce number of activities  and avoid some problems of fragment
             
               - define the main scrap view
                    - scrap_view_main = org.heaven7.scrap.sample.MainScrapView
-              - define the main scrap view whether add it to back stack
+              - define the main scrap view whether add it to back stack or not.
                    - scrap_view_main_addBackStack = true
             
            - 2, declear really main activity
