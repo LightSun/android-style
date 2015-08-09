@@ -26,10 +26,10 @@ it helps you to reduce number of activities  and avoid some problems of fragment
      - Support the entry of scrap view ( similar to the MainActivity) 
            - 1,create file 'scrap_config.properties' in res/raw like this.
             
-               # define the main scrap view
-                  scrap_view_main = org.heaven7.scrap.sample.MainScrapView
-               # define the main scrap view whether add it to back stack
-                  scrap_view_main_addBackStack = true
+              - # define the main scrap view
+                     - scrap_view_main = org.heaven7.scrap.sample.MainScrapView
+              - # define the main scrap view whether add it to back stack
+                     - scrap_view_main_addBackStack = true
             
            - 2, declear really main activity
             ``` java
