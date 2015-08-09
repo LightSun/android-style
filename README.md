@@ -1,22 +1,30 @@
 # android-scrap
 this is one Activity Framework named android-scrap, a little like fragment.  
 it helps you to reduce number of activities  and avoid some problems of fragment.
-but current you you must declare another activity as the entry activity.
+.
 
 
 ## Features
-- One Activity
+- Really One Activity
 - Support animation(Animation or Animator or ViewPropertyAnimator) between two children of the 'BaseScrapView'.
 - Support cache BaseScrapView and add it to the back stack.
 - Support multi modes of back stack.
 - Support listen to Activity's Lifecycle and event.
 - Support fast set properties of view ,named 'ViewHelper'.
+- Support hide or show the loading view.
+- Support the entry of scrap view ( similar to the MainActivity).
 - Integreted google-Volley and expand it to support  file upload and circle/round image. and you can see it in demo.
 - Integrated QuickAdapter and expand it to use easily and support multi item Adapter. based on [JoanZapata/base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper) and thanks for him.
 - the more to see in demo or source code
 
+
 ## Changelog
-  1.0.0  support once animation when you jump, you can use it in Transaction.
+-  # 1.0
+     - support once animation when you jump, you can use it in Transaction.
+-  # 1.1 
+     - Support hide or show the loading view.
+     - Support the entry of scrap view ( similar to the MainActivity) 
+     - optimize code.
   
 ## TODO
    * other idea
