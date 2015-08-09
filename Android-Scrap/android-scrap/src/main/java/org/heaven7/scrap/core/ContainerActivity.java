@@ -37,6 +37,7 @@ public class ContainerActivity extends Activity{
 	private FrameLayout mFl_top;
 	private FrameLayout mFl_content;
 	private FrameLayout mFl_bottom;
+	private FrameLayout mFl_loading;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +49,15 @@ public class ContainerActivity extends Activity{
 			mFl_top = (FrameLayout) findViewById(R.id.fl_top);
 			mFl_bottom = (FrameLayout) findViewById(R.id.fl_bottom);
 			mFl_content = (FrameLayout) findViewById(R.id.fl_content);
-			
-			attachAndDispatchOnCreate(mFl_top,mFl_content,mFl_bottom,savedInstanceState);
+			mFl_loading = (FrameLayout) findViewById(R.id.fl_loading);
+
+			attachAndDispatchOnCreate(mFl_top,mFl_content,mFl_bottom,mFl_loading,savedInstanceState);
 		}
 	}
 	/** this must called after the container(top,middle,and bottom) is found ! */
 	protected void attachAndDispatchOnCreate(ViewGroup top,
-			ViewGroup middle, ViewGroup bottom , Bundle savedInstanceState) {
-		ActivityController.get().attach(this, top, middle, bottom, savedInstanceState);
+			ViewGroup middle, ViewGroup bottom, ViewGroup loading, Bundle savedInstanceState) {
+		ActivityController.get().attach(this, top, middle, bottom,loading, savedInstanceState);
 		ActivityController.get().getLifeCycleDispatcher()
 		              .dispatchActivityOnCreate(this, savedInstanceState);
 	}
@@ -206,6 +208,6 @@ public class ContainerActivity extends Activity{
 	@Override
 	public void finish() {
 		super.finish();
-		ActivityController.get().attach(null,null,null,null,null);
+		ActivityController.get().attach(null,null,null,null,null,null);
 	}
 }

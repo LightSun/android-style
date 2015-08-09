@@ -18,9 +18,9 @@ package org.heaven7.scrap.util;
 
 import android.os.Bundle;
 
+import org.heaven7.scrap.core.ActivityController;
 import org.heaven7.scrap.core.ActivityViewController;
 import org.heaven7.scrap.core.BaseScrapView;
-import org.heaven7.scrap.core.ActivityController;
 import org.heaven7.scrap.core.ScrapPosition;
 import org.heaven7.scrap.core.Transaction;
 import org.heaven7.scrap.core.anim.AnimateExecutor;

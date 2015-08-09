@@ -27,6 +27,7 @@ import org.heaven7.scrap.annotation.CalledByFramework;
 import org.heaven7.scrap.core.event.IActivityEventCallback;
 import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleAdapter;
 import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
+import org.heaven7.scrap.util.MainWorker;
 import org.heaven7.scrap.util.ScrapHelper;
 import org.heaven7.scrap.util.Toaster;
 
@@ -68,6 +69,9 @@ public abstract class BaseScrapView {
 	/** when set to true , this ScrapView will be stack.
 	 * but if it can be replaced or cleared by another same classname of this.  */
 	private boolean mInBackStack;
+
+	/** whether show the loading view if you need */
+	private final LoadingParam mLoadingParam = new LoadingParam(false,true,true);
 
 	/**
 	 */
@@ -183,6 +187,9 @@ public abstract class BaseScrapView {
 		return getContext().getResources();
 	}
 
+	/**
+	 * this is used if scrap view is backed from back stack.
+	  */
 	public boolean isInBackStack() {
 		return mInBackStack;
 	}
@@ -199,7 +206,33 @@ public abstract class BaseScrapView {
 	public void setDefaultBackEventProcessor(IBackEventProcessor processor) {
        this.mDefaultBackEventProcessor = processor;
 	}
-	
+
+	/**
+	 * set whether or not to show the loading .
+	 */
+	public void setShowLoading(boolean showLoading) {
+		if(this.mLoadingParam.showLoading != showLoading) {
+			this.mLoadingParam.set(showLoading, true, true);
+			ScrapHelper.getActivityViewController().showOrHideLoading(this.mLoadingParam);
+		}
+	}
+
+	/**
+	 *  set whether or not to show the loading
+	 * @see  #setShowLoading(boolean)
+	 */
+	public void setShowLoading(LoadingParam loadingParam) {
+		if(mLoadingParam.showLoading != loadingParam.showLoading) {
+			this.mLoadingParam.set(loadingParam.showLoading, loadingParam.showTop, loadingParam.showBottom);
+			ScrapHelper.getActivityViewController().showOrHideLoading(this.mLoadingParam);
+		}
+	}
+
+	/** post the runnable run on ui thread */
+	protected void runOnUiThread(Runnable r){
+		MainWorker.post(r);
+	}
+
 	//==================================//
 
 	/** replace the view of this which is indicate by the scrap.

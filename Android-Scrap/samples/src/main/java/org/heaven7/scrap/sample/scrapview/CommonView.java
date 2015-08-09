@@ -64,6 +64,10 @@ public class CommonView extends BaseScrapView {
         });
         //set the list view's data
         //use QuickAdapter to fast set adapter.
+        showGirl();
+    }
+
+    protected void showGirl() {
         addGirlDatas();
         getViewHelper().setAdapter(R.id.lv, new QuickAdapter<GirlData>(R.layout.item_girl,mGirlData) {
             @Override

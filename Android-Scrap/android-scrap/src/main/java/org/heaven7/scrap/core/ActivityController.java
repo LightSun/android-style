@@ -17,7 +17,9 @@
 package org.heaven7.scrap.core;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 
 import org.heaven7.scrap.annotation.CalledByFramework;
@@ -26,6 +28,11 @@ import org.heaven7.scrap.core.event.ActivityEventAdapter;
 import org.heaven7.scrap.core.event.ActivityEventCallbackGroup;
 import org.heaven7.scrap.core.event.IActivityEventCallback;
 import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleDispatcher;
+import org.heaven7.scrap.util.ConfigUtil;
+import org.heaven7.scrap.util.Reflector;
+import org.heaven7.scrap.util.ScrapConstant;
+
+import java.util.Properties;
 
 /**
  * the controller of activity. contains: lifeCycle({@link org.heaven7.scrap.core.lifecycle.ActivityLifeCycleDispatcher}) and
@@ -36,7 +43,7 @@ import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleDispatcher;
  * @see ActivityEventCallbackGroup
  */
 public final class ActivityController {
-	
+
 	private static class Creator{
 		public static final ActivityController INSTANCE = new ActivityController();
 	}
@@ -82,10 +89,43 @@ public final class ActivityController {
 	/** this will be called automatic is the one Activity.* */
 	@CalledByFramework
 	/*public*/ void attach(Activity activity, ViewGroup top, ViewGroup middle,
-			ViewGroup bottom, Bundle savedInstanceState) {
+			ViewGroup bottom,ViewGroup loading, Bundle savedInstanceState) {
 		mSaveInstanceState = savedInstanceState!=null? new Bundle(savedInstanceState) :null;
 		mViewController.attachActivity(activity);
-		mViewController.attachContainers(top, middle, bottom);
+		mViewController.attachContainers(top, middle, bottom, loading);
+		jumpToMainScrapViewIfNeed(activity);
+	}
+	/** jump to the main scrap view */
+	private void jumpToMainScrapViewIfNeed(Activity activity){
+		if(activity == null) return ;
+		Properties prop = null;
+		try {
+			prop = ConfigUtil.loadRawConfig(activity, ScrapConstant.CONFIG_FILENAME);
+		}catch(RuntimeException e){
+			//ignore
+		}
+		if(prop !=null){
+			String classname = prop.getProperty(ScrapConstant.CONFIG_KEY_MAIN_SCRAP_VIEW);
+			if(classname != null ){
+				try {
+					String backStack = prop.getProperty(ScrapConstant.CONFIG_KEY_MAIN_SCRAP_VIEW_BACK_STACK);
+					BaseScrapView view = Reflector.from(Class.forName(classname)).constructor(Context.class)
+							.create(activity);
+					if( !Boolean.valueOf(backStack) ) {
+						jumpTo(view);
+					}else{
+						beginTransaction().addBackAsBottom(view).jump().commit();
+					}
+				} catch (ClassNotFoundException e) {
+					throw new RuntimeException("Get error while load main scrap view , classname = " +classname,e);
+				}
+			}
+		}
+	}
+
+	/** set the global loading view , this will be used if you call {@link BaseScrapView#setShowLoading(boolean)}*/
+	public void setLoadingView(View loading){
+		mViewController.setLoadingView(loading);
 	}
 	
 	/**

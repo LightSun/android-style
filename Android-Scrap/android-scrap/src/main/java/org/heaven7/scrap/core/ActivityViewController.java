@@ -24,11 +24,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.heaven7.scrap.R;
 import org.heaven7.scrap.annotation.CalledByFramework;
 import org.heaven7.scrap.core.anim.AnimateExecutor;
 import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleAdapter;
+import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
 import org.heaven7.scrap.util.ArrayList2;
 import org.heaven7.scrap.util.Reflector;
+import org.heaven7.scrap.util.ScrapHelper;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -74,6 +77,8 @@ public final class ActivityViewController implements Transaction.IJumper {
      * the top bottom of activity
      */
     private ViewGroup mBottomContainer;
+    /** the loading container  */
+    private ViewGroup mLoadingContainer;
 
     /**
      * indicate the current BaseScrapView which is showing or the last operating  view
@@ -85,8 +90,10 @@ public final class ActivityViewController implements Transaction.IJumper {
      * the global animate executor
      */
     private AnimateExecutor mGlobalAnimateExecutor;
-
+    /**  used for back stack and cache scrap view. */
     private final CacheHelper mCacheHelper;
+
+    private final JumpParam mJumpPram  = new JumpParam();
     /**
      * the default intent executor to start activity
      */
@@ -125,16 +132,24 @@ public final class ActivityViewController implements Transaction.IJumper {
             return onBackPressed();
         }
     };
+    private View mDefaultLoadingView;
 
     /* package */ ActivityViewController() {
         mCacheHelper = new CacheHelper();
     }
 
     //============================//
-    void attachContainers(ViewGroup top, ViewGroup middle, ViewGroup bottom) {
+    void attachContainers(ViewGroup top, ViewGroup middle, ViewGroup bottom,ViewGroup loading) {
         this.mTopContainer = top;
         this.mMiddleContainer = middle;
         this.mBottomContainer = bottom;
+        this.mLoadingContainer = loading;
+        //default loading is gone
+        if(loading != null){
+            this.mDefaultLoadingView = loading.findViewById(R.id.pb);
+            loading.removeAllViews();
+            loading.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -169,6 +184,15 @@ public final class ActivityViewController implements Transaction.IJumper {
         }
         if (v != null) {
             mBottomContainer.addView(v);
+        }
+        return this;
+    }
+    private ActivityViewController loading(View v) {
+        if (mLoadingContainer.getChildCount() > 0) {
+            mLoadingContainer.removeAllViews();
+        }
+        if (v != null) {
+            mLoadingContainer.addView(v);
         }
         return this;
     }
@@ -388,32 +412,22 @@ public final class ActivityViewController implements Transaction.IJumper {
      * @param executor the startActivity executor if activity not attached to this or is finished..
      * @param animExecutor  the animate executor to perform this jump.
      */
-    private void jumpTo(final BaseScrapView v, final Bundle data, IntentExecutor executor,
-                        final AnimateExecutor animExecutor) {
+    private void jumpTo(BaseScrapView v, Bundle data, IntentExecutor executor,
+                         AnimateExecutor animExecutor) {
         if (v == null)
             throw new NullPointerException();
         if(sDebug)
             Log.v("Scrap", "jumpTo ......" + v) ;
 
+        if(data != null){
+            v.setBundle(data);
+        }
         final Activity activity = getActivity();
         //not attached
         if (activity == null) {
-            ActivityController.get().getLifeCycleDispatcher()
-                    .registerActivityLifeCycleCallback(new ActivityLifeCycleAdapter() {
-                        @Override
-                        public void onActivityPostCreate(Activity activity,
-                                                         Bundle savedInstanceState) {
-                            ActivityController.get().getLifeCycleDispatcher()
-                                    .unregisterActivityLifeCycleCallback(this);
-                            v.setContext(activity);
-                            v.setViewHelper(new ViewHelper(activity.getWindow().getDecorView()));
-                            if (data != null)
-                                v.setBundle(data);
-                            jumpToImpl(v,animExecutor);
-                        }
-                    });
-            Context context = v.getContext();
-            executor.startActivity(context);
+            mJumpPram.set(v, animExecutor);
+            ScrapHelper.registerActivityLifeCycleCallback(mLifeCycleCallback);
+            executor.startActivity(v.getContext());
         } else {
             //may is finishing. check it
             if (activity.isFinishing()) {
@@ -423,8 +437,6 @@ public final class ActivityViewController implements Transaction.IJumper {
             }
             v.setContext(activity);
             v.setViewHelper(new ViewHelper(activity.getWindow().getDecorView()));
-            if (data != null)
-                v.setBundle(data);
             jumpToImpl(v,animExecutor);
         }
     }
@@ -436,7 +448,7 @@ public final class ActivityViewController implements Transaction.IJumper {
      * @see BaseScrapView#setBundle(Bundle)
      */
     public void jumpTo(final BaseScrapView v, final Bundle data) {
-        jumpTo(v, data, mDefaultIntentExecutor,null);
+        jumpTo(v, data, mDefaultIntentExecutor, null);
     }
 
     /**
@@ -529,6 +541,8 @@ public final class ActivityViewController implements Transaction.IJumper {
         mBottomContainer = null;
         mMiddleContainer = null;
         mTopContainer = null;
+        mLoadingContainer = null;
+        mDefaultLoadingView = null;
         if (mCurrentView != null) {
             detachTarget(mCurrentView);
             mCurrentView = null;
@@ -596,7 +610,7 @@ public final class ActivityViewController implements Transaction.IJumper {
         }
         if (view != null) {
             if(view.isInBackStack()) {
-                //here ignore the mode,so first change and restore
+                //here ignore the mode to avoid problem ,so first change and restore
                 mCacheHelper.mViewStack.setMode(ArrayList2.ExpandArrayList2.Mode.Normal);
                 mCacheHelper.addToStackTop(view);
                 mCacheHelper.resetStackSetting();
@@ -644,5 +658,64 @@ public final class ActivityViewController implements Transaction.IJumper {
         if (target == null)
             return false;
         return mCacheHelper.getStackHead() == target;
+    }
+
+    /** set the global loading view , this will be used if you call {@link BaseScrapView#setShowLoading(boolean)}*/
+    public void setLoadingView(View loading) {
+        this.mDefaultLoadingView = loading;
+    }
+
+    /** set to show or hide loading view */
+    @CalledByFramework("about loading view")
+    /*public*/ void showOrHideLoading(LoadingParam param) {
+        if(param.showLoading ){
+            //loading view : from not show -> show
+            if(mLoadingContainer.getVisibility() != View.VISIBLE){
+                if(mDefaultLoadingView.getParent() == null){
+                    loading(mDefaultLoadingView);
+                }
+                mLoadingContainer.setVisibility(View.VISIBLE);
+                mTopContainer.setVisibility(param.showTop? View.VISIBLE:View.GONE);
+                mBottomContainer.setVisibility(param.showBottom? View.VISIBLE:View.GONE);
+                mMiddleContainer.setVisibility(View.GONE);
+            }
+        }else{
+            //loading view : from show -> not show. show others
+            if(mLoadingContainer.getVisibility() == View.VISIBLE){
+                mLoadingContainer.setVisibility(View.GONE);
+                mMiddleContainer.setVisibility(View.VISIBLE);
+                mTopContainer.setVisibility(View.VISIBLE);
+                mBottomContainer.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    /** internal life cycle callback.if the activity is not attached  ! */
+    private final IActivityLifeCycleCallback mLifeCycleCallback = new ActivityLifeCycleAdapter(){
+        @Override
+        public void onActivityPostCreate(Activity activity, Bundle savedInstanceState) {
+            ScrapHelper.unregisterActivityLifeCycleCallback(this);
+            final JumpParam param = mJumpPram;
+            BaseScrapView view = param.scrapView;
+            view.setContext(activity);
+            view.setViewHelper(new ViewHelper(activity.getWindow().getDecorView()));
+            jumpToImpl(view, param.animateExecutor);
+            // clear param to avoid memory leak.
+            param.clear();
+        }
+    };
+
+    private class JumpParam{
+        public BaseScrapView scrapView;
+        public AnimateExecutor animateExecutor;
+
+        public void set(BaseScrapView scrapView,AnimateExecutor animateExecutor){
+            this.scrapView = scrapView;
+            this.animateExecutor = animateExecutor;
+        }
+        public void clear(){
+            scrapView = null;
+            animateExecutor = null;
+        }
     }
 }

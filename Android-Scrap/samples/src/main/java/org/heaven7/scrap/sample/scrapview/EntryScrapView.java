@@ -1,4 +1,4 @@
-package org.heaven7.scrap.sample;
+package org.heaven7.scrap.sample.scrapview;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
@@ -11,11 +11,7 @@ import org.heaven7.scrap.core.BaseScrapView;
 import org.heaven7.scrap.core.ViewHelper;
 import org.heaven7.scrap.core.anim.AnimateCategoryType;
 import org.heaven7.scrap.core.anim.AnimateExecutor;
-import org.heaven7.scrap.sample.scrapview.CommonView;
-import org.heaven7.scrap.sample.scrapview.ScrapView;
-import org.heaven7.scrap.sample.scrapview.TestKeyEventScrapView;
-import org.heaven7.scrap.sample.scrapview.TestLifeCycleScrapView;
-import org.heaven7.scrap.sample.scrapview.TestVisivilityScrapView;
+import org.heaven7.scrap.sample.R;
 import org.heaven7.scrap.util.ArrayList2;
 import org.heaven7.scrap.util.ScrapHelper;
 
@@ -43,16 +39,6 @@ public class EntryScrapView extends CommonView {
 
     @Override
     protected boolean onBackPressed() {
-        if (ScrapHelper.isScrapViewAtBottom(EntryScrapView.this)) {
-            long now = System.currentTimeMillis();
-            if (now - start >= 500) {
-                showToast("you must click twice in 500 ms to exit CommonView");
-                start = now;
-            } else {
-                ScrapHelper.finishCurrentActivity();
-            }
-            return true;
-        }
        return super.onBackPressed();
     }
 
@@ -131,6 +117,9 @@ public class EntryScrapView extends CommonView {
                 case 5:
                     ScrapHelper.jumpTo(new TestKeyEventScrapView(context));
                     break;
+
+                case 6:
+                    ScrapHelper.jumpTo(new TestLoadingScrapView(context));
             }
         }
     };
@@ -176,6 +165,9 @@ public class EntryScrapView extends CommonView {
 
         desc = "this is a sample tell you how to register/unregiser the other key event of activity.";
         datas.add(new ActionData("Activity's other Key event",desc,5));
+
+        desc = "this is a sample tell you how to use the loading view...";
+        datas.add(new ActionData("Loading View",desc,6));
         return datas;
     }
     static class ActionData{

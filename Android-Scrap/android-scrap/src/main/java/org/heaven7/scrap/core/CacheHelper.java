@@ -34,8 +34,8 @@ import java.util.NoSuchElementException;
  * if {@link ExpandArrayList2#getMode()} != {@link Mode#Normal}
  * <li> you can use {@link Transaction#changeBackStackMode(Mode)} to change the default behavior. and the {@link Transaction#commit()} will restore mode
  * to default({@link Mode#ClearPrevious}).
- * @see {@link Transaction#changeBackStackMode(Mode)}
- * @see {@link Transaction#commit()}
+ * @see Transaction#changeBackStackMode(Mode)
+ * @see Transaction#commit()
  * @author heaven7
  */
 /* package */ final class CacheHelper {
