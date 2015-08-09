@@ -44,7 +44,7 @@ i like technology. especially the open-source technology.And previous i didn't c
 ### How to use 
 - in android studio gradle of android studio:       
       - add dependence ,
-- 
+ 
           ``` java
           dependencies {
               compile 'org.heaven7.scrap:android-scrap:1.1'
