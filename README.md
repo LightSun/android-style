@@ -24,6 +24,13 @@ it helps you to reduce number of activities  and avoid some problems of fragment
 -  # 1.1 
      - Support hide or show the loading view.
      - Support the entry of scrap view ( similar to the MainActivity) 
+           - 1)  create file 'scrap_config.properties' in res/raw like this.
+                 ``` java
+                    # define the main scrap view
+                    scrap_view_main = org.heaven7.scrap.sample.MainScrapView
+                    # define the main scrap view whether add it to back stack
+                    scrap_view_main_addBackStack = true
+                 ```
      - optimize code.
   
 ## TODO
