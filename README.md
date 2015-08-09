@@ -22,7 +22,7 @@ it helps you to reduce number of activities  and avoid some problems of fragment
 -  # 1.0
      - support once animation when you jump, you can use it in Transaction.
 -  # 1.1 
-     - Support hide or show the loading view.
+     - Support hide or show the loading view, see it in 'TestLoadingScrapView'
      - Support the entry of scrap view ( similar to the MainActivity) 
            - 1,create file 'scrap_config.properties' in res/raw like this.
             
