@@ -42,7 +42,14 @@ it helps you to reduce number of activities  and avoid some problems of fragment
 i like technology. especially the open-source technology.And previous i didn't contribute to it caused by i am a little lazy, but now i really want to do some for the open-source. So i hope to share and communicate with the all of you.
 
 ### How to use 
-   in gradle:  wait...
+- in android studio gradle of android studio:       
+      - add dependence ,
+- 
+          ``` java
+          dependencies {
+              compile 'org.heaven7.scrap:android-scrap:1.1'
+          }
+          ```
    
 ## Demo
 in model [android-scrap/sample](https://github.com/LightSun/android-scrap/tree/master/Android-Scrap/samples).
