@@ -45,6 +45,7 @@ it helps you to reduce number of activities  and avoid some problems of fragment
      - optimize code.
   
 ## TODO
+   * Support viewPager nest fragment
    * other idea
    * Support databinding . wait for the databing of google lib is stable .
    
