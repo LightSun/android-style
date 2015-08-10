@@ -1,24 +1,51 @@
 # android-scrap
-this is one Activity Framework named android-scrap, a little like fragment.  
+this is really One Activity Framework named android-scrap, a little like fragment.  
 it helps you to reduce number of activities  and avoid some problems of fragment.
-but current you you must declare another activity as the entry activity.
+.
 
 
 ## Features
-- One Activity
+- Really One Activity
 - Support animation(Animation or Animator or ViewPropertyAnimator) between two children of the 'BaseScrapView'.
 - Support cache BaseScrapView and add it to the back stack.
 - Support multi modes of back stack.
 - Support listen to Activity's Lifecycle and event.
 - Support fast set properties of view ,named 'ViewHelper'.
+- Support hide or show the loading view.
+- Support the entry of scrap view ( similar to the MainActivity).
 - Integreted google-Volley and expand it to support  file upload and circle/round image. and you can see it in demo.
 - Integrated QuickAdapter and expand it to use easily and support multi item Adapter. based on [JoanZapata/base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper) and thanks for him.
 - the more to see in demo or source code
 
+
 ## Changelog
-  1.0.0  support once animation when you jump, you can use it in Transaction.
+-  # 1.0
+     - support once animation when you jump, you can use it in Transaction.
+-  # 1.1 
+     - Support hide or show the loading view, see it in 'TestLoadingScrapView'
+     - Support the entry of scrap view ( similar to the MainActivity) 
+           - 1,create file 'scrap_config.properties' in res/raw like this.
+            
+              - define the main scrap view
+                   - scrap_view_main = org.heaven7.scrap.sample.MainScrapView
+              - define the main scrap view whether add it to back stack or not.
+                   - scrap_view_main_addBackStack = true
+            
+           - 2, declear really main activity
+            ``` java
+             <activity android:name="org.heaven7.scrap.core.ContainerActivity"
+              >
+                  <intent-filter>
+                     <action android:name="android.intent.action.MAIN" />
+     
+                     <category android:name="android.intent.category.LAUNCHER" />
+                 </intent-filter>
+             </activity>
+             ```
+     - optimize code.
   
 ## TODO
+   * Support viewPager nest fragment
    * other idea
    * Support databinding . wait for the databing of google lib is stable .
    
@@ -34,7 +61,14 @@ but current you you must declare another activity as the entry activity.
 i like technology. especially the open-source technology.And previous i didn't contribute to it caused by i am a little lazy, but now i really want to do some for the open-source. So i hope to share and communicate with the all of you.
 
 ### How to use 
-   in gradle:  wait...
+- in android studio gradle of android studio:       
+      - add dependence ,
+ 
+          ``` java
+          dependencies {
+              compile 'org.heaven7.scrap:android-scrap:1.1'
+          }
+          ```
    
 ## Demo
 in model [android-scrap/sample](https://github.com/LightSun/android-scrap/tree/master/Android-Scrap/samples).
