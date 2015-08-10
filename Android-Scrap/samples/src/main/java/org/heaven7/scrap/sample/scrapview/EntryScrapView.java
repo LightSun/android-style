@@ -103,7 +103,7 @@ public class EntryScrapView extends CommonView {
                 case 4:
 
                     /**
-                     * if you want to set global animate executor use underline. ScrapHelper.setAnimateExecutor(animateExecutor);
+                     * if you want to set global animate executor,  please use ScrapHelper.setAnimateExecutor(animateExecutor);
                      */
                     Bundle b2 = new Bundle();
                     b2.putInt("id",1);

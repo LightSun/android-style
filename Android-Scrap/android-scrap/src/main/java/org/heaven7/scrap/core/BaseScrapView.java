@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import org.heaven7.scrap.annotation.CalledByFramework;
+import org.heaven7.scrap.annotation.NonNull;
 import org.heaven7.scrap.core.event.IActivityEventCallback;
 import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleAdapter;
 import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
@@ -210,9 +211,9 @@ public abstract class BaseScrapView {
 	/**
 	 * set whether or not to show the loading .
 	 */
-	public void setShowLoading(boolean showLoading) {
+	protected void setShowLoading(boolean showLoading) {
 		if(this.mLoadingParam.showLoading != showLoading) {
-			this.mLoadingParam.set(showLoading, true, true);
+			this.mLoadingParam.showLoading = showLoading;
 			ScrapHelper.getActivityViewController().showOrHideLoading(this.mLoadingParam);
 		}
 	}
@@ -221,7 +222,7 @@ public abstract class BaseScrapView {
 	 *  set whether or not to show the loading
 	 * @see  #setShowLoading(boolean)
 	 */
-	public void setShowLoading(LoadingParam loadingParam) {
+	protected void setShowLoading(LoadingParam loadingParam) {
 		if(mLoadingParam.showLoading != loadingParam.showLoading) {
 			this.mLoadingParam.set(loadingParam.showLoading, loadingParam.showTop, loadingParam.showBottom);
 			ScrapHelper.getActivityViewController().showOrHideLoading(this.mLoadingParam);
@@ -239,7 +240,7 @@ public abstract class BaseScrapView {
 	 *  @param view  the view to replace
 	 *  @param  scrap  the position of the view
 	 */
-	protected void replaceView(View view,ScrapPosition scrap){
+	protected void replaceView(@NonNull View view,@NonNull ScrapPosition scrap){
 		if(view == null)
 			throw new NullPointerException("view cann't be null");
         mViewProcessor.replaceView(view, scrap);
@@ -281,7 +282,14 @@ public abstract class BaseScrapView {
 	 */
 	@CalledByFramework
 	protected void onHide(ScrapPosition position){
-		
+		switch (position){
+			case Top:
+                mLoadingParam.showTop = false;
+				break;
+			case Bottom:
+				mLoadingParam.showBottom = false;
+				break;
+		}
 	}
 	/**
 	 * when the top/middle/bottom show it's visibility,this will be called.
@@ -291,7 +299,14 @@ public abstract class BaseScrapView {
 	 */
 	@CalledByFramework
 	protected void onShow(ScrapPosition position){
-		
+		switch (position){
+			case Top:
+				mLoadingParam.showTop = true;
+				break;
+			case Bottom:
+				mLoadingParam.showBottom = true;
+				break;
+		}
 	}
 	/**
 	 * when this view is attached done to the activity. this will be called.

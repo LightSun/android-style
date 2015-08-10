@@ -230,7 +230,7 @@ public final class Transaction {
 	 * @param target the taget view to add back stack.
 	 * @throws NoSuchElementException if the anotherView of another class can't find.
 	 */
-	public Transaction addBackAfterAnother(Class<? extends BaseScrapView> another,BaseScrapView target) {
+	/*imdeterminate*/ Transaction addBackAfterAnother(Class<? extends BaseScrapView> another,BaseScrapView target) {
 		if (target == null)
 			throw new NullPointerException();
 		if(mLastView != target)

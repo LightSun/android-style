@@ -17,6 +17,7 @@
 package org.heaven7.scrap.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 //comes from android src
 /**
  * Copy on write array. This array is not thread safe, and only one loop can
@@ -96,6 +97,14 @@ public class CopyOnWriteArray<T> {
        public void addAll(CopyOnWriteArray<T> array) {
             getArray().addAll(array.mData);
         }
+       public void addAll(Collection<T> collection) {
+            getArray().addAll(collection);
+       }
+       public void addAll(T...ts) {
+            for(T t : ts){
+                getArray().add(t);
+            }
+       }
 
        public void remove(T item) {
             getArray().remove(item);

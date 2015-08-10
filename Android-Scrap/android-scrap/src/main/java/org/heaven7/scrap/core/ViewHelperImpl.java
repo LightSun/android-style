@@ -55,6 +55,7 @@ public class ViewHelperImpl{
     public ViewHelperImpl(View target) {
         this.v = target;
     }
+    public ViewHelperImpl(){}
 
     /** change the current view to the target */
     public ViewHelperImpl view(View target){

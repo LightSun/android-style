@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DataBinding>
+    <data>
+        <variable name="user" type="com.example.User"/>
+        <variable name="handlers" type="com.example.Handlers"/>
+        <import type="android.view.View" alias="View"/> <!-- 这种alias可隐藏 -->
+        <import type="com.example.real.estate.View"
+                          alias="Vista"/>
+        <variable name="userList" type="List'{user}'"/>
+
+        <variable name="image" type="Drawable"/>
+        <variable name="note"  type="String"/>
+    </data>
+
+    <bind id="bt">
+        <property name="text">@{user.username}</property>
+        <property name="onClick">@{user.isFriend ? handlers.onClickFriend : handlers.onClickEnemy}</property>
+        <property name="visibility">@{user.isAdult ? View.VISIBLE : View.GONE}</property>
+    </bind>
+
+    <bind id="iv_head">
+        <property name="xxx">@{ user.url }</property>
+        <apply method_name="setImageBitmap" type = "bitmap" >@{ user.url }</apply>
+    </bind>
+
+    <bind id="lv">
+         <adapter >
+               <item layout="item_demo" bind="scrap_data_binding_1"/>
+         </adapter>
+    </bind>
+
+</DataBinding>
+

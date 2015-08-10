@@ -68,7 +68,7 @@ public class ConfigUtil {
 				value = en.getValue();
 				if(value instanceof String){
 					if(StringUtils.containsWhitespace((CharSequence) value)){
-						//去掉末尾的所有空格
+						//trim shitespace
 						prop.put(en.getKey(), StringUtils.trimTrailingWhitespace((String) value));
 					}
 				}
