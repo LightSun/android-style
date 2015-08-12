@@ -1,30 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DataBinding>
     <data>
-        <variable name="user" type="com.example.User"/>
-        <variable name="handlers" type="com.example.Handlers"/>
-        <import type="android.view.View" alias="View"/> <!-- 这种alias可隐藏 -->
-        <import type="com.example.real.estate.View"
-                          alias="Vista"/>
-        <variable name="userList" type="List'{user}'"/>
+        <variable name="user"  classname="com.example.User"  type="bean"/>
+        <variable name="handlers" classname="com.example.Handlers" type="callback"/>
+        <variable name="userList" classname="com.example.User" type="beans"/>
 
-        <variable name="image" type="Drawable"/>
-        <variable name="note"  type="String"/>
+        <import classname="android.view.View" alias="View"/> <!-- this type of alias  can hide (but must uppercase) -->
+        <import classname="com.example.real.estate.View"
+                          alias="Vista"/>
+
+        <!--<variable name="image" type="Drawable"/>
+        <variable name="note"  type="String"/>-->
     </data>
 
     <bind id="bt">
-        <property name="text">@{user.username}</property>
-        <property name="onClick">@{user.isFriend ? handlers.onClickFriend : handlers.onClickEnemy}</property>
-        <property name="visibility">@{user.isAdult ? View.VISIBLE : View.GONE}</property>
+        <property name="text" referVariable="user" valueType="string">@{user.username}</property>
+        <property name="onClick" referVariable="user,handlers"  valueType="method">
+            @{user.isFriend ? handlers.onClickFriend : handlers.onClickEnemy}
+        </property>
+        <property name="visibility" referVariable="user" referImport="View">
+            @{user.isAdult ? View.VISIBLE : View.GONE}</property>
     </bind>
 
     <bind id="iv_head">
-        <property name="xxx">@{ user.url }</property>
-        <apply method_name="setImageBitmap" type = "bitmap" >@{ user.url }</apply>
+        <property name="xxx"> @{ user.url } </property>
+        <property name="ImageBitmap" type = "imageUrl" >@{ user.url }</property> <!-- method name shuould be uppercase -->
     </bind>
 
     <bind id="lv">
-         <adapter >
+         <adapter list="@{userList}">
                <item layout="item_demo" bind="scrap_data_binding_1"/>
          </adapter>
     </bind>

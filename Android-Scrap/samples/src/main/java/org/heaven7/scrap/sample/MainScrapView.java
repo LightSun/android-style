@@ -68,5 +68,8 @@ public class MainScrapView extends BaseScrapView {
                         .jump().commit();
             }
         });
+
+        //String s = getResources().getDisplayMetrics().toString();
+       // ScrapLog.i("getDisplayMetrics",s);
     }
 }

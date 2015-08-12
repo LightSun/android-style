@@ -16,10 +16,10 @@
  */
 package org.heaven7.scrap.core;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -32,7 +32,7 @@ import org.heaven7.scrap.core.event.ActivityEventCallbackGroup;
  * the container activity for this 'one activity' framework.
  * @author heaven7
  */
-public class ContainerActivity extends Activity{
+public class ContainerActivity extends AppCompatActivity{
 	
 	private FrameLayout mFl_top;
 	private FrameLayout mFl_content;
