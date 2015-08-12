@@ -45,9 +45,8 @@ it helps you to reduce number of activities  and avoid some problems of fragment
      - optimize code.
   
 ## TODO
-   * Support viewPager nest fragment
    * other idea
-   * Support databinding . wait for the databing of google lib is stable .
+   * Support databinding . wait for the databinding of google lib is stable .
    
 ## issue
    * if you have a good suggestion  about this, please tell me. Thanks! 
@@ -61,7 +60,7 @@ it helps you to reduce number of activities  and avoid some problems of fragment
 i like technology. especially the open-source technology.And previous i didn't contribute to it caused by i am a little lazy, but now i really want to do some for the open-source. So i hope to share and communicate with the all of you.
 
 ### How to use 
-- in android studio gradle of android studio:       
+- in gradle of android studio:       
       - add dependence ,
  
           ``` java
