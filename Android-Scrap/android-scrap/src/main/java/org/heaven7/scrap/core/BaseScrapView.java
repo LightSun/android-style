@@ -30,7 +30,6 @@ import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleAdapter;
 import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
 import org.heaven7.scrap.util.MainWorker;
 import org.heaven7.scrap.util.ScrapHelper;
-import org.heaven7.scrap.util.Toaster;
 
 /**
  * this is a base view for 'the scrap view'. it help you to fast use.
@@ -50,8 +49,6 @@ public abstract class BaseScrapView {
 	private LayoutInflater mInflater;
 	/** the bundle data if you want to pass data from one BaseScrapView to another */
 	private Bundle mBundle;
-	/** a toast wrapper */
-	private Toaster mToaster;
 	/**
 	 * a view helper to help you fast call some  methods.
 	 * @see  ViewHelper
@@ -78,7 +75,6 @@ public abstract class BaseScrapView {
 	 */
 	public BaseScrapView(Context mContext) {
 		super();
-		this.mToaster = new Toaster(mContext);
 		this.mContext = mContext;
 		this.mInflater = LayoutInflater.from(mContext);
 		onPostInit();
@@ -160,22 +156,10 @@ public abstract class BaseScrapView {
 		return mBundle;
 	}
 	
-	/** show the toast with the msg. */
-	public void showToast(String msg){
-		mToaster.show(msg);
-	}
-	/** show the toast with the msg of resId. */
-	public void showToast(int resId){
-		mToaster.show(resId);
-	}
 	/** get the ViewHelper to help use some good method.
 	 * @see ViewHelper*/
 	public ViewHelper getViewHelper(){
 		return mViewHelper;
-	}
-	/** get the toast warpper */
-	public Toaster getToaster(){
-		return mToaster;
 	}
 
 	@CalledByFramework("set the activity's view processor")

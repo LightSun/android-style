@@ -70,7 +70,7 @@ public class ScrapView extends CommonView {
                 Bundle b = new Bundle();
                 b.putInt("id",id+1);
 
-                ScrapHelper.beginTransaction().changeBackStackMode(ArrayList2.ExpandArrayList2.Mode.Normal)
+                ScrapHelper.beginTransaction().stackMode(ArrayList2.ExpandArrayList2.Mode.Normal)
                         .addBackAsTop(new ScrapView(v.getContext()))
                         .withExtras(b).jump().commit();
             }

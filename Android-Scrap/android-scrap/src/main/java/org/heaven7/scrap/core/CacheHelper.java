@@ -32,9 +32,9 @@ import java.util.NoSuchElementException;
  * the cache helper for internal use.
  * the view stack only cache one instance of the same class name which is a child of BaseScrapView.
  * if {@link ExpandArrayList2#getMode()} != {@link Mode#Normal}
- * <li> you can use {@link Transaction#changeBackStackMode(Mode)} to change the default behavior. and the {@link Transaction#commit()} will restore mode
+ * <li> you can use {@link Transaction#stackMode(Mode)} to change the default behavior. and the {@link Transaction#commit()} will restore mode
  * to default({@link Mode#ClearPrevious}).
- * @see Transaction#changeBackStackMode(Mode)
+ * @see Transaction#stackMode(Mode)
  * @see Transaction#commit()
  * @author heaven7
  */

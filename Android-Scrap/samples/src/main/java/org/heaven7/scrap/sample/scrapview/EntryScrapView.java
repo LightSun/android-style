@@ -89,7 +89,7 @@ public class EntryScrapView extends CommonView {
              */
                     Bundle b = new Bundle();
                     b.putInt("id",1);
-                    ScrapHelper.beginTransaction().changeBackStackMode(ArrayList2.ExpandArrayList2.Mode.Normal)
+                    ScrapHelper.beginTransaction().stackMode(ArrayList2.ExpandArrayList2.Mode.Normal)
                             .addBackAsTop(new ScrapView(context))
                             .withExtras(b).jump().commit();
                  //   ScrapHelper.beginTransaction().cache() //if you want cache the view.
@@ -109,7 +109,7 @@ public class EntryScrapView extends CommonView {
                     b2.putInt("id",1);
                     //also use can use #setBundle to carray data
                    // view2.setBundle(data);
-                    ScrapHelper.beginTransaction().changeBackStackMode(ArrayList2.ExpandArrayList2.Mode.Normal)
+                    ScrapHelper.beginTransaction().stackMode(ArrayList2.ExpandArrayList2.Mode.Normal)
                             .addBackAsTop(new ScrapView(context))
                             .animateExecutor(animateExecutor).withExtras(b2)
                             .jump().commit();

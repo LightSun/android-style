@@ -19,12 +19,17 @@ package org.heaven7.scrap.util;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * reflect util
  * @author heaven7
  */
-public class Reflector{
+public final class Reflector{
 	
 	
 	public static IReflector from(Class<?> clazz){
@@ -34,50 +39,47 @@ public class Reflector{
 	public interface IReflector {
 		
 		/**equal to Class.newInstance() */
-		public abstract <T>T newInstance();
+		<T>T newInstance();
 
-		public abstract  IReflector constructor(Class<?>... paramTypes);
+		IReflector constructor(Class<?>... paramTypes);
 
 		/** create an  Instance of T, you must call the method {@linkplain #constructor} first*/
-		public abstract  <T> T create(Object... args);
+		<T> T create(Object... args);
 
 		/** find the field */
-		public abstract IReflector field(String name);
+		IReflector field(String name);
 
-		/** find the method */
-		public abstract IReflector method(String name, Class<?>... paramTypes);
+		/** find the public method */
+		IReflector method(String name, Class<?>... paramTypes);
+
+		/** find the public methods */
+		IReflector methods(String name, boolean staticType);
 
 		/** set  static field value */
-		public abstract IReflector setStatic(Object value);
+		IReflector setStatic(Object value);
 
 		/** set  static field value */
-		public abstract IReflector set(Object target, Object value);
+		IReflector set(Object target, Object value);
 
 		/** get field value*/
-		public abstract <T> T get(Object target);
+		<T> T get(Object target);
 
 		/** get static field value*/
-		public abstract <T> T getStatic();
+		<T> T getStatic();
 
 		/** invoke static method */
-		public abstract <T> T invokeStatic(Object... args);
+		<T> T invokeStatic(Object... args);
+
+		/** invoke static method . see {@linkplain #methods(String, boolean)}*/
+		<T> T invokeStaticUntil(Object... args);
 
 		/** invoke method */
-		public abstract <T> T invoke(Object target, Object... args);
+		<T> T invoke(Object target, Object... args);
+
+		/** invoke method */
+		<T> T invokeUntil(Object target, Object... args);
 	}
 	
-    /*public static void getUniqueName(StringBuilder sb,Object...objs){
-    	final Class<?> clazz = objs.getClass();
-    	sb.setLength(0);
-    	sb.append(clazz.getName());
-    	
-    	Class<?> clazz2  = clazz;
-    	while(clazz2.isArray()){
-    		clazz2 = clazz2.getComponentType();
-    		sb.append(clazz2.getName());
-    	}
-    }*/
-
 	public static Class<?> toArrayType(Class<?> clazz) {
 		return Array.newInstance(clazz, 0).getClass();
 	}
@@ -89,7 +91,7 @@ public class Reflector{
 	@SuppressWarnings("unchecked")
 	public static <T> Constructor<T> constructor(Class<?> clazz,Class<?>...paramTypes){
 		try {
-			Constructor<?> c = clazz.getDeclaredConstructor(paramTypes);
+			Constructor<?> c = clazz.getConstructor(paramTypes);
 			c.setAccessible(true);
 			return (Constructor<T>) c;
 		} catch (NoSuchMethodException e) {
@@ -98,7 +100,7 @@ public class Reflector{
 	}
 	public static Method method(Class<?> clazz,String name,Class<?>...paramTypes){
 		try {
-			Method m = clazz.getDeclaredMethod(name, paramTypes);
+			Method m = clazz.getMethod(name, paramTypes);
 			m.setAccessible(true);
 			return m;
 		} catch (NoSuchMethodException e) {
@@ -115,13 +117,14 @@ public class Reflector{
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	private static class SimpleReflector implements IReflector{
 		private final Class<?> clazz;
 		private Method m;
 		private Field f;
 		private Constructor<?> c;
-		
+		private List<Method> mMethods;
+
 		public SimpleReflector(Class<?> clazz) {
 			this.clazz = clazz;
 		}
@@ -198,7 +201,27 @@ public class Reflector{
 		public <T> T getStatic(){
 			return get(null);
 		}
-		
+
+		@Override
+		public IReflector methods(String name, boolean staticType) {
+			Method[] methods = clazz.getMethods();
+			List<Method> list = new ArrayList<>();
+			boolean tmpStatic;
+			for (Method m : methods){
+				tmpStatic = (m.getModifiers() & Modifier.STATIC)== Modifier.STATIC;
+				if(staticType == tmpStatic){
+					if(m.getName().equals(name)){
+						list.add(m);
+					}
+				}
+			}
+			if(list.isEmpty()){
+				throw new IllegalStateException("can't find method for name = " + name + " ,static = " + staticType);
+			}
+			mMethods = list;
+			return this;
+		}
+
 		/* (non-Javadoc)
 		 * @see com.heaven.classloadertest.IReflector#invokeStatic(java.lang.Object)
 		 */
@@ -209,6 +232,24 @@ public class Reflector{
 		/* (non-Javadoc)
 		 * @see com.heaven.classloadertest.IReflector#invoke(java.lang.Object, java.lang.Object)
 		 */
+
+		@Override
+		public <T> T invokeStaticUntil(Object... args) {
+			return invokeUntil(null, args);
+		}
+
+		@Override  @SuppressWarnings("unchecked")
+		public <T> T invokeUntil(Object target, Object... args) {
+			for (Method m : mMethods){
+				try {
+					return (T) m.invoke(target, args);
+				} catch (Exception e) {
+					//ignore
+				}
+			}
+			throw new IllegalStateException("invoke static method error.");
+		}
+
 		@Override
 		@SuppressWarnings("unchecked")
 		public <T> T invoke(Object target,Object...args){

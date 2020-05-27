@@ -26,7 +26,7 @@ import java.util.NoSuchElementException;
 /**
  * the Transaction object hold a group operation such as: {@link #cache(String, BaseScrapView)},
  *  {@link #addBackAsTop(BaseScrapView)},{@link #addBackAfterAnother(BaseScrapView, BaseScrapView)},
- *  {@link #addBackBeforeAnother(BaseScrapView, BaseScrapView)} , {@link #jump(BaseScrapView)},{@link #changeBackStackMode(org.heaven7.scrap.util.ArrayList2.ExpandArrayList2.Mode)}
+ *  {@link #addBackBeforeAnother(BaseScrapView, BaseScrapView)} , {@link #jump(BaseScrapView)},{@link #stackMode(org.heaven7.scrap.util.ArrayList2.ExpandArrayList2.Mode)}
  *  and use {@link #commit()} to commit it at last. here is the sample code:<p>
  *  <pre> Transaction transaction = ActivityController.get().beginTransaction();  
  *  transaction.cache(view).changeBackStackMode(ExpandArrayList2.Mode.ReplacePreviousAndClearAfter)
@@ -82,7 +82,7 @@ public final class Transaction {
 	/** change the behaviour of the default back stack.  after call {@link #commit()} the mode will restore.
 	 * @param mode which mode you want to. default is {@link ArrayList2.ExpandArrayList2.Mode#ClearPrevious}
 	 * @see ArrayList2.ExpandArrayList2.Mode */
-	public Transaction changeBackStackMode(ArrayList2.ExpandArrayList2.Mode mode){
+	public Transaction stackMode(ArrayList2.ExpandArrayList2.Mode mode){
 		mHelper.mViewStack.setMode(mode);
 		return this;
 	}
@@ -230,7 +230,7 @@ public final class Transaction {
 	 * @param target the taget view to add back stack.
 	 * @throws NoSuchElementException if the anotherView of another class can't find.
 	 */
-	/*imdeterminate*/ Transaction addBackAfterAnother(Class<? extends BaseScrapView> another,BaseScrapView target) {
+	public Transaction addBackAfterAnother(Class<? extends BaseScrapView> another,BaseScrapView target) {
 		if (target == null)
 			throw new NullPointerException();
 		if(mLastView != target)
@@ -244,7 +244,7 @@ public final class Transaction {
 	 * @param target the target view to add back stack.
 	 *  @throws NoSuchElementException if the anotherView  of another class can't find.
 	 */
-	/*imdeterminate*/ Transaction addBackBeforeAnother(Class<? extends BaseScrapView> another,BaseScrapView target) {
+	public Transaction addBackBeforeAnother(Class<? extends BaseScrapView> another,BaseScrapView target) {
 		if (target == null)
 			throw new NullPointerException();
 		if(mLastView != target)
