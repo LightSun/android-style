@@ -2,8 +2,9 @@ package org.heaven7.scrap.sample.scrapview;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.ImageView;
 
-import com.android.volley.extra.ImageParam;
+import com.bumptech.glide.Glide;
 
 import org.heaven7.scrap.adapter.QuickAdapter;
 import org.heaven7.scrap.core.BaseScrapView;
@@ -73,8 +74,8 @@ public class CommonView extends BaseScrapView {
             @Override
             protected void convert(Context context, int position, ViewHelper viewHelper, GirlData item) {
                    viewHelper.setText(R.id.tv,item.name);
-                   viewHelper.setImageUrl(R.id.eniv, item.imageUrl, new ImageParam.Builder()
-                           .placeholder(R.mipmap.ic_launcher).error(R.mipmap.ic_launcher).circle().create());
+                ImageView view = viewHelper.getView(R.id.eniv);
+                Glide.with(view).load(item.imageUrl).into(view);
             }
         });
     }

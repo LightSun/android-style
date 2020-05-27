@@ -19,11 +19,12 @@ package org.heaven7.scrap.core;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.heaven7.scrap.R;
 import org.heaven7.scrap.core.event.ActivityEventCallbackGroup;
@@ -32,7 +33,7 @@ import org.heaven7.scrap.core.event.ActivityEventCallbackGroup;
  * the container activity for this 'one activity' framework.
  * @author heaven7
  */
-public class ContainerActivity extends AppCompatActivity{
+public class ContainerActivity extends AppCompatActivity {
 	
 	private FrameLayout mFl_top;
 	private FrameLayout mFl_content;
@@ -51,7 +52,7 @@ public class ContainerActivity extends AppCompatActivity{
 			mFl_content = (FrameLayout) findViewById(R.id.fl_content);
 			mFl_loading = (FrameLayout) findViewById(R.id.fl_loading);
 
-			attachAndDispatchOnCreate(mFl_top,mFl_content,mFl_bottom,mFl_loading,savedInstanceState);
+			attachAndDispatchOnCreate(mFl_top, mFl_content, mFl_bottom,mFl_loading,savedInstanceState);
 		}
 	}
 	/** this must called after the container(top,middle,and bottom) is found ! */

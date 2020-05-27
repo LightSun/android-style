@@ -29,10 +29,6 @@ import android.widget.Adapter;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 
-import com.android.volley.data.RequestManager;
-import com.android.volley.extra.ExpandNetworkImageView;
-import com.android.volley.extra.ImageParam;
-
 /**
  * for better use same view's method. cached it automatic for reuse.
  * use can through {@link BaseScrapView#getViewHelper()} to get.
@@ -185,17 +181,6 @@ public class ViewHelper {
 	public ViewHelper setImageUrl(int viewId, String imageUrl,IImageLoader loader) {
 		return view(viewId).setImageUrl(imageUrl,loader).reverse(this);
 	}
-	/** use volley extra to load image（this support circle image and round）.
-	 * <li>@Note RequestManager must call {@link RequestManager#init(Context)} before this.
-	 * such as in {@link Application#onCreate()}
-	 * @param param  image param to control what bitmap to show!
-	 * @param viewId must be {@link ExpandNetworkImageView}
-	 * @see {@link ImageParam.Builder#circle()} and etc methods.
-	 * */
-	public ViewHelper setImageUrl(int viewId,String url,ImageParam param){
-		return view(viewId).setImageUrl(url,param).reverse(this);
-	}
-	
 	/**
 	 * Add an action to set the image of an image view. Can be called multiple
 	 * times.

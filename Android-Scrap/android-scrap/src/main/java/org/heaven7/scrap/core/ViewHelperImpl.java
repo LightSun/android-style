@@ -33,10 +33,6 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.android.volley.data.RequestManager;
-import com.android.volley.extra.ExpandNetworkImageView;
-import com.android.volley.extra.ImageParam;
-
 import org.heaven7.scrap.util.ViewCompatUtil;
 
 /**
@@ -136,12 +132,6 @@ public class ViewHelperImpl{
 
     public ViewHelperImpl setImageUrl(String url,ViewHelper.IImageLoader loader) {
         loader.load(url, (ImageView) v);
-        return this;
-    }
-    public ViewHelperImpl setImageUrl(String url,ImageParam param) {
-        ExpandNetworkImageView view = (ExpandNetworkImageView) v;
-        view.setImageParam(param);
-        view.setImageUrl(url, RequestManager.getImageLoader());
         return this;
     }
     public ViewHelperImpl setImageBitmap(Bitmap bitmap) {

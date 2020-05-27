@@ -708,7 +708,7 @@ public final class ActivityViewController implements Transaction.IJumper {
         }
     };
 
-    private class JumpParam{
+    private static class JumpParam{
         public BaseScrapView scrapView;
         public AnimateExecutor animateExecutor;
 

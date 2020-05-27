@@ -3,8 +3,6 @@ package org.heaven7.scrap.sample;
 import android.content.Context;
 import android.view.View;
 
-import com.android.volley.data.RequestManager;
-
 import org.heaven7.scrap.core.BaseScrapView;
 import org.heaven7.scrap.sample.scrapview.EntryScrapView;
 import org.heaven7.scrap.util.ScrapHelper;
@@ -16,7 +14,6 @@ import org.heaven7.scrap.util.ScrapHelper;
  */
 public class MainScrapView extends BaseScrapView {
 
-    private static boolean sVolleyInited;
     private long start;
 
     public MainScrapView(Context mContext) {
@@ -57,10 +54,7 @@ public class MainScrapView extends BaseScrapView {
     @Override
     protected void onAttach() {
         //after here i use volley to load image,so must init
-        if(!sVolleyInited){
-            sVolleyInited = true;
-            RequestManager.init(getContext().getApplicationContext());
-        }
+
         getViewHelper().setOnClickListener(R.id.bt, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
