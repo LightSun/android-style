@@ -52,5 +52,6 @@ public interface IActivityLifeCycleCallback {
 	void onActivityLowMemory(Activity activity);
 	
 	void onActivityWindowFocusChanged(Activity activity, boolean hasFocus);
-	
+
+    void onRequestPermissionsResult(Activity activity, int requestCode, String[] permissions, int[] grantResult);
 }

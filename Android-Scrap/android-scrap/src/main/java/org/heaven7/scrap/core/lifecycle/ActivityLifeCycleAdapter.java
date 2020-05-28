@@ -95,5 +95,10 @@ public  class ActivityLifeCycleAdapter implements IActivityLifeCycleCallback {
 	public void onActivityWindowFocusChanged(Activity activity, boolean hasFocus) {
 		
 	}
-	
+
+	@Override
+	public void onRequestPermissionsResult(Activity activity, int requestCode, String[] permissions, int[] grantResult) {
+
+	}
+
 }

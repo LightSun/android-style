@@ -14,13 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.heaven7.scrap.util;
+package org.heaven7.scrap.core;
 /**
  * Created by heaven7 on 2015/8/8.
  */
 public interface ScrapConstant {
 
-    String CONFIG_FILENAME                          = "scrap_config";
+    String CONFIG_FILENAME                          = "scrap_config.properties";
     String CONFIG_KEY_MAIN_SCRAP_VIEW               = "scrap_view_main";
     String CONFIG_KEY_MAIN_SCRAP_VIEW_BACK_STACK    = "scrap_view_main_addBackStack";
+
+    String KEY_UI_DELEGATE = "__UiDelegate";
+    String KEY_PARAMETER = "__param";
 }

@@ -22,6 +22,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.RestrictTo;
+
 import com.heaven7.java.base.anno.CalledInternal;
 
 import org.heaven7.scrap.core.anim.AnimateExecutor;
@@ -30,7 +32,6 @@ import org.heaven7.scrap.core.event.ActivityEventCallbackGroup;
 import org.heaven7.scrap.core.event.IActivityEventCallback;
 import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleDispatcher;
 import org.heaven7.scrap.util.Reflector;
-import org.heaven7.scrap.util.ScrapConstant;
 import org.heaven7.scrap.util.Utils;
 
 import java.util.Properties;
@@ -89,7 +90,8 @@ public final class ActivityController {
 	
 	/** this will be called automatic is the one Activity.* */
 	@CalledInternal
-	/*public*/ void attach(Activity activity, ViewGroup top, ViewGroup middle,
+	@RestrictTo(RestrictTo.Scope.LIBRARY)
+	public void attach(Activity activity, ViewGroup top, ViewGroup middle,
 			ViewGroup bottom,ViewGroup loading, Bundle savedInstanceState) {
 		mSaveInstanceState = savedInstanceState!=null? new Bundle(savedInstanceState) :null;
 		mViewController.attachActivity(activity);
@@ -180,7 +182,7 @@ public final class ActivityController {
 	/** open the transaction of {@link ActivityViewController}, this is very useful.
 	 * here is the sample code: <p>
 	 * <pre> Transaction transaction = ActivityController.get().beginTransaction();  
-     *       transaction.cache(view).changeBackStackMode(ExpandArrayList2.Mode.ReplacePreviousAndClearAfter)
+     *       transaction.cache(view).stackMode(Mode.ReplacePreviousAndClearAfter)
      *           .addBackAsTop().jump().commit();
      *  </pre></p>
      *  the more to see {@link Transaction}
