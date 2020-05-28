@@ -2,13 +2,12 @@ package org.heaven7.scrap.core.delegate;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import org.heaven7.scrap.R;
-import org.heaven7.scrap.core.ActivityController;
 import org.heaven7.scrap.core.event.ActivityEventCallbackGroup;
 import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleDispatcher;
+import org.heaven7.scrap.core.oneac.ActivityController;
 
 public class SingleActivityUiDelegate extends AbstractUiDelegate {
 
@@ -46,19 +45,12 @@ public class SingleActivityUiDelegate extends AbstractUiDelegate {
     }
 
     private void init(Bundle savedInstanceState) {
-        mFl_top = (FrameLayout) findViewById(R.id.fl_top);
-        mFl_bottom = (FrameLayout) findViewById(R.id.fl_bottom);
-        mFl_content = (FrameLayout) findViewById(R.id.fl_content);
-        mFl_loading = (FrameLayout) findViewById(R.id.fl_loading);
+        mFl_top = (FrameLayout) findViewById(R.id.lib_style_top);
+        mFl_bottom = (FrameLayout) findViewById(R.id.lib_style_bottom);
+        mFl_content = (FrameLayout) findViewById(R.id.lib_style_content);
+        mFl_loading = (FrameLayout) findViewById(R.id.lib_style_loading);
 
-        attachAndDispatchOnCreate(mFl_top, mFl_content, mFl_bottom, mFl_loading, savedInstanceState);
-    }
-
-    /** this must called after the container(top,middle,and bottom) is found ! */
-    protected void attachAndDispatchOnCreate(ViewGroup top,
-                                             ViewGroup middle, ViewGroup bottom, ViewGroup loading, Bundle savedInstanceState) {
-        ActivityController.get().attach(getActivity(), top, middle, bottom,loading, savedInstanceState);
-        ActivityController.get().getLifeCycleDispatcher()
-                .dispatchActivityOnCreate(getActivity(), savedInstanceState);
+        /* this must called after the container(top,middle,and bottom) is found ! */
+        ActivityController.get().attach(getActivity(), mFl_top, mFl_content, mFl_bottom, mFl_loading, savedInstanceState);
     }
 }

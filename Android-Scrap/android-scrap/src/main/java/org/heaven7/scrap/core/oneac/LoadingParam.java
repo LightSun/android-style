@@ -1,4 +1,4 @@
-package org.heaven7.scrap.core;
+package org.heaven7.scrap.core.oneac;
 
 /**
  * loading param , used for the loading view

@@ -6,8 +6,8 @@ import android.view.MotionEvent;
 
 import org.heaven7.scrap.core.event.ActivityEventAdapter;
 import org.heaven7.scrap.core.event.IActivityEventCallback;
+import org.heaven7.scrap.core.oneac.ScrapHelper;
 import org.heaven7.scrap.sample.ScrapLog;
-import org.heaven7.scrap.util.ScrapHelper;
 
 /**
  * Created by heaven7 on 2015/8/4.

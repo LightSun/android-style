@@ -6,10 +6,11 @@ import android.view.View;
 
 import com.heaven7.core.util.ViewHelper;
 
+import org.heaven7.scrap.core.oneac.ScrapHelper;
 import org.heaven7.scrap.sample.R;
 import org.heaven7.scrap.sample.ScrapLog;
 import org.heaven7.scrap.util.ArrayList2;
-import org.heaven7.scrap.util.ScrapHelper;
+import org.heaven7.scrap.util.ExpandArrayList;
 
 /**
  * Created by heaven7 on 2015/8/3.
@@ -71,7 +72,7 @@ public class ScrapView extends CommonView {
                 Bundle b = new Bundle();
                 b.putInt("id",id+1);
 
-                ScrapHelper.beginTransaction().stackMode(ArrayList2.ExpandArrayList2.Mode.Normal)
+                ScrapHelper.beginTransaction().stackMode(ExpandArrayList.Mode.Normal)
                         .addBackAsTop(new ScrapView(v.getContext()))
                         .withExtras(b).jump().commit();
             }

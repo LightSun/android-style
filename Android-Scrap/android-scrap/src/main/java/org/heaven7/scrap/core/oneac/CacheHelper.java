@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.heaven7.scrap.core;
+package org.heaven7.scrap.core.oneac;
 
 import android.content.Context;
 
@@ -40,14 +40,14 @@ import java.util.NoSuchElementException;
 
 	final ExpandArrayList<BaseScrapView> mViewStack;
 	private final HashMap<String, BaseScrapView> mCachedViewMap;
-	
+
     private static final Comparator<BaseScrapView> DEFAULT_COMPARATOR = new Comparator<BaseScrapView>() {
 		@Override
 		public int compare(BaseScrapView lhs, BaseScrapView rhs) {
 			return lhs.getClass() == rhs.getClass() ? 0 :1;
 		}
 	};
-	
+
 	public CacheHelper() {
 		mCachedViewMap = new HashMap<String, BaseScrapView>();
 		mViewStack = new ExpandArrayList<BaseScrapView>(){
@@ -68,7 +68,7 @@ import java.util.NoSuchElementException;
 		mViewStack.setComparator(DEFAULT_COMPARATOR);
 		mViewStack.setMode(ExpandArrayList.Mode.ClearPrevious);
 	}
-	
+
 	/** restore the setting of back stack. */
 	public void resetStackSetting(){
 		if(mViewStack.getComparator() != DEFAULT_COMPARATOR){
@@ -77,28 +77,28 @@ import java.util.NoSuchElementException;
 		if(mViewStack.getMode() != ExpandArrayList.Mode.ClearPrevious)
 		   mViewStack.setMode(ExpandArrayList.Mode.ClearPrevious);
 	}
-	
+
 	public List<BaseScrapView> getStackList() {
 		return mViewStack;
 	}
-	
+
 	/**
 	 *  make the BaseScrapView in the cache for reuse.
 	 * @param key the key to find for resue.
 	 * @param view which view you want to cache
 	 */
-	public CacheHelper cache(String key,BaseScrapView view){
+	public CacheHelper cache(String key, BaseScrapView view){
 		if(view == null)
 			throw new NullPointerException();
 		mCachedViewMap.put(key, view);
 		return this;
 	}
-	
+
 	/** default key is the view.getClass().getName()*/
 	public CacheHelper cache(BaseScrapView view){
 		return cache(view.getClass().getName(), view);
 	}
-	
+
 	public BaseScrapView getCacheView(String key){
 		return mCachedViewMap.get(key);
 	}
@@ -123,7 +123,7 @@ import java.util.NoSuchElementException;
 	 */
 	public CacheHelper addToStackBottom(BaseScrapView view){
 		mViewStack.addFirst(view);
-		return this; 
+		return this;
 	}
 
 	/**
@@ -132,27 +132,27 @@ import java.util.NoSuchElementException;
 	public int getStackSize(){
 		return mViewStack.size();
 	}
-	
+
 	public BaseScrapView pollStackTail(){
 		return mViewStack.pollLast();
 	}
-	
+
 	public BaseScrapView pollStackHead(){
 		return mViewStack.pollFirst();
 	}
 
 	/** get the bottom of stack.*/
-	public  BaseScrapView getStackHead(){
+	public BaseScrapView getStackHead(){
 		return mViewStack.getFirst();
 	}
-	
+
 	public void clearStack(){
 		mViewStack.clear();
 	}
 	public void clearCache(){
 		mCachedViewMap.clear();
 	}
-	
+
 	public void clearAll(){
 		mCachedViewMap.clear();
 		mViewStack.clear();
@@ -165,7 +165,7 @@ import java.util.NoSuchElementException;
      * @throws NoSuchElementException if referencedView isn't in stack.
      */
 	public void addToStack(BaseScrapView referencedView, BaseScrapView target,
-			boolean before) {
+                           boolean before) {
 		if(before)
 			mViewStack.addBefore(referencedView, target);
 		else
@@ -179,7 +179,7 @@ import java.util.NoSuchElementException;
      * @throws NoSuchElementException if the referencedView isn't in stack.
      */
 	/*public*/ void addToStack(Class<? extends BaseScrapView> referencedClass, BaseScrapView target,
-			boolean before) {
+                               boolean before) {
 		//create a simulate BaseScrapView to indexOf
 		BaseScrapView referencedView = Reflector.from(referencedClass).constructor(Context.class)
 				 .create(target.getContext());

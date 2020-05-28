@@ -68,10 +68,11 @@ public abstract class AbstractUiDelegate {
     public boolean onBackPressed() {
         return false;
     }
-
+    @CallSuper
     public void onFinish() {
 
     }
+    @CallSuper
     public void onDestroy(){
 
     }

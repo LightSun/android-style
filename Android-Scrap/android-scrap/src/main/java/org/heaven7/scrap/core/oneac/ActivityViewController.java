@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.heaven7.scrap.core;
+package org.heaven7.scrap.core.oneac;
 
 import android.app.Activity;
 import android.content.Context;
@@ -30,18 +30,18 @@ import com.heaven7.java.base.anno.NonNull;
 import com.heaven7.java.base.anno.Nullable;
 
 import org.heaven7.scrap.R;
+import org.heaven7.scrap.core.ContainerActivity;
 import org.heaven7.scrap.core.anim.AnimateExecutor;
 import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleAdapter;
 import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
 import org.heaven7.scrap.util.ExpandArrayList;
 import org.heaven7.scrap.util.Reflector;
-import org.heaven7.scrap.util.ScrapHelper;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
 
 /**
- * the controller of the activity's view.
+ * the controller of the one-activity's view.
  * <li> use {@link #jumpTo(BaseScrapView, Bundle)} to switch page.
  * <li> use {@link #cache(String, BaseScrapView)} to cache the page. and {@link #getCachedView(String)} to find it.
  * <li> if you want to  make the BaseScrapView add to the default back stack. use {@link #beginTransaction()}
@@ -403,7 +403,7 @@ public final class ActivityViewController implements Transaction.IJumper {
         jumpTo(v, null,mDefaultIntentExecutor,null);
     }
     @Override
-    public void jumpTo(@NonNull BaseScrapView v,Bundle data,AnimateExecutor executor) {
+    public void jumpTo(@NonNull BaseScrapView v, Bundle data, AnimateExecutor executor) {
         jumpTo(v, data,mDefaultIntentExecutor,executor);
     }
 
@@ -417,7 +417,7 @@ public final class ActivityViewController implements Transaction.IJumper {
      * @param animExecutor  the animate executor to perform this jump.
      */
     private void jumpTo(@NonNull BaseScrapView v, Bundle data, IntentExecutor executor,
-                         AnimateExecutor animExecutor) {
+                        AnimateExecutor animExecutor) {
         if (v == null)
             throw new NullPointerException();
         if(sDebug)
@@ -441,7 +441,7 @@ public final class ActivityViewController implements Transaction.IJumper {
             }
             v.setContext(activity);
             v.setViewHelper(new ViewHelper2(activity.getWindow().getDecorView()));
-            jumpToImpl(v,animExecutor);
+            jumpToImpl(v, animExecutor);
         }
     }
 
@@ -460,11 +460,11 @@ public final class ActivityViewController implements Transaction.IJumper {
      * @param next the target view
      * @param ae  the animate executor to perform this jump.
      */
-    private void jumpToImpl(final BaseScrapView next,AnimateExecutor ae) {
+    private void jumpToImpl(final BaseScrapView next, AnimateExecutor ae) {
         beforeAttach(next);
         final AnimateExecutor tempAnimExecutor = ae!=null ? ae :mGlobalAnimateExecutor;
         if (mCurrentView == null || tempAnimExecutor == null) {
-            replace(next,tempAnimExecutor);
+            replace(next, tempAnimExecutor);
         } else {
             View root = mCurrentView.getViewHelper().getRootView();
             tempAnimExecutor.performAnimate(root, false, mCurrentView, next,
@@ -491,7 +491,7 @@ public final class ActivityViewController implements Transaction.IJumper {
      * @param animExecutor  the animate executor to perform current jump, if is null use the global
      *                      animateExecutor{@link #mGlobalAnimateExecutor}
      */
-    private void replace(BaseScrapView target,AnimateExecutor animExecutor) {
+    private void replace(BaseScrapView target, AnimateExecutor animExecutor) {
         final BaseScrapView previous = mCurrentView;
         final View topView = target.getTopView();
         final View middleView = target.getMiddleView();
@@ -504,6 +504,7 @@ public final class ActivityViewController implements Transaction.IJumper {
         }
         mCurrentView = target;
         target.onAttach();
+
         AnimateExecutor executor = animExecutor!=null? animExecutor : mGlobalAnimateExecutor;
         if (executor != null)
             executor.performAnimate(target.getViewHelper().getRootView(), true, previous, target, null);
@@ -714,7 +715,7 @@ public final class ActivityViewController implements Transaction.IJumper {
         public BaseScrapView scrapView;
         public AnimateExecutor animateExecutor;
 
-        public void set(BaseScrapView scrapView,AnimateExecutor animateExecutor){
+        public void set(BaseScrapView scrapView, AnimateExecutor animateExecutor){
             this.scrapView = scrapView;
             this.animateExecutor = animateExecutor;
         }

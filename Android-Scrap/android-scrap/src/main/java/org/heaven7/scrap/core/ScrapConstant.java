@@ -20,7 +20,7 @@ package org.heaven7.scrap.core;
  */
 public interface ScrapConstant {
 
-    String CONFIG_FILENAME                          = "scrap_config.properties";
+    String CONFIG_FILENAME                          = "scrap_config";
     String CONFIG_KEY_MAIN_SCRAP_VIEW               = "scrap_view_main";
     String CONFIG_KEY_MAIN_SCRAP_VIEW_BACK_STACK    = "scrap_view_main_addBackStack";
 

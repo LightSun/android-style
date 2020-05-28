@@ -55,10 +55,14 @@ public class ContainerActivity extends AppCompatActivity {
         setContentView(mDelegate.getLayoutId());
         mDelegate.setActivity(this);
 
+        //on initialize
         mDelegate.onInitialize(getIntent(), savedInstanceState);
+        //on-create
+		mDelegate.getLifeCycleDispatcher().dispatchActivityOnCreate(this, savedInstanceState);
     }
 
-    @Override
+
+	@Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);

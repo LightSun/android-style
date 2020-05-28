@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.heaven7.scrap.core;
+package org.heaven7.scrap.core.oneac;
 
 import android.os.Bundle;
 
@@ -26,9 +26,9 @@ import java.util.NoSuchElementException;
 /**
  * the Transaction object hold a group operation such as: {@link #cache(String, BaseScrapView)},
  *  {@link #addBackAsTop(BaseScrapView)},{@link #addBackAfterAnother(BaseScrapView, BaseScrapView)},
- *  {@link #addBackBeforeAnother(BaseScrapView, BaseScrapView)} , {@link #jump(BaseScrapView)},{@link #stackMode(org.heaven7.scrap.util.ArrayList2.ExpandArrayList2.Mode)}
+ *  {@link #addBackBeforeAnother(BaseScrapView, BaseScrapView)} , {@link #jump(BaseScrapView)},{@link #stackMode(ExpandArrayList.Mode)}
  *  and use {@link #commit()} to commit it at last. here is the sample code:<p>
- *  <pre> Transaction transaction = ActivityController.get().beginTransaction();  
+ *  <pre> Transaction transaction = ActivityController.get().beginTransaction();
  *  transaction.cache(view).changeBackStackMode(ExpandArrayList2.Mode.ReplacePreviousAndClearAfter)
  *     addBackAsTop().jump().commit();
  *  </pre></p>
@@ -37,7 +37,7 @@ import java.util.NoSuchElementException;
  */
 public final class Transaction {
 
-	/** 
+	/**
 	 * the recorded  BaseScrapView of your last operation. which will be null after you call {@link #commit()}
 	 * */
 	private BaseScrapView mLastView;
@@ -48,7 +48,7 @@ public final class Transaction {
 
 	/** the cache helper to help you cache  */
 	private final CacheHelper mHelper;
-	
+
 	/** the jumper which can used to jump to target BaseScrapView */
 	private final IJumper mJumper;
 
@@ -78,7 +78,7 @@ public final class Transaction {
 		this.mJumper = jumper;
 		this.mHelper = mHelper;
 	}
-	
+
 	/** change the behaviour of the default back stack.  after call {@link #commit()} the mode will restore.
 	 * @param mode which mode you want to. default is {@link ExpandArrayList.Mode#ClearPrevious}
 	 * @see ExpandArrayList.Mode */
@@ -89,7 +89,7 @@ public final class Transaction {
 
 	/***
 	 * remove the mapping  of key in the cache.
-	 * @param key
+	 * @param key the key of scrap-view
 	 * @return  the mapping value
 	 */
 	public BaseScrapView removeCache(String key){
@@ -154,7 +154,7 @@ public final class Transaction {
 	}
 	/**
 	 * add the target view to back stack  and position it as bottom .
-	 * @param target the target view 
+	 * @param target the target view
 	 */
 	public Transaction addBackAsBottom(BaseScrapView target) {
 		if (target == null)
@@ -179,7 +179,7 @@ public final class Transaction {
 	}
 	/**
 	 * add the lastview(from last operation) as the target view to back stack and befor the another view .
-	 * @param anotherView the another view 
+	 * @param anotherView the another view
 	 *  @throws NoSuchElementException if the anotherView  can't find.
 	 */
 	public Transaction addBackBeforeAnother(BaseScrapView anotherView) {
@@ -187,12 +187,12 @@ public final class Transaction {
 		return addBackBeforeAnother(anotherView, mLastView);
 	}
 	/**
-	 * add the target view to back stack and befor the the another view. 
+	 * add the target view to back stack and befor the the another view.
 	 * @param anotherView the another view
 	 * @param targetView the target view  add to the back stack.
 	 * @throws NoSuchElementException if the anotherView  can't find.
 	 */
-	public Transaction addBackBeforeAnother(BaseScrapView anotherView,BaseScrapView targetView) {
+	public Transaction addBackBeforeAnother(BaseScrapView anotherView, BaseScrapView targetView) {
 		if (targetView == null)
 			throw new NullPointerException();
 		if(mLastView != targetView)
@@ -201,8 +201,8 @@ public final class Transaction {
 		return this;
 	}
 	/**
-	 * add the lastview(from last operation) as the target view to back stack and  after the another view. 
-	 * @param anotherView the another view 
+	 * add the lastview(from last operation) as the target view to back stack and  after the another view.
+	 * @param anotherView the another view
 	 * @throws NoSuchElementException if the anotherView  can't find.
 	 */
 	public Transaction addBackAfterAnother(BaseScrapView anotherView) {
@@ -210,12 +210,12 @@ public final class Transaction {
 		return addBackAfterAnother(anotherView, mLastView);
 	}
 	/**
-	 * add the target view to back stack and  after the another view. 
-	 * @param another the another view 
+	 * add the target view to back stack and  after the another view.
+	 * @param another the another view
 	 * @param target the target view to add back stack.
 	 * @throws NoSuchElementException if the anotherView  can't find.
 	 */
-	public Transaction addBackAfterAnother(BaseScrapView another,BaseScrapView target) {
+	public Transaction addBackAfterAnother(BaseScrapView another, BaseScrapView target) {
 		if (target == null)
 			throw new NullPointerException();
 		if(mLastView != target)
@@ -223,14 +223,14 @@ public final class Transaction {
 		mHelper.addToStack(another,target,false);
 		return this;
 	}
-	
+
 	/**
-	 * add the target view to back stack and  after the referencedView. 
+	 * add the target view to back stack and  after the referencedView.
 	 * @param another the another class of view
 	 * @param target the taget view to add back stack.
 	 * @throws NoSuchElementException if the anotherView of another class can't find.
 	 */
-	public Transaction addBackAfterAnother(Class<? extends BaseScrapView> another,BaseScrapView target) {
+	public Transaction addBackAfterAnother(Class<? extends BaseScrapView> another, BaseScrapView target) {
 		if (target == null)
 			throw new NullPointerException();
 		if(mLastView != target)
@@ -239,12 +239,12 @@ public final class Transaction {
 		return this;
 	}
 	/**
-	 * add the target view to back stack and  after the another view. 
+	 * add the target view to back stack and  after the another view.
 	 * @param another the another class of view
 	 * @param target the target view to add back stack.
 	 *  @throws NoSuchElementException if the anotherView  of another class can't find.
 	 */
-	public Transaction addBackBeforeAnother(Class<? extends BaseScrapView> another,BaseScrapView target) {
+	public Transaction addBackBeforeAnother(Class<? extends BaseScrapView> another, BaseScrapView target) {
 		if (target == null)
 			throw new NullPointerException();
 		if(mLastView != target)

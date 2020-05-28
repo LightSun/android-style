@@ -14,22 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.heaven7.scrap.util;
+package org.heaven7.scrap.core.oneac;
 
 import android.os.Bundle;
 
-import org.heaven7.scrap.core.ActivityController;
-import org.heaven7.scrap.core.ActivityViewController;
-import org.heaven7.scrap.core.BaseScrapView;
-import org.heaven7.scrap.core.ScrapPosition;
-import org.heaven7.scrap.core.Transaction;
 import org.heaven7.scrap.core.anim.AnimateExecutor;
 import org.heaven7.scrap.core.event.IActivityEventCallback;
 import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
 
 /**
  * a helpful util to use the 'OneActivity' framework.such as: jump to different page of {@linkplain BaseScrapView}
- * if you want more ,please see {@link ActivityController} and {@link org.heaven7.scrap.core.ActivityViewController}.
+ * if you want more ,please see {@link ActivityController} and {@link ActivityViewController}.
  * <p>how to get them ?</p>
  * <pre>ActivityController controller = ActivityController.get();
  *     ActivityViewController viewController = controller.getViewController();
@@ -37,8 +32,8 @@ import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
  * </pre>
  * @author heaven7
  * @see ActivityController
- * @see  org.heaven7.scrap.core.ActivityViewController
- * @see  org.heaven7.scrap.core.Transaction
+ * @see ActivityViewController
+ * @see Transaction
  */
 public final class ScrapHelper {
 
@@ -46,13 +41,13 @@ public final class ScrapHelper {
 	public static void jumpTo(BaseScrapView view ){
 		ActivityController.get().jumpTo(view);
 	}
-	
+
 	/**
 	 * jump to the target view with data. but not cache it or add to back stack.
 	 * if you want more . please use {@link #beginTransaction()}
 	 * @param view the view to jump
 	 * @param data the data to carry.
-	 * @see org.heaven7.scrap.core.Transaction
+	 * @see Transaction
 	 */
 	public static void jumpTo(BaseScrapView view ,Bundle data){
 		ActivityController.get().jumpTo(view, data);
@@ -75,18 +70,18 @@ public final class ScrapHelper {
 	public static void jumpTo(BaseScrapView target,AnimateExecutor executor){
 		getActivityViewController().jumpTo(target,null,executor);
 	}
-	
+
 	/**
-	 * open the transaction of {@link org.heaven7.scrap.core.ActivityViewController}, this is very useful.
+	 * open the transaction of {@link ActivityViewController}, this is very useful.
 	 * here is the sample code: <p>
-	 * <pre> Transaction transaction = ActivityController.get().beginTransaction();  
+	 * <pre> Transaction transaction = ActivityController.get().beginTransaction();
      *       transaction.cache(view).changeBackStackMode(ExpandArrayList2.Mode.ReplacePreviousAndClearAfter)
-     *           .addBack().jump().commit(); 
+     *           .addBack().jump().commit();
      *  </pre></p>
-     *  the more to see {@link org.heaven7.scrap.core.Transaction}
-     *  @see org.heaven7.scrap.core.Transaction
+     *  the more to see {@link Transaction}
+     *  @see Transaction
 	 */
-	public static org.heaven7.scrap.core.Transaction beginTransaction(){
+	public static Transaction beginTransaction(){
 		return ActivityController.get().beginTransaction();
 	}
 
@@ -180,7 +175,7 @@ public final class ScrapHelper {
 	 * @param position the scrap position.
 	 * @see  ActivityViewController#toogleVisibility(ScrapPosition)
 	 */
-	public static void toogleVisibility(ScrapPosition position) {
+	public static void toggleVisibility(ScrapPosition position) {
 		getActivityViewController().toogleVisibility(position);
 	}
 

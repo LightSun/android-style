@@ -9,7 +9,7 @@ import com.heaven7.adapter.BaseSelector;
 import com.heaven7.adapter.QuickAdapter;
 import com.heaven7.core.util.ViewHelper;
 
-import org.heaven7.scrap.core.BaseScrapView;
+import org.heaven7.scrap.core.oneac.BaseScrapView;
 import org.heaven7.scrap.sample.R;
 import org.heaven7.scrap.util.ArrayList2;
 

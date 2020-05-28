@@ -25,7 +25,7 @@ import android.view.animation.Animation;
 
 import com.heaven7.java.base.anno.CalledInternal;
 
-import org.heaven7.scrap.core.BaseScrapView;
+import org.heaven7.scrap.core.oneac.BaseScrapView;
 
 /**
  * used to perform the animation of cross the stage(eg: from one abstract view to another). but i don't know which you want to use.

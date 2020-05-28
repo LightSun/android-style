@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 
+ * Copyright (C) 2015
  *            heaven7(donshine723@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,24 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.heaven7.scrap.core;
+package org.heaven7.scrap.core.oneac;
+
+import android.content.Context;
 
 /**
- * indicate the position as scrap of Activity.
- * @author heaven7
- *
+ * Created by heaven7 on 2015/8/1.
  */
-public enum ScrapPosition{
-	/**
-	 * this indicate the top view of Activity.
-	 */
-	Top,
-	/**
-	 * this indicate the Middle view of Activity.
-	 */
-	Middle, 
-	/**
-	 * this indicate the Bottom view of Activity.
-	 */
-	Bottom
+public interface IntentExecutor {
+    /**
+     * start activity with the context
+     * @param context the context
+     */
+    void startActivity(Context context);
+
 }

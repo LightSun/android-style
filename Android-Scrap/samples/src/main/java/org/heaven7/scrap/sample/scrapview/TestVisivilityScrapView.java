@@ -3,9 +3,9 @@ package org.heaven7.scrap.sample.scrapview;
 import android.content.Context;
 import android.view.View;
 
-import org.heaven7.scrap.core.ScrapPosition;
+import org.heaven7.scrap.core.oneac.ScrapHelper;
+import org.heaven7.scrap.core.oneac.ScrapPosition;
 import org.heaven7.scrap.sample.R;
-import org.heaven7.scrap.util.ScrapHelper;
 
 /**
  * this is sample to test visibility of view which is indicate by the ScrapPosition.
@@ -41,7 +41,7 @@ public class TestVisivilityScrapView extends CommonView {
        }).setOnClickListener(R.id.bt_test3, new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               ScrapHelper.toogleVisibility(ScrapPosition.Bottom);
+               ScrapHelper.toggleVisibility(ScrapPosition.Bottom);
            }
        });
     }

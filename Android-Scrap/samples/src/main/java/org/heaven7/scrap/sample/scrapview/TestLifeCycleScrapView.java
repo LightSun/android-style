@@ -8,10 +8,10 @@ import android.view.View;
 
 import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleAdapter;
 import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
+import org.heaven7.scrap.core.oneac.ScrapHelper;
 import org.heaven7.scrap.sample.R;
 import org.heaven7.scrap.sample.ScrapLog;
 import org.heaven7.scrap.sample.util.DialogUtil;
-import org.heaven7.scrap.util.ScrapHelper;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -21,8 +21,8 @@ import java.util.TimerTask;
  * <li>Note: Because this view is attached to the Activity. so activity is created.
  * some methods will not called.</li>
  * if you want register global  life cycle callback (.please use
- * {@link org.heaven7.scrap.util.ScrapHelper#registerActivityLifeCycleCallback(IActivityLifeCycleCallback...)}
- * and {@link org.heaven7.scrap.util.ScrapHelper#unregisterActivityLifeCycleCallback(IActivityLifeCycleCallback...)}
+ * {@link ScrapHelper#registerActivityLifeCycleCallback(IActivityLifeCycleCallback...)}
+ * and {@link ScrapHelper#unregisterActivityLifeCycleCallback(IActivityLifeCycleCallback...)}
  * it has more methods.
  * Created by heaven7 on 2015/8/4.
  */

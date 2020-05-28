@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.heaven7.scrap.core;
+package org.heaven7.scrap.core.oneac;
 
 import android.app.Activity;
 import android.content.Context;
@@ -32,7 +32,6 @@ import com.heaven7.java.base.anno.NonNull;
 import org.heaven7.scrap.core.event.IActivityEventCallback;
 import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleAdapter;
 import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
-import org.heaven7.scrap.util.ScrapHelper;
 
 /**
  * this is a base view for 'the scrap view'. it help you to fast use.
@@ -47,7 +46,7 @@ import org.heaven7.scrap.util.ScrapHelper;
  * @see  ActivityController
  */
 public abstract class BaseScrapView {
-	
+
 	private Context mContext;
 	private LayoutInflater mInflater;
 	/** the bundle data if you want to pass data from one BaseScrapView to another */
@@ -154,15 +153,15 @@ public abstract class BaseScrapView {
 	public LayoutInflater getLayoutInflater(){
 		return mInflater;
 	}
-	
+
 	public void setBundle(Bundle data){
 		this.mBundle = data;
 	}
-	
+
 	public Bundle getBundle() {
 		return mBundle;
 	}
-	
+
 	/** get the ViewHelper to help use some good method.
 	 * @see ViewHelper2*/
 	public ViewHelper2 getViewHelper(){
@@ -256,18 +255,18 @@ public abstract class BaseScrapView {
 	}
 	/** get the layout id of the top . called by {@link #getTopView()}*/
 	protected abstract int getTopLayoutId();
-	
+
 	/** get the layout id of the middle .called by {@link #getMiddleView()}*/
 	protected abstract int getMiddleLayoutId();
-	
+
 	/** get the layout id of the bottom . called by {@link #getBottomView()}*/
 	protected abstract int getBottomLayoutId();
 
 	//===========life cycle ===================//
-	
+
 	/**
 	 * when the top/middle/bottom hide it's visibility,this will be called.
-	 * @param position  which scrap of activity 
+	 * @param position  which scrap of activity
 	 * @see ActivityViewController#setVisibility(ScrapPosition, boolean)
 	 * @see ActivityViewController#toogleVisibility(ScrapPosition)
 	 */
@@ -284,7 +283,7 @@ public abstract class BaseScrapView {
 	}
 	/**
 	 * when the top/middle/bottom show it's visibility,this will be called.
-	 * @param position  which scrap of activity 
+	 * @param position  which scrap of activity
 	 * @see ActivityViewController#setVisibility(ScrapPosition, boolean)
 	 * @see ActivityViewController#toogleVisibility(ScrapPosition)
 	 */
@@ -308,11 +307,11 @@ public abstract class BaseScrapView {
 	}
 	/**
 	 * when this view is detach done to the activity. this will be called.
-	 * after call this, the context will set to null to avoid memory leak! 
+	 * after call this, the context will set to null to avoid memory leak!
 	 */
 	@CalledInternal
 	protected void onDetach() {
-		
+
 	}
 
 	//======================  life cycle from activity   ========================//
@@ -321,13 +320,13 @@ public abstract class BaseScrapView {
 	 */
 
 	/**
-	 * comes from {@link android.app.Activity#onCreate(Bundle)}
+	 * comes from {@link Activity#onCreate(Bundle)}
 	 * @param saveInstanceState
 	 */
 	protected void onActivityCreate(Bundle saveInstanceState) {
 	}
 	/**
-	 * comes from {@link android.app.Activity#onPostCreate(Bundle)}
+	 * comes from {@link Activity#onPostCreate(Bundle)}
 	 * @param saveInstanceState
 	 */
 	protected void onActivityPostCreate(Bundle saveInstanceState){

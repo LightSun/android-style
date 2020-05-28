@@ -3,4 +3,5 @@
     <item name="lib_style_top" type="id"/>
     <item name="lib_style_bottom" type="id"/>
     <item name="lib_style_content" type="id"/>
+    <item name="lib_style_loading" type="id"/>
 </resources>

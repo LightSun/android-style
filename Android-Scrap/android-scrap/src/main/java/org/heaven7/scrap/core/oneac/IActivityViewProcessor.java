@@ -1,4 +1,4 @@
-package org.heaven7.scrap.core;
+package org.heaven7.scrap.core.oneac;
 
 import android.view.View;
 
@@ -12,5 +12,5 @@ public interface IActivityViewProcessor {
      * @param view  the view to replace
      * @param position the position to replace.
      */
-    void replaceView(View view,ScrapPosition position);
+    void replaceView(View view, ScrapPosition position);
 }

@@ -3,9 +3,9 @@ package org.heaven7.scrap.sample;
 import android.content.Context;
 import android.view.View;
 
-import org.heaven7.scrap.core.BaseScrapView;
+import org.heaven7.scrap.core.oneac.BaseScrapView;
+import org.heaven7.scrap.core.oneac.ScrapHelper;
 import org.heaven7.scrap.sample.scrapview.EntryScrapView;
-import org.heaven7.scrap.util.ScrapHelper;
 
 /**
  * similar as the Main Activity: so this is used as the Splash scrap view.
