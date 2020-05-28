@@ -19,7 +19,7 @@ package org.heaven7.scrap.core.event;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
-import org.heaven7.scrap.annotation.CalledByFramework;
+import com.heaven7.java.base.anno.CalledInternal;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -44,7 +44,7 @@ public final class ActivityEventCallbackGroup implements IActivityEventCallback 
 		mListeners.clear();
 	}
 	
-	@CalledByFramework
+	@CalledInternal
 	public void setActivityLastEventListener(IActivityEventCallback l){
 		mLastEventListener = l;
 	}

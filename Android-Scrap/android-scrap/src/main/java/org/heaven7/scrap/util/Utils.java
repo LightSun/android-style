@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 
+ * Copyright (C) 2015
  *            heaven7(donshine723@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,24 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.heaven7.scrap.core.anim;
-/**
- * indicate three kinds of animation : Animation  and Animator and ViewPropertyAnimator
- * @author heaven7
- *
- */
-public enum AnimateCategoryType {
+package org.heaven7.scrap.util;
 
-	/**
-	 * this indicate you want to use Animation,such as: AlphaAnimation, TranslateAnimation...and etc 
-	 */
-	Animation,
-	/**
-	 * this indicate you want to use animator,such as: ObjectAnimator, AnimatorSet...and etc 
-	 */
-	Animator , 
-	/**
-	 * this indicate you want to use ViewPropertyAnimator, this can be return by view.animate(); 
-	 */
-	ViewPropertyAnimator;
+import android.content.Context;
+
+import androidx.annotation.RestrictTo;
+
+import com.heaven7.core.util.ConfigUtil;
+import com.heaven7.core.util.ResourceUtil;
+
+import java.util.Properties;
+
+@RestrictTo(RestrictTo.Scope.LIBRARY)
+public final class Utils {
+
+	/** load properties which is under the raw (exclude extension )*/
+	public static Properties loadRawConfig(Context context,String rawResName) {
+		int resId = ResourceUtil.getResId(context, rawResName, ResourceUtil.ResourceType.Raw);
+		return ConfigUtil.loadRawConfig(context, resId);
+	}
+
 }

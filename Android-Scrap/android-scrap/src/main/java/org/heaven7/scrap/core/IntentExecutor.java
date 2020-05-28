@@ -24,7 +24,7 @@ import android.content.Context;
 public interface IntentExecutor {
     /**
      * start activity with the context
-     * @param context
+     * @param context the context
      */
     void startActivity(Context context);
 

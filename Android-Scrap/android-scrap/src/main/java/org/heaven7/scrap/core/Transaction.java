@@ -19,7 +19,7 @@ package org.heaven7.scrap.core;
 import android.os.Bundle;
 
 import org.heaven7.scrap.core.anim.AnimateExecutor;
-import org.heaven7.scrap.util.ArrayList2;
+import org.heaven7.scrap.util.ExpandArrayList;
 
 import java.util.NoSuchElementException;
 
@@ -80,9 +80,9 @@ public final class Transaction {
 	}
 	
 	/** change the behaviour of the default back stack.  after call {@link #commit()} the mode will restore.
-	 * @param mode which mode you want to. default is {@link ArrayList2.ExpandArrayList2.Mode#ClearPrevious}
-	 * @see ArrayList2.ExpandArrayList2.Mode */
-	public Transaction stackMode(ArrayList2.ExpandArrayList2.Mode mode){
+	 * @param mode which mode you want to. default is {@link ExpandArrayList.Mode#ClearPrevious}
+	 * @see ExpandArrayList.Mode */
+	public Transaction stackMode(ExpandArrayList.Mode mode){
 		mHelper.mViewStack.setMode(mode);
 		return this;
 	}

@@ -40,7 +40,7 @@ import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
  * @see  org.heaven7.scrap.core.ActivityViewController
  * @see  org.heaven7.scrap.core.Transaction
  */
-public class ScrapHelper {
+public final class ScrapHelper {
 
 	/** jump to the target view with no data. */
 	public static void jumpTo(BaseScrapView view ){

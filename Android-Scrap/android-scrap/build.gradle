@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply from: '../lib.gradle'
 //indicate this is library'
 
 // default have

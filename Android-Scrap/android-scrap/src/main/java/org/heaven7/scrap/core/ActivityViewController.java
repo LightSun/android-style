@@ -24,14 +24,16 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.heaven7.adapter.util.ViewHelper2;
+import com.heaven7.java.base.anno.CalledInternal;
+import com.heaven7.java.base.anno.NonNull;
+import com.heaven7.java.base.anno.Nullable;
+
 import org.heaven7.scrap.R;
-import org.heaven7.scrap.annotation.CalledByFramework;
-import org.heaven7.scrap.annotation.NonNull;
-import org.heaven7.scrap.annotation.Nullable;
 import org.heaven7.scrap.core.anim.AnimateExecutor;
 import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleAdapter;
 import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
-import org.heaven7.scrap.util.ArrayList2;
+import org.heaven7.scrap.util.ExpandArrayList;
 import org.heaven7.scrap.util.Reflector;
 import org.heaven7.scrap.util.ScrapHelper;
 
@@ -438,7 +440,7 @@ public final class ActivityViewController implements Transaction.IJumper {
                 return;
             }
             v.setContext(activity);
-            v.setViewHelper(new ViewHelper(activity.getWindow().getDecorView()));
+            v.setViewHelper(new ViewHelper2(activity.getWindow().getDecorView()));
             jumpToImpl(v,animExecutor);
         }
     }
@@ -591,7 +593,7 @@ public final class ActivityViewController implements Transaction.IJumper {
     /**
      * handle the default back behaviour of the activity's back event
      */
-    @CalledByFramework
+    @CalledInternal
 	/* package */ boolean onBackPressed() {
         // current a bug occoured. if scrapview first is in back stack. when back to it.
         // removed it from backstack.
@@ -614,7 +616,7 @@ public final class ActivityViewController implements Transaction.IJumper {
         if (view != null) {
             if(view.isInBackStack()) {
                 //here ignore the mode to avoid problem ,so first change and restore
-                mCacheHelper.mViewStack.setMode(ArrayList2.ExpandArrayList2.Mode.Normal);
+                mCacheHelper.mViewStack.setMode(ExpandArrayList.Mode.Normal);
                 mCacheHelper.addToStackTop(view);
                 mCacheHelper.resetStackSetting();
             }
@@ -669,7 +671,7 @@ public final class ActivityViewController implements Transaction.IJumper {
     }
 
     /** set to show or hide loading view */
-    @CalledByFramework("about loading view")
+    @CalledInternal
     /*public*/ void showOrHideLoading(LoadingParam param) {
         if(param.showLoading ){
             //loading view : from not show -> show
@@ -701,7 +703,7 @@ public final class ActivityViewController implements Transaction.IJumper {
             final JumpParam param = mJumpPram;
             BaseScrapView view = param.scrapView;
             view.setContext(activity);
-            view.setViewHelper(new ViewHelper(activity.getWindow().getDecorView()));
+            view.setViewHelper(new ViewHelper2(activity.getWindow().getDecorView()));
             jumpToImpl(view, param.animateExecutor);
             // clear param to avoid memory leak.
             param.clear();

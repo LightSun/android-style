@@ -16,6 +16,8 @@
  */
 package org.heaven7.scrap.util;
 
+import androidx.annotation.RestrictTo;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -29,6 +31,7 @@ import java.util.TreeSet;
 /**
  * comes from spring
  */
+@RestrictTo(RestrictTo.Scope.LIBRARY)
 public abstract class StringUtils {
 	private static final String FOLDER_SEPARATOR = "/";
 	private static final String WINDOWS_FOLDER_SEPARATOR = "\\";

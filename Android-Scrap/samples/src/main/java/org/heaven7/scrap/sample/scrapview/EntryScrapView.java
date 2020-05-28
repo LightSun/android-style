@@ -6,13 +6,15 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
-import org.heaven7.scrap.adapter.QuickAdapter;
+import com.heaven7.adapter.BaseSelector;
+import com.heaven7.adapter.QuickAdapter;
+import com.heaven7.adapter.util.ViewHelper2;
+import com.heaven7.core.util.ViewHelper;
+
 import org.heaven7.scrap.core.BaseScrapView;
-import org.heaven7.scrap.core.ViewHelper;
-import org.heaven7.scrap.core.anim.AnimateCategoryType;
 import org.heaven7.scrap.core.anim.AnimateExecutor;
 import org.heaven7.scrap.sample.R;
-import org.heaven7.scrap.util.ArrayList2;
+import org.heaven7.scrap.util.ExpandArrayList;
 import org.heaven7.scrap.util.ScrapHelper;
 
 import java.util.ArrayList;
@@ -45,13 +47,13 @@ public class EntryScrapView extends CommonView {
     @Override
     protected void onDetach() {
         super.onDetach();
-        showToast("EntryScrapView is detached!");
+       // showToast("EntryScrapView is detached!");
     }
 
     @Override
     protected void onAttach() {
 
-       final ViewHelper helper = getViewHelper();
+       final ViewHelper2 helper = getViewHelper();
         helper.setText(R.id.tv_title,"Scrap_Demos").setOnClickListener(R.id.iv_back, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,11 +63,10 @@ public class EntryScrapView extends CommonView {
 
         List<ActionData> datas =  getDatas();
         helper.setAdapter(R.id.lv, new QuickAdapter<ActionData>(R.layout.item_demo,datas) {
-
             @Override
-            protected void convert(Context context, int position, ViewHelper viewHelper, ActionData item) {
+            protected void onBindData(Context context, int i, ActionData item, int i1, ViewHelper viewHelper) {
                 viewHelper.setText(R.id.bt_action,item.title)
-                         .setText(R.id.tv_desc,item.desc)
+                        .setText(R.id.tv_desc,item.desc)
                         .setTag(R.id.bt_action,item.id)
                         .setOnClickListener(R.id.bt_action,mClickListener);
             }
@@ -89,7 +90,7 @@ public class EntryScrapView extends CommonView {
              */
                     Bundle b = new Bundle();
                     b.putInt("id",1);
-                    ScrapHelper.beginTransaction().stackMode(ArrayList2.ExpandArrayList2.Mode.Normal)
+                    ScrapHelper.beginTransaction().stackMode(ExpandArrayList.Mode.Normal)
                             .addBackAsTop(new ScrapView(context))
                             .withExtras(b).jump().commit();
                  //   ScrapHelper.beginTransaction().cache() //if you want cache the view.
@@ -109,7 +110,7 @@ public class EntryScrapView extends CommonView {
                     b2.putInt("id",1);
                     //also use can use #setBundle to carray data
                    // view2.setBundle(data);
-                    ScrapHelper.beginTransaction().stackMode(ArrayList2.ExpandArrayList2.Mode.Normal)
+                    ScrapHelper.beginTransaction().stackMode(ExpandArrayList.Mode.Normal)
                             .addBackAsTop(new ScrapView(context))
                             .animateExecutor(animateExecutor).withExtras(b2)
                             .jump().commit();
@@ -124,12 +125,11 @@ public class EntryScrapView extends CommonView {
         }
     };
     // here use animator to perform animation between two ScrapViews.
-    private AnimateExecutor animateExecutor = new AnimateExecutor() {
+    private final AnimateExecutor animateExecutor = new AnimateExecutor() {
         @Override//use animator
-        protected AnimateCategoryType getType(boolean enter, BaseScrapView previous, BaseScrapView current) {
-            return AnimateCategoryType.Animator;
+        protected byte getType(boolean enter, BaseScrapView previous, BaseScrapView current) {
+            return TYPE_ANIMATOR;
         }
-
         @Override
         protected Animator prepareAnimator(View target, boolean enter, BaseScrapView previous, BaseScrapView current) {
             if(!enter){
@@ -170,7 +170,7 @@ public class EntryScrapView extends CommonView {
         datas.add(new ActionData("Loading View",desc,6));
         return datas;
     }
-    static class ActionData{
+    static class ActionData extends BaseSelector {
         public ActionData(String title, String desc, int id) {
             this.title = title;
             this.desc = desc;

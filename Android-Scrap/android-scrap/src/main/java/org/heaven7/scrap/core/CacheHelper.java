@@ -18,9 +18,7 @@ package org.heaven7.scrap.core;
 
 import android.content.Context;
 
-import org.heaven7.scrap.util.ArrayList2;
-import org.heaven7.scrap.util.ArrayList2.ExpandArrayList2;
-import org.heaven7.scrap.util.ArrayList2.ExpandArrayList2.Mode;
+import org.heaven7.scrap.util.ExpandArrayList;
 import org.heaven7.scrap.util.Reflector;
 
 import java.util.Comparator;
@@ -31,16 +29,16 @@ import java.util.NoSuchElementException;
 /**
  * the cache helper for internal use.
  * the view stack only cache one instance of the same class name which is a child of BaseScrapView.
- * if {@link ExpandArrayList2#getMode()} != {@link Mode#Normal}
- * <li> you can use {@link Transaction#stackMode(Mode)} to change the default behavior. and the {@link Transaction#commit()} will restore mode
- * to default({@link Mode#ClearPrevious}).
- * @see Transaction#stackMode(Mode)
+ * if {@link ExpandArrayList#getMode()} != {@link ExpandArrayList.Mode#Normal}
+ * <li> you can use {@link Transaction#stackMode(ExpandArrayList.Mode)} to change the default behavior. and the {@link Transaction#commit()} will restore mode
+ * to default({@link ExpandArrayList.Mode#ClearPrevious}).
+ * @see Transaction#stackMode(ExpandArrayList.Mode)
  * @see Transaction#commit()
  * @author heaven7
  */
 /* package */ final class CacheHelper {
 
-	final ExpandArrayList2<BaseScrapView> mViewStack;
+	final ExpandArrayList<BaseScrapView> mViewStack;
 	private final HashMap<String, BaseScrapView> mCachedViewMap;
 	
     private static final Comparator<BaseScrapView> DEFAULT_COMPARATOR = new Comparator<BaseScrapView>() {
@@ -52,7 +50,7 @@ import java.util.NoSuchElementException;
 	
 	public CacheHelper() {
 		mCachedViewMap = new HashMap<String, BaseScrapView>();
-		mViewStack = new ExpandArrayList2<BaseScrapView>(){
+		mViewStack = new ExpandArrayList<BaseScrapView>(){
 			@Override
 			public boolean add(BaseScrapView baseScrapView) {
 				if(!baseScrapView.isInBackStack())
@@ -68,7 +66,7 @@ import java.util.NoSuchElementException;
 		};
 		// set Comparator to prevent the same class
 		mViewStack.setComparator(DEFAULT_COMPARATOR);
-		mViewStack.setMode(ArrayList2.ExpandArrayList2.Mode.ClearPrevious);
+		mViewStack.setMode(ExpandArrayList.Mode.ClearPrevious);
 	}
 	
 	/** restore the setting of back stack. */
@@ -76,8 +74,8 @@ import java.util.NoSuchElementException;
 		if(mViewStack.getComparator() != DEFAULT_COMPARATOR){
 		   mViewStack.setComparator(DEFAULT_COMPARATOR);
 		}
-		if(mViewStack.getMode() != Mode.ClearPrevious)
-		   mViewStack.setMode(Mode.ClearPrevious);
+		if(mViewStack.getMode() != ExpandArrayList.Mode.ClearPrevious)
+		   mViewStack.setMode(ExpandArrayList.Mode.ClearPrevious);
 	}
 	
 	public List<BaseScrapView> getStackList() {

@@ -23,12 +23,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import org.heaven7.scrap.annotation.CalledByFramework;
-import org.heaven7.scrap.annotation.NonNull;
+import com.heaven7.adapter.util.ViewHelper2;
+import com.heaven7.core.util.MainWorker;
+import com.heaven7.core.util.Toaster;
+import com.heaven7.java.base.anno.CalledInternal;
+import com.heaven7.java.base.anno.NonNull;
+
 import org.heaven7.scrap.core.event.IActivityEventCallback;
 import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleAdapter;
 import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
-import org.heaven7.scrap.util.MainWorker;
 import org.heaven7.scrap.util.ScrapHelper;
 
 /**
@@ -51,9 +54,9 @@ public abstract class BaseScrapView {
 	private Bundle mBundle;
 	/**
 	 * a view helper to help you fast call some  methods.
-	 * @see  ViewHelper
+	 * @see  ViewHelper2
 	 */
-	private ViewHelper mViewHelper;
+	private ViewHelper2 mViewHelper;
 	/**
 	 * the processor of activity's view
 	 */
@@ -86,10 +89,14 @@ public abstract class BaseScrapView {
 
 	}
 
+	public void showToast(String msg){
+		Toaster.show(mContext.getApplicationContext(), msg);
+	}
+
 	/**
 	 * automatic called by framework,when this view is prepared to attach.
 	 */
-	@CalledByFramework("when this abstract view is prepared to attach and before attached!")
+	@CalledInternal //"when this abstract view is prepared to attach and before attached!"
 	/*public*/ void registerActivityLifeCycleCallbacks() {
 		if(mLifecycleCallback == null) {
 			mLifecycleCallback = new ActivityLifeCycleAdapter() {
@@ -128,14 +135,14 @@ public abstract class BaseScrapView {
 	/**
 	 * automatic called by framework,when this view is prepared to detach.
 	 */
-	@CalledByFramework("when this abstract view is prepared to detach and before detached!")
+	@CalledInternal//("when this abstract view is prepared to detach and before detached!")
 	/*public*/ void unregisterActivityLifeCycleCallbacks(){
 		if(mLifecycleCallback != null) {
 			ScrapHelper.unregisterActivityLifeCycleCallback(mLifecycleCallback);
 		}
 	}
 
-	/*package */ void setViewHelper(ViewHelper vp){
+	/*package */ void setViewHelper(ViewHelper2 vp){
 		this.mViewHelper = vp;
 	}
 	public void setContext(Context ctx){
@@ -157,12 +164,12 @@ public abstract class BaseScrapView {
 	}
 	
 	/** get the ViewHelper to help use some good method.
-	 * @see ViewHelper*/
-	public ViewHelper getViewHelper(){
+	 * @see ViewHelper2*/
+	public ViewHelper2 getViewHelper(){
 		return mViewHelper;
 	}
 
-	@CalledByFramework("set the activity's view processor")
+	@CalledInternal//("set the activity's view processor")
 	/*package*/ void setActivityViewProcessor(IActivityViewProcessor processor) {
 		this.mViewProcessor = processor;
 	}
@@ -179,7 +186,7 @@ public abstract class BaseScrapView {
 		return mInBackStack;
 	}
 	/** set whether or not in back stack  ,often called by framework*/
-	@CalledByFramework("often")
+	@CalledInternal
 	/*public*/ void setInBackStack(boolean mInBackStack) {
 		this.mInBackStack = mInBackStack;
 	}
@@ -229,19 +236,19 @@ public abstract class BaseScrapView {
 			throw new NullPointerException("view cann't be null");
         mViewProcessor.replaceView(view, scrap);
 	}
-	@CalledByFramework
+	@CalledInternal
 	public  View getTopView(){
 		if(getTopLayoutId() == 0)
 			return null;
 		return mInflater.inflate(getTopLayoutId(), null);
 	}
-	@CalledByFramework
+	@CalledInternal
 	public  View getMiddleView(){
 		if(getMiddleLayoutId() == 0)
 			return null;
 		return mInflater.inflate(getMiddleLayoutId(), null);
 	}
-	@CalledByFramework
+	@CalledInternal
 	public  View getBottomView(){
 		if(getBottomLayoutId() == 0)
 			return null;
@@ -264,7 +271,7 @@ public abstract class BaseScrapView {
 	 * @see ActivityViewController#setVisibility(ScrapPosition, boolean)
 	 * @see ActivityViewController#toogleVisibility(ScrapPosition)
 	 */
-	@CalledByFramework
+	@CalledInternal
 	protected void onHide(ScrapPosition position){
 		switch (position){
 			case Top:
@@ -281,7 +288,7 @@ public abstract class BaseScrapView {
 	 * @see ActivityViewController#setVisibility(ScrapPosition, boolean)
 	 * @see ActivityViewController#toogleVisibility(ScrapPosition)
 	 */
-	@CalledByFramework
+	@CalledInternal
 	protected void onShow(ScrapPosition position){
 		switch (position){
 			case Top:
@@ -295,7 +302,7 @@ public abstract class BaseScrapView {
 	/**
 	 * when this view is attached done to the activity. this will be called.
 	 */
-	@CalledByFramework
+	@CalledInternal
 	protected void onAttach() {
 		//ActivityController.get().getLifeCycleDispatcher().
 	}
@@ -303,7 +310,7 @@ public abstract class BaseScrapView {
 	 * when this view is detach done to the activity. this will be called.
 	 * after call this, the context will set to null to avoid memory leak! 
 	 */
-	@CalledByFramework
+	@CalledInternal
 	protected void onDetach() {
 		
 	}
@@ -361,7 +368,7 @@ public abstract class BaseScrapView {
 	 * @see  IActivityEventCallback#onBackPressed()
 	 */
 	protected boolean onBackPressed() {
-		return mDefaultBackEventProcessor!=null? mDefaultBackEventProcessor.handleBackEvent():false;
+		return mDefaultBackEventProcessor!=null && mDefaultBackEventProcessor.handleBackEvent();
 	}
 
 }

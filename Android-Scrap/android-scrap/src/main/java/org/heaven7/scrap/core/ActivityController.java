@@ -22,15 +22,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.heaven7.scrap.annotation.CalledByFramework;
+import com.heaven7.java.base.anno.CalledInternal;
+
 import org.heaven7.scrap.core.anim.AnimateExecutor;
 import org.heaven7.scrap.core.event.ActivityEventAdapter;
 import org.heaven7.scrap.core.event.ActivityEventCallbackGroup;
 import org.heaven7.scrap.core.event.IActivityEventCallback;
 import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleDispatcher;
-import org.heaven7.scrap.util.ConfigUtil;
 import org.heaven7.scrap.util.Reflector;
 import org.heaven7.scrap.util.ScrapConstant;
+import org.heaven7.scrap.util.Utils;
 
 import java.util.Properties;
 
@@ -87,7 +88,7 @@ public final class ActivityController {
 	}
 	
 	/** this will be called automatic is the one Activity.* */
-	@CalledByFramework
+	@CalledInternal
 	/*public*/ void attach(Activity activity, ViewGroup top, ViewGroup middle,
 			ViewGroup bottom,ViewGroup loading, Bundle savedInstanceState) {
 		mSaveInstanceState = savedInstanceState!=null? new Bundle(savedInstanceState) :null;
@@ -100,7 +101,7 @@ public final class ActivityController {
 		if(activity == null) return ;
 		Properties prop = null;
 		try {
-			prop = ConfigUtil.loadRawConfig(activity, ScrapConstant.CONFIG_FILENAME);
+			prop = Utils.loadRawConfig(activity, ScrapConstant.CONFIG_FILENAME);
 		}catch(RuntimeException e){
 			//ignore
 		}

@@ -21,7 +21,8 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
-import org.heaven7.scrap.annotation.CalledByFramework;
+import com.heaven7.java.base.anno.CalledInternal;
+
 import org.heaven7.scrap.util.CopyOnWriteArray;
 
 public final class ActivityLifeCycleDispatcher{
@@ -51,7 +52,7 @@ public final class ActivityLifeCycleDispatcher{
 	}
 	
 	//==============================//
-	@CalledByFramework
+	@CalledInternal
 	public void dispatchActivityOnCreate(Activity activity,Bundle savedInstanceState){
 		//activity.getWindow().getDecorView().getViewTreeObserver()
 		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
@@ -67,7 +68,7 @@ public final class ActivityLifeCycleDispatcher{
 			}
 		}
 	}
-	@CalledByFramework
+	@CalledInternal
 	public void dispatchActivityOnPostCreate(Activity activity,Bundle savedInstanceState){
 
 		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
@@ -83,7 +84,7 @@ public final class ActivityLifeCycleDispatcher{
 			}
 		}
 	}
-	@CalledByFramework
+	@CalledInternal
 	public void dispatchActivityOnStart(Activity activity) {
 		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
 		if (listeners != null && listeners.size() > 0) {
@@ -98,7 +99,7 @@ public final class ActivityLifeCycleDispatcher{
 			}
 		}
 	}
-	@CalledByFramework
+	@CalledInternal
 	public void dispatchActivityOnResume(Activity activity) {
 		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
 		if (listeners != null && listeners.size() > 0) {
@@ -113,7 +114,7 @@ public final class ActivityLifeCycleDispatcher{
 			}
 		}
 	}
-	@CalledByFramework
+	@CalledInternal
 	public void dispatchActivityOnPause(Activity activity) {
 		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
 		if (listeners != null && listeners.size() > 0) {
@@ -128,7 +129,7 @@ public final class ActivityLifeCycleDispatcher{
 			}
 		}
 	}
-	@CalledByFramework
+	@CalledInternal
 	public void dispatchActivityOnStop(Activity activity) {
 		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
 		if (listeners != null && listeners.size() > 0) {
@@ -143,7 +144,7 @@ public final class ActivityLifeCycleDispatcher{
 			}
 		}
 	}
-	@CalledByFramework
+	@CalledInternal
 	public void dispatchActivityOnDestroy(Activity activity) {
 		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
 		if (listeners != null && listeners.size() > 0) {
@@ -158,7 +159,7 @@ public final class ActivityLifeCycleDispatcher{
 			}
 		}
 	}
-	@CalledByFramework
+	@CalledInternal
 	public void dispatchActivityOnConfigurationChanged(Activity activity, Configuration newConfig) {
 		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
 		if (listeners != null && listeners.size() > 0) {
@@ -173,7 +174,7 @@ public final class ActivityLifeCycleDispatcher{
 			}
 		}
 	}
-	@CalledByFramework
+	@CalledInternal
 	public void dispatchActivityOnSaveInstanceState(Activity activity,
 			Bundle outState) {
 		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
@@ -189,7 +190,7 @@ public final class ActivityLifeCycleDispatcher{
 			}
 		}
 	}
-	@CalledByFramework
+	@CalledInternal
 	public void dispatchActivityOnRestoreInstanceState(
 			Activity activity, Bundle savedInstanceState) {
 		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
@@ -205,7 +206,7 @@ public final class ActivityLifeCycleDispatcher{
 			}
 		}
 	}
-	@CalledByFramework
+	@CalledInternal
 	public void dispatchActivityOnUserLeaveHint(Activity activity) {
 		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
 		if (listeners != null && listeners.size() > 0) {
@@ -220,7 +221,7 @@ public final class ActivityLifeCycleDispatcher{
 			}
 		}
 	}
-	@CalledByFramework
+	@CalledInternal
 	public void dispatchActivityOnActivityResult(Activity activity,
 			int requestCode, int resultCode, Intent data) {
 		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
@@ -236,7 +237,7 @@ public final class ActivityLifeCycleDispatcher{
 			}
 		}
 	}
-	@CalledByFramework
+	@CalledInternal
 	public void dispatchActivityOnLowMemory(Activity activity) {
 		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
 		if (listeners != null && listeners.size() > 0) {
@@ -252,7 +253,7 @@ public final class ActivityLifeCycleDispatcher{
 		}
 	}
 
-	@CalledByFramework
+	@CalledInternal
 	public void dispatchActivityOnWindowFocusChanged(
 			Activity activity, boolean hasFocus) {
 		final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;

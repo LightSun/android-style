@@ -5,10 +5,11 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.heaven7.adapter.BaseSelector;
+import com.heaven7.adapter.QuickAdapter;
+import com.heaven7.core.util.ViewHelper;
 
-import org.heaven7.scrap.adapter.QuickAdapter;
 import org.heaven7.scrap.core.BaseScrapView;
-import org.heaven7.scrap.core.ViewHelper;
 import org.heaven7.scrap.sample.R;
 import org.heaven7.scrap.util.ArrayList2;
 
@@ -72,11 +73,12 @@ public class CommonView extends BaseScrapView {
         addGirlDatas();
         getViewHelper().setAdapter(R.id.lv, new QuickAdapter<GirlData>(R.layout.item_girl,mGirlData) {
             @Override
-            protected void convert(Context context, int position, ViewHelper viewHelper, GirlData item) {
-                   viewHelper.setText(R.id.tv,item.name);
+            protected void onBindData(Context context, int position, GirlData item, int layoutId, ViewHelper viewHelper) {
+                viewHelper.setText(R.id.tv,item.name);
                 ImageView view = viewHelper.getView(R.id.eniv);
                 Glide.with(view).load(item.imageUrl).into(view);
             }
+
         });
     }
 
@@ -99,7 +101,7 @@ public class CommonView extends BaseScrapView {
 
     private final List<GirlData> mGirlData = new ArrayList2<>();
 
-    public static class GirlData{
+    public static class GirlData extends BaseSelector {
         public String imageUrl;
         public String name;
 

@@ -4,7 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
-import org.heaven7.scrap.core.ViewHelper;
+import com.heaven7.core.util.ViewHelper;
+
 import org.heaven7.scrap.sample.R;
 import org.heaven7.scrap.sample.ScrapLog;
 import org.heaven7.scrap.util.ArrayList2;

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import org.heaven7.scrap.util.ResourceUtil;
+import com.heaven7.core.util.ResourceUtil;
 
 public class ResourceHolder implements ResourceHoldable {
 
