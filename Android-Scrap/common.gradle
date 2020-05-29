@@ -16,7 +16,7 @@ dependencies {
   implementation 'com.github.LightSun:SuperAdapter:2.1.1-x'
   implementation('com.github.LightSun:util-v1:1.1.7-x') {
     exclude group: 'com.android.support'
-    exclude group: 'com.heaven7.android.component'
+    exclude module: 'android-component'
   }
   implementation('com.github.LightSun.Android-ImagePick:imagepick:2.0.0-beta-x') {
     exclude module: 'android-util2'
@@ -28,7 +28,7 @@ dependencies {
   implementation('com.github.LightSun:android-util2:1.2.0-x') {
     exclude group: "com.heaven7.core.adapter"
     exclude group: "com.heaven7.core.util"
-    exclude group: 'com.heaven7.android.component'
+    exclude module: 'android-component'
   }
   implementation('com.github.LightSun:android-PullRefreshView:1.1.1-x') {
     exclude group: "com.heaven7.core.adapter"

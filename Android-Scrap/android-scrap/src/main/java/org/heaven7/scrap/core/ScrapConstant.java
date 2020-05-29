@@ -26,4 +26,5 @@ public interface ScrapConstant {
 
     String KEY_UI_DELEGATE = "__UiDelegate";
     String KEY_PARAMETER = "__param";
+    String KEY_OVERLAP = "__overlap";
 }

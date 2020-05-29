@@ -18,7 +18,7 @@ public class SingleActivityUiDelegate extends AbstractUiDelegate {
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_container;
+        return R.layout.lib_style_ac_container;
     }
 
     @Override

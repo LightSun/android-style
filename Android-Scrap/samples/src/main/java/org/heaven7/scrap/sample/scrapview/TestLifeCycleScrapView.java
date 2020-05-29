@@ -17,6 +17,8 @@ import org.heaven7.scrap.sample.util.DialogUtil;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import butterknife.ButterKnife;
+
 /**
  * test the stand life cycle of activity.
  * <li>Note: Because this view is attached to the Activity. so activity is created.

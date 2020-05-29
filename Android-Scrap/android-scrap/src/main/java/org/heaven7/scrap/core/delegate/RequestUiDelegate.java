@@ -4,7 +4,7 @@ import com.heaven7.android.component.network.NetworkComponent;
 import com.heaven7.android.component.network.NetworkContext;
 
 
-public abstract class RequestUiDelegate<T> extends AbstractUiDelegate{
+public abstract class RequestUiDelegate<T> extends StyledUiDelegate{
 
     private final NetworkContext mNetworkContext;
 

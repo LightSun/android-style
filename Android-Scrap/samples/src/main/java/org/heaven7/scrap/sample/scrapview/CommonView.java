@@ -20,6 +20,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Optional;
 
 /**
  * Created by heaven7 on 2015/8/3.
@@ -45,36 +46,32 @@ public class CommonView extends BaseScrapView {
     protected int getBottomLayoutId() {
         return R.layout.scrap_page_1_bottom;
     }
-
-    @Override
-    protected void setView(View view) {
-        super.setView(view);
-        if(view != null){
-            ButterKnife.bind(this, view);
-        }
-    }
-
     @Override
     protected void onAttach() {
         super.onAttach();
+        ButterKnife.bind(this, getView());
         showToast("CommonView is attached");
         //set the list view's data
         //use QuickAdapter to fast set adapter.
         showGirl();
     }
 
+    @Optional
     @OnClick(R.id.iv_back)
     public void onClickBack(View view){
         onBackPressed();
     }
+    @Optional
     @OnClick(R.id.bt_1)
     public void onClickBt1(View view){
         showToast("button1 was clicked");
     }
+    @Optional
     @OnClick(R.id.bt_2)
     public void onClickBt2(View view){
         showToast("button2 was clicked");
     }
+    @Optional
     @OnClick(R.id.bt_3)
     public void onClickBt3(View view){
         showToast("button3 was clicked");

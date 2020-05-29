@@ -13,6 +13,7 @@ import org.heaven7.scrap.sample.R;
 import org.heaven7.scrap.sample.ScrapLog;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by heaven7 on 2015/8/3.
@@ -46,6 +47,8 @@ public class ScrapView extends CommonView {
 
     @Override
     protected void onAttach() {
+        ButterKnife.bind(this, getView());
+
         this.id = getBundle() == null ? 0 : getBundle().getInt("id");
         if(id == 4){
             setIsLastScrapView(true);

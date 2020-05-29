@@ -28,7 +28,7 @@ import java.util.NoSuchElementException;
  *  {@link #addBackBeforeAnother(BaseScrapView, BaseScrapView)} , {@link #jump(BaseScrapView)},{@link #stackMode(StackMode)}
  *  and use {@link #commit()} to commit it at last. here is the sample code:<p>
  *  <pre> Transaction transaction = ActivityController.get().beginTransaction();
- *  transaction.cache(view).changeBackStackMode(ExpandArrayList2.Mode.ReplacePreviousAndClearAfter)
+ *  transaction.cache(view).stackMode(StackMode.ReplacePreviousAndClearAfter)
  *     addBackAsTop().jump().commit();
  *  </pre></p>
  * @author heaven7

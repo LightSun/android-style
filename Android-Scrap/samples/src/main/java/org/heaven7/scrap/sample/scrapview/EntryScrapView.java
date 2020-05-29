@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by heaven7 on 2015/8/3.
@@ -42,14 +43,16 @@ public class EntryScrapView extends CommonView {
 
     @Override
     protected void onAttach() {
+        ButterKnife.bind(this, getView());
+
         mTv_title.setText("Scrap_Demos");
 
         RecyclerView view = getView(R.id.lv);
         view.setLayoutManager(new LinearLayoutManager(getContext()));
-        view.setAdapter(new QuickRecycleViewAdapter<ActionData>(R.layout.item_girl, getDatas()) {
+        view.setAdapter(new QuickRecycleViewAdapter<ActionData>(R.layout.item_demo, getDatas()) {
             @Override
-            protected void onBindData(Context context, int position, ActionData item, int layoutId, ViewHelper2 viewHelper) {
-                viewHelper.setText(R.id.bt_action, item.title)
+            protected void onBindData(Context context, int position, ActionData item, int layoutId, ViewHelper2 helper) {
+                helper.setText(R.id.bt_action, item.title)
                         .setText(R.id.tv_desc, item.desc)
                         .setTag(R.id.bt_action, item.id)
                         .setOnClickListener(R.id.bt_action, mClickListener);
