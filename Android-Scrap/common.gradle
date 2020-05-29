@@ -9,7 +9,7 @@ dependencies {
   implementation 'com.heaven7.java.visitor:Visitor:1.3.5'
 
   implementation 'com.github.LightSun:android-ui:1.0.3-x'
-  implementation 'com.github.LightSun:android-Component:1.1.5-beta-x'
+  implementation 'com.github.LightSun:android-Component:1.1.7-x'
   implementation 'com.github.LightSun:Android-Download:1.0.0-beta-x'
   implementation 'com.heaven7.core.util:memory:1.0.5'
   implementation 'com.github.LightSun:Android-Common-Dialog:1.0.2-x'

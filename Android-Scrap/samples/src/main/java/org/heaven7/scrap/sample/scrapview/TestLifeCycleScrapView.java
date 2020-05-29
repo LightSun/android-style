@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleAdapter;
 import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
@@ -72,11 +73,6 @@ public class TestLifeCycleScrapView extends CommonView {
             public void onActivityDestroy(Activity activity) {
                 ScrapLog.i("callback  onActivityDestroy","");
             }
-
-            @Override
-            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-                ScrapLog.i("callback  onActivitySaveInstanceState","");
-            }
             @Override
             public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
                 ScrapLog.i("callback  OnActivityResult","");
@@ -90,13 +86,17 @@ public class TestLifeCycleScrapView extends CommonView {
     @Override
     protected void onAttach() {
         // use dialog to help you test it, or else you will see nothing it this.
-        getViewHelper().setOnClickListener(R.id.bt_1, new View.OnClickListener() {
+        TextView mBt1 = getView(R.id.bt_1);
+        getView(R.id.bt_1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 testLifeCycle();
             }
-        }).setVisibility(R.id.bt_2, false).setVisibility(R.id.bt_3,false)
-                .setText(R.id.bt_1,"Click this button to show auto Dialog and test life cycle");
+        });
+
+        getView(R.id.bt_2).setVisibility(View.GONE);
+        getView(R.id.bt_3).setVisibility(View.GONE);
+        mBt1.setText("Click this button to show auto Dialog and test life cycle");
     }
 
     @Override

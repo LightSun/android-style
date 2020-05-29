@@ -27,22 +27,25 @@ public class TestVisivilityScrapView extends CommonView {
     }
 
     @Override
+
     protected void onAttach() {
-       getViewHelper().setOnClickListener(R.id.bt_test1, new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               ScrapHelper.setVisibility(ScrapPosition.Bottom, true);
-           }
-       }).setOnClickListener(R.id.bt_test2, new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               ScrapHelper.setVisibility(ScrapPosition.Bottom, false);
-           }
-       }).setOnClickListener(R.id.bt_test3, new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               ScrapHelper.toggleVisibility(ScrapPosition.Bottom);
-           }
-       });
+        getView(R.id.bt_test1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ScrapHelper.setVisibility(ScrapPosition.Bottom, true);
+            }
+        });
+        getView(R.id.bt_test2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ScrapHelper.setVisibility(ScrapPosition.Bottom, false);
+            }
+        });
+        getView(R.id.bt_test3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ScrapHelper.toggleVisibility(ScrapPosition.Bottom);
+            }
+        });
     }
 }

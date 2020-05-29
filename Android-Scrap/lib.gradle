@@ -16,14 +16,13 @@ dependencies {
    // implementation 'com.github.LightSun:Android-Common-Dialog:1.0.2-x'
     implementation 'com.github.LightSun:SuperAdapter:2.1.7-x'
     implementation('com.github.LightSun:util-v1:1.1.7-x') {
-        exclude group: 'com.android.support'
-        exclude group: 'com.heaven7.android.component'
+        exclude module: 'android-component'
     }
 
     implementation('com.github.LightSun:android-util2:1.2.0-x') {
         exclude group: "com.heaven7.core.adapter"
         exclude group: "com.heaven7.core.util"
-        exclude group: 'com.heaven7.android.component'
+        exclude module: 'android-component'
     }
     implementation('com.github.LightSun:android-PullRefreshView:1.1.1-x') {
         exclude group: "com.heaven7.core.adapter"

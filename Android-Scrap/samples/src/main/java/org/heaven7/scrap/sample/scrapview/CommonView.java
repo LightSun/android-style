@@ -4,10 +4,13 @@ import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.heaven7.adapter.BaseSelector;
-import com.heaven7.adapter.QuickAdapter;
-import com.heaven7.core.util.ViewHelper;
+import com.heaven7.adapter.QuickRecycleViewAdapter;
+import com.heaven7.adapter.util.ViewHelper2;
 
 import org.heaven7.scrap.core.oneac.BaseScrapView;
 import org.heaven7.scrap.sample.R;
@@ -15,10 +18,14 @@ import org.heaven7.scrap.util.ArrayList2;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Created by heaven7 on 2015/8/3.
  */
 public class CommonView extends BaseScrapView {
+
 
     public CommonView(Context mContext) {
         super(mContext);
@@ -40,52 +47,53 @@ public class CommonView extends BaseScrapView {
     }
 
     @Override
+    protected void setView(View view) {
+        super.setView(view);
+        if(view != null){
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    @Override
     protected void onAttach() {
         super.onAttach();
         showToast("CommonView is attached");
-        getViewHelper().setOnClickListener(R.id.iv_back, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        }).setOnClickListener(R.id.bt_1, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showToast("button1 was clicked");
-            }
-        }).setOnClickListener(R.id.bt_2, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showToast("button2 was clicked");
-            }
-        }).setOnClickListener(R.id.bt_3, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showToast("button3 was clicked");
-            }
-        });
         //set the list view's data
         //use QuickAdapter to fast set adapter.
         showGirl();
     }
 
+    @OnClick(R.id.iv_back)
+    public void onClickBack(View view){
+        onBackPressed();
+    }
+    @OnClick(R.id.bt_1)
+    public void onClickBt1(View view){
+        showToast("button1 was clicked");
+    }
+    @OnClick(R.id.bt_2)
+    public void onClickBt2(View view){
+        showToast("button2 was clicked");
+    }
+    @OnClick(R.id.bt_3)
+    public void onClickBt3(View view){
+        showToast("button3 was clicked");
+    }
+
     protected void showGirl() {
         addGirlDatas();
-        getViewHelper().setAdapter(R.id.lv, new QuickAdapter<GirlData>(R.layout.item_girl,mGirlData) {
+
+        RecyclerView view = getView(R.id.lv);
+        view.setLayoutManager(new LinearLayoutManager(getContext()));
+        view.setAdapter(new QuickRecycleViewAdapter<GirlData>(R.layout.item_girl,mGirlData) {
             @Override
-            protected void onBindData(Context context, int position, GirlData item, int layoutId, ViewHelper viewHelper) {
+            protected void onBindData(Context context, int position, GirlData item, int layoutId, ViewHelper2 viewHelper) {
                 viewHelper.setText(R.id.tv,item.name);
                 ImageView view = viewHelper.getView(R.id.eniv);
                 Glide.with(view).load(item.imageUrl).into(view);
             }
 
         });
-    }
-
-    @Override
-    protected void onDetach() {
-        super.onDetach();
-        mGirlData.clear();
     }
 
     private void addGirlDatas() {

@@ -24,7 +24,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.heaven7.adapter.util.ViewHelper2;
 import com.heaven7.java.base.anno.CalledInternal;
 import com.heaven7.java.base.anno.NonNull;
 import com.heaven7.java.base.anno.Nullable;
@@ -34,7 +33,6 @@ import org.heaven7.scrap.core.ContainerActivity;
 import org.heaven7.scrap.core.anim.AnimateExecutor;
 import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleAdapter;
 import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
-import org.heaven7.scrap.util.ExpandArrayList;
 import org.heaven7.scrap.util.Reflector;
 
 import java.lang.ref.WeakReference;
@@ -440,7 +438,7 @@ public final class ActivityViewController implements Transaction.IJumper {
                 return;
             }
             v.setContext(activity);
-            v.setViewHelper(new ViewHelper2(activity.getWindow().getDecorView()));
+            v.setView(activity.getWindow().getDecorView());
             jumpToImpl(v, animExecutor);
         }
     }
@@ -466,7 +464,7 @@ public final class ActivityViewController implements Transaction.IJumper {
         if (mCurrentView == null || tempAnimExecutor == null) {
             replace(next, tempAnimExecutor);
         } else {
-            View root = mCurrentView.getViewHelper().getRootView();
+            View root = mCurrentView.getView();
             tempAnimExecutor.performAnimate(root, false, mCurrentView, next,
                     new AnimateExecutor.OnAnimateEndListener() {
                         @Override
@@ -493,9 +491,9 @@ public final class ActivityViewController implements Transaction.IJumper {
      */
     private void replace(BaseScrapView target, AnimateExecutor animExecutor) {
         final BaseScrapView previous = mCurrentView;
-        final View topView = target.getTopView();
-        final View middleView = target.getMiddleView();
-        final View bottomView = target.getBottomView();
+        final View topView = target.getTopView(mTopContainer);
+        final View middleView = target.getMiddleView(mContentContainer);
+        final View bottomView = target.getBottomView(mBottomContainer);
 
         top(topView).middle(middleView).bottom(bottomView);
 
@@ -507,7 +505,7 @@ public final class ActivityViewController implements Transaction.IJumper {
 
         AnimateExecutor executor = animExecutor!=null? animExecutor : mGlobalAnimateExecutor;
         if (executor != null)
-            executor.performAnimate(target.getViewHelper().getRootView(), true, previous, target, null);
+            executor.performAnimate(target.getView(), true, previous, target, null);
     }
 
     /**
@@ -516,7 +514,7 @@ public final class ActivityViewController implements Transaction.IJumper {
     private void detachTarget(BaseScrapView target) {
         synchronized (target) {
             target.onDetach();
-            target.setViewHelper(null);
+            target.setView(null);
             target.unregisterActivityLifeCycleCallbacks();
             target.setActivityViewProcessor(null);
             target.setDefaultBackEventProcessor(null);
@@ -617,7 +615,7 @@ public final class ActivityViewController implements Transaction.IJumper {
         if (view != null) {
             if(view.isInBackStack()) {
                 //here ignore the mode to avoid problem ,so first change and restore
-                mCacheHelper.mViewStack.setMode(ExpandArrayList.Mode.Normal);
+                mCacheHelper.mViewStack.setStackMode(StackMode.Normal);
                 mCacheHelper.addToStackTop(view);
                 mCacheHelper.resetStackSetting();
             }
@@ -704,7 +702,7 @@ public final class ActivityViewController implements Transaction.IJumper {
             final JumpParam param = mJumpPram;
             BaseScrapView view = param.scrapView;
             view.setContext(activity);
-            view.setViewHelper(new ViewHelper2(activity.getWindow().getDecorView()));
+            view.setView(activity.getWindow().getDecorView());
             jumpToImpl(view, param.animateExecutor);
             // clear param to avoid memory leak.
             param.clear();

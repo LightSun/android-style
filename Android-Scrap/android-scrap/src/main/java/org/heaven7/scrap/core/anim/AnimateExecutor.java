@@ -44,7 +44,7 @@ public abstract class AnimateExecutor {
 
     /**
      * @return a AnimateCategoryType , can be null.if you don't need animation
-     * @see #prepareAnmation(View, boolean, BaseScrapView, BaseScrapView)
+     * @see #prepareAnimation(View, boolean, BaseScrapView, BaseScrapView)
      */
     protected abstract byte getType(boolean enter, BaseScrapView previous,
                                     BaseScrapView current);

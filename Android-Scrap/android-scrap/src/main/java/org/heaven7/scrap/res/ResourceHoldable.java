@@ -5,32 +5,32 @@ import android.graphics.Bitmap;
 
 public interface ResourceHoldable {
 
-	Context getContext();
-	
-	CharSequence getText(String resName);
+    Context getContext();
 
-	 Bitmap getBitmap(String resName);
+    CharSequence getText(String resName);
 
-	 Bitmap getBitmap(String resName, int width, int height);
+    Bitmap getBitmap(String resName);
 
-	int getId(String resName);
+    Bitmap getBitmap(String resName, int width, int height);
 
-	int getStringId(String resName);
+    int getId(String resName);
 
-	int getLayoutId(String resName);
+    int getStringId(String resName);
 
-	 int getDrawableId(String resName);
+    int getLayoutId(String resName);
 
-	 int getStyleId(String resName);
+    int getDrawableId(String resName);
 
-	 int getAnimId(String resName);
+    int getStyleId(String resName);
 
-	 int getColorId(String resName);
+    int getAnimId(String resName);
 
-	 int getDimenId(String resName);
-	
-	 int getRawId(String resName);
+    int getColorId(String resName);
 
-	 int getStringArrayId(String resName);
+    int getDimenId(String resName);
+
+    int getRawId(String resName);
+
+    int getStringArrayId(String resName);
 
 }

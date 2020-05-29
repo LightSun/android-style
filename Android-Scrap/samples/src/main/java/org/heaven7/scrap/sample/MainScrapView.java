@@ -60,11 +60,13 @@ public class MainScrapView extends BaseScrapView {
     protected void onAttach() {
         //after here i use volley to load image,so must init
 
-        getViewHelper().setOnClickListener(R.id.bt, new View.OnClickListener() {
+        getView(R.id.bt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ScrapHelper.beginTransaction().addBackAsTop(new EntryScrapView(v.getContext()))
-                        .jump().commit();
+                ScrapHelper.beginTransaction()
+                        .addBackAsTop(new EntryScrapView(v.getContext()))
+                        .jump()
+                        .commit();
             }
         });
 

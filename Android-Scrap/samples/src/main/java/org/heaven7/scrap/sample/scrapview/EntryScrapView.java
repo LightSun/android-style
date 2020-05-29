@@ -5,25 +5,33 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.heaven7.adapter.BaseSelector;
-import com.heaven7.adapter.QuickAdapter;
+import com.heaven7.adapter.QuickRecycleViewAdapter;
 import com.heaven7.adapter.util.ViewHelper2;
-import com.heaven7.core.util.ViewHelper;
 
 import org.heaven7.scrap.core.anim.AnimateExecutor;
 import org.heaven7.scrap.core.oneac.BaseScrapView;
 import org.heaven7.scrap.core.oneac.ScrapHelper;
+import org.heaven7.scrap.core.oneac.StackMode;
 import org.heaven7.scrap.sample.R;
-import org.heaven7.scrap.util.ExpandArrayList;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
 
 /**
  * Created by heaven7 on 2015/8/3.
  */
 public class EntryScrapView extends CommonView {
+
+    @BindView(R.id.tv_title)
+    TextView mTv_title;
 
     /**
      * @param mContext the context
@@ -32,43 +40,21 @@ public class EntryScrapView extends CommonView {
         super(mContext);
     }
 
-    // here not need bottom.so return null.
-    @Override
-    public View getBottomView() {
-        return null;
-    }
-
-    @Override
-    protected boolean onBackPressed() {
-        return super.onBackPressed();
-    }
-
-    @Override
-    protected void onDetach() {
-        super.onDetach();
-        // showToast("EntryScrapView is detached!");
-    }
-
     @Override
     protected void onAttach() {
+        mTv_title.setText("Scrap_Demos");
 
-        final ViewHelper2 helper = getViewHelper();
-        helper.setText(R.id.tv_title, "Scrap_Demos").setOnClickListener(R.id.iv_back, new View.OnClickListener() {
+        RecyclerView view = getView(R.id.lv);
+        view.setLayoutManager(new LinearLayoutManager(getContext()));
+        view.setAdapter(new QuickRecycleViewAdapter<ActionData>(R.layout.item_girl, getDatas()) {
             @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        List<ActionData> datas = getDatas();
-        helper.setAdapter(R.id.lv, new QuickAdapter<ActionData>(R.layout.item_demo, datas) {
-            @Override
-            protected void onBindData(Context context, int i, ActionData item, int i1, ViewHelper viewHelper) {
+            protected void onBindData(Context context, int position, ActionData item, int layoutId, ViewHelper2 viewHelper) {
                 viewHelper.setText(R.id.bt_action, item.title)
                         .setText(R.id.tv_desc, item.desc)
                         .setTag(R.id.bt_action, item.id)
                         .setOnClickListener(R.id.bt_action, mClickListener);
             }
+
         });
     }
 
@@ -90,9 +76,12 @@ public class EntryScrapView extends CommonView {
                      */
                     Bundle b = new Bundle();
                     b.putInt("id", 1);
-                    ScrapHelper.beginTransaction().stackMode(ExpandArrayList.Mode.Normal)
+                    ScrapHelper.beginTransaction()
+                            .stackMode(StackMode.Normal)
                             .addBackAsTop(new ScrapView(context))
-                            .withExtras(b).jump().commit();
+                            .arguments(b)
+                            .jump()
+                            .commit();
                     //   ScrapHelper.beginTransaction().cache() //if you want cache the view.
                     break;
                 case 2:
@@ -110,10 +99,13 @@ public class EntryScrapView extends CommonView {
                     b2.putInt("id", 1);
                     //also use can use #setBundle to carray data
                     // view2.setBundle(data);
-                    ScrapHelper.beginTransaction().stackMode(ExpandArrayList.Mode.Normal)
+                    ScrapHelper.beginTransaction()
+                            .stackMode(StackMode.Normal)
                             .addBackAsTop(new ScrapView(context))
-                            .animateExecutor(animateExecutor).withExtras(b2)
-                            .jump().commit();
+                            .animateExecutor(animateExecutor)
+                            .arguments(b2)
+                            .jump()
+                            .commit();
                     break;
                 case 5:
                     ScrapHelper.jumpTo(new TestKeyEventScrapView(context));
@@ -178,7 +170,6 @@ public class EntryScrapView extends CommonView {
             this.desc = desc;
             this.id = id;
         }
-
         String title;
         String desc;
         int id;

@@ -51,7 +51,6 @@ public final class ActivityController {
     private static class Creator {
         public static final ActivityController INSTANCE = new ActivityController();
     }
-
     /**
      * the activity's view controller
      */

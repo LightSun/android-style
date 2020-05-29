@@ -31,4 +31,8 @@ dependencies {
     implementation project(':android-scrap')
 
     api "com.github.bumptech.glide:glide:4.9.0"
+    def butterknife = '10.0.0'
+
+    implementation "com.jakewharton:butterknife:${butterknife}"
+    annotationProcessor "com.jakewharton:butterknife-compiler:${butterknife}"
 }

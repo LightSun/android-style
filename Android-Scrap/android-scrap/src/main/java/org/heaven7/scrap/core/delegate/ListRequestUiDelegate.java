@@ -16,13 +16,18 @@ import java.util.Map;
 
 public abstract class ListRequestUiDelegate<T> extends RequestUiDelegate<T> implements ListHelper.Callback {
 
-    private ListHelper<T> mListHelper;
+    private final ListHelper<T> mListHelper;
     private PullToRefreshLayout mPullLayout;
 
     public ListRequestUiDelegate(NetworkContext context, ListHelper.Factory factory) {
         super(context);
         mListHelper = new ListHelper<T>(context, factory, this);
     }
+
+    public ListHelper<T> getListHelper() {
+        return mListHelper;
+    }
+
     @Override
     public FooterDelegate getFooterDelegate() {
         return null;

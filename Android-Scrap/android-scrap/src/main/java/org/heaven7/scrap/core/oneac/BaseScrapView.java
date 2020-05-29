@@ -22,11 +22,15 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.CallSuper;
 
 import com.heaven7.adapter.util.ViewHelper2;
 import com.heaven7.core.util.Toaster;
 import com.heaven7.java.base.anno.CalledInternal;
 import com.heaven7.java.base.anno.NonNull;
+import com.heaven7.java.base.anno.Nullable;
 
 import org.heaven7.scrap.core.event.IActivityEventCallback;
 import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleAdapter;
@@ -51,10 +55,9 @@ public abstract class BaseScrapView {
 	/** the bundle data if you want to pass data from one BaseScrapView to another */
 	private Bundle mBundle;
 	/**
-	 * a view helper to help you fast call some  methods.
-	 * @see  ViewHelper2
+	 * the root view
 	 */
-	private ViewHelper2 mViewHelper;
+	private View mRootView;
 	/**
 	 * the processor of activity's view
 	 */
@@ -139,10 +142,18 @@ public abstract class BaseScrapView {
 			ScrapHelper.unregisterActivityLifeCycleCallback(mLifecycleCallback);
 		}
 	}
-
-	/*package */ void setViewHelper(ViewHelper2 vp){
-		this.mViewHelper = vp;
+	@CallSuper
+	protected void setView(View view){
+		this.mRootView = view;
 	}
+
+	public View getView(){
+		return mRootView;
+	}
+	public <T extends View >T getView(int id){
+		return mRootView.findViewById(id);
+	}
+
 	public void setContext(Context ctx){
 		this.mContext = ctx;
 	}
@@ -159,12 +170,6 @@ public abstract class BaseScrapView {
 
 	public Bundle getBundle() {
 		return mBundle;
-	}
-
-	/** get the ViewHelper to help use some good method.
-	 * @see ViewHelper2*/
-	public ViewHelper2 getViewHelper(){
-		return mViewHelper;
 	}
 
 	@CalledInternal//("set the activity's view processor")
@@ -191,7 +196,7 @@ public abstract class BaseScrapView {
 
 	/***
 	 *  set the default back event processor.
-	 * @param processor
+	 * @param processor the back processor
 	 */
 	public void setDefaultBackEventProcessor(IBackEventProcessor processor) {
        this.mDefaultBackEventProcessor = processor;
@@ -234,32 +239,49 @@ public abstract class BaseScrapView {
 			throw new NullPointerException("view cann't be null");
         mViewProcessor.replaceView(view, scrap);
 	}
+
+	/**
+	 * get the top view, often as title-bar
+	 * @return the top view
+	 */
 	@CalledInternal
-	public  View getTopView(){
+	public View getTopView(ViewGroup parent){
 		if(getTopLayoutId() == 0)
 			return null;
-		return mInflater.inflate(getTopLayoutId(), null);
+		return mInflater.inflate(getTopLayoutId(), parent, false);
 	}
+
+	/**
+	 * get the middle view as content view
+	 * @return the content view
+	 */
 	@CalledInternal
-	public View getMiddleView(){
+	public View getMiddleView(ViewGroup parent){
 		if(getMiddleLayoutId() == 0)
 			return null;
-		return mInflater.inflate(getMiddleLayoutId(), null);
+		return mInflater.inflate(getMiddleLayoutId(), parent, false);
 	}
+
+	/**
+	 * get the bottom view
+	 * @return the bottom view
+	 */
 	@CalledInternal
-	public  View getBottomView(){
+	public View getBottomView(ViewGroup parent){
 		if(getBottomLayoutId() == 0)
 			return null;
-		return mInflater.inflate(getBottomLayoutId(), null);
+		return mInflater.inflate(getBottomLayoutId(), parent, false);
 	}
-	/** get the layout id of the top . called by {@link #getTopView()}*/
+	/** get the layout id of the top . called by {@link #getTopView(ViewGroup)}*/
 	protected abstract int getTopLayoutId();
 
-	/** get the layout id of the middle .called by {@link #getMiddleView()}*/
+	/** get the layout id of the middle .called by {@link #getMiddleView(ViewGroup)}*/
 	protected abstract int getMiddleLayoutId();
 
-	/** get the layout id of the bottom . called by {@link #getBottomView()}*/
-	protected abstract int getBottomLayoutId();
+	/** get the layout id of the bottom . called by {@link #getBottomView(ViewGroup)}*/
+	protected int getBottomLayoutId(){
+		return 0;
+	}
 
 	//===========life cycle ===================//
 
@@ -302,7 +324,6 @@ public abstract class BaseScrapView {
 	 */
 	@CalledInternal
 	protected void onAttach() {
-		//ActivityController.get().getLifeCycleDispatcher().
 	}
 	/**
 	 * when this view is detach done to the activity. this will be called.

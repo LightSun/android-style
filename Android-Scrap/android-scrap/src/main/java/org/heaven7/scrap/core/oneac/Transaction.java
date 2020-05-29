@@ -19,14 +19,13 @@ package org.heaven7.scrap.core.oneac;
 import android.os.Bundle;
 
 import org.heaven7.scrap.core.anim.AnimateExecutor;
-import org.heaven7.scrap.util.ExpandArrayList;
 
 import java.util.NoSuchElementException;
 
 /**
  * the Transaction object hold a group operation such as: {@link #cache(String, BaseScrapView)},
  *  {@link #addBackAsTop(BaseScrapView)},{@link #addBackAfterAnother(BaseScrapView, BaseScrapView)},
- *  {@link #addBackBeforeAnother(BaseScrapView, BaseScrapView)} , {@link #jump(BaseScrapView)},{@link #stackMode(ExpandArrayList.Mode)}
+ *  {@link #addBackBeforeAnother(BaseScrapView, BaseScrapView)} , {@link #jump(BaseScrapView)},{@link #stackMode(StackMode)}
  *  and use {@link #commit()} to commit it at last. here is the sample code:<p>
  *  <pre> Transaction transaction = ActivityController.get().beginTransaction();
  *  transaction.cache(view).changeBackStackMode(ExpandArrayList2.Mode.ReplacePreviousAndClearAfter)
@@ -80,10 +79,10 @@ public final class Transaction {
 	}
 
 	/** change the behaviour of the default back stack.  after call {@link #commit()} the mode will restore.
-	 * @param mode which mode you want to. default is {@link ExpandArrayList.Mode#ClearPrevious}
-	 * @see ExpandArrayList.Mode */
-	public Transaction stackMode(ExpandArrayList.Mode mode){
-		mHelper.mViewStack.setMode(mode);
+	 * @param mode which mode you want to. default is {@link StackMode#ClearPrevious}
+	 * @see StackMode */
+	public Transaction stackMode(StackMode mode){
+		mHelper.mViewStack.setStackMode(mode);
 		return this;
 	}
 
@@ -104,7 +103,7 @@ public final class Transaction {
 	}
 	/** set the extra data to carry to the target scrap view.the extra data will only be used
 	 *  if then you call ...jump().commit(). */
-	public Transaction withExtras(Bundle data){
+	public Transaction arguments(Bundle data){
 		this.mBundle = data;
 		return this;
 	}
