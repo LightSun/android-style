@@ -21,9 +21,11 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
+import org.heaven7.scrap.core.oneac.ScrapHelper;
+
 /**
- * Activity life cycle callback. if you want track the method of them.please call {@link org.heaven7.scrap.util.ScrapHelper#registerActivityLifeCycleCallback(IActivityLifeCycleCallback...)}
- * and {@link org.heaven7.scrap.util.ScrapHelper#unregisterActivityLifeCycleCallback(IActivityLifeCycleCallback...)}
+ * Activity life cycle callback. if you want track the method of them.please call {@link ScrapHelper#registerActivityLifeCycleCallback(IActivityLifeCycleCallback...)}
+ * and {@link ScrapHelper#unregisterActivityLifeCycleCallback(IActivityLifeCycleCallback...)}
  * @author  heaven7
  */
 public interface IActivityLifeCycleCallback {
@@ -37,10 +39,6 @@ public interface IActivityLifeCycleCallback {
 	void onActivityPause(Activity activity);
 	void onActivityStop(Activity activity);
 	void onActivityDestroy(Activity activity);
-	
-	void onActivitySaveInstanceState(Activity activity, Bundle outState);
-	void onActivityRestoreInstanceState(Activity activity,
-										Bundle savedInstanceState);
 	
 	void onActivityConfigurationChanged(Activity activity, Configuration newConfig);
 	

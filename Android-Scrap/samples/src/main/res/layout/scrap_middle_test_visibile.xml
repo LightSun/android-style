@@ -22,11 +22,13 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:textAllCaps="false"
             android:text="b1"
             android:id="@+id/bt_test1" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
+            android:textAllCaps="false"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -37,6 +39,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:textAllCaps="false"
             android:text="b3"
             android:id="@+id/bt_test3" />
     </LinearLayout>

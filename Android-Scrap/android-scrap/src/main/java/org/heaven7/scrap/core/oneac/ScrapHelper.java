@@ -88,7 +88,7 @@ public final class ScrapHelper {
 	/**
 	 * register Activity life cycle callback. which will be call in the Activity.
 	 * also you can use {@link org.heaven7.scrap.core.lifecycle.ActivityLifeCycleAdapter} ,it implement IActivityLifeCycleCallback
-	 * @param callbacks
+	 * @param callbacks the callbacks
 	 * @see  IActivityLifeCycleCallback
 	 * @see  org.heaven7.scrap.core.lifecycle.ActivityLifeCycleAdapter
 	 * @see  org.heaven7.scrap.core.lifecycle.ActivityLifeCycleDispatcher
@@ -99,7 +99,7 @@ public final class ScrapHelper {
 
 	/**
 	 * unregister the activity life cycle callback. suach as: Activity_onResume(),Activity_onStop()
-	 * @param callbacks
+	 * @param callbacks the callbacks
 	 * @see  #registerActivityLifeCycleCallback(IActivityLifeCycleCallback...)
 	 */
 	public static void unregisterActivityLifeCycleCallback(IActivityLifeCycleCallback...callbacks){
@@ -109,7 +109,7 @@ public final class ScrapHelper {
 	/**
 	 * register the event callback of Activity.such as: key event(down/up...etc).touch event.
 	 * also use can use {@link org.heaven7.scrap.core.event.ActivityEventAdapter}
-	 * @param callbacks
+	 * @param callbacks the callbacks
 	 * @see  IActivityEventCallback
 	 * @see org.heaven7.scrap.core.event.ActivityEventAdapter
 	 */
@@ -119,7 +119,7 @@ public final class ScrapHelper {
 
 	/**
 	 * unregister the event callback of activity.
-	 * @param callbacks
+	 * @param callbacks the callbacks
 	 * @see  #registerActivityEventCallback(IActivityEventCallback...)
 	 */
 	public static void unregisterActivityEventCallback(IActivityEventCallback ...callbacks){
@@ -173,16 +173,16 @@ public final class ScrapHelper {
 	/**
 	 * toogle the visibility of view which is indicate by the ScrapPosition.
 	 * @param position the scrap position.
-	 * @see  ActivityViewController#toogleVisibility(ScrapPosition)
+	 * @see  ActivityViewController#toggleVisibility(ScrapPosition)
 	 */
 	public static void toggleVisibility(ScrapPosition position) {
-		getActivityViewController().toogleVisibility(position);
+		getActivityViewController().toggleVisibility(position);
 	}
 
 	/**
 	 * set the animate executor when jump from one ScrapView to another.
 	 * @note this animate executor is used as  the global .
-	 * @param animateExecutor
+	 * @param animateExecutor the animate executor
 	 * @see  AnimateExecutor
 	 */
 	public static void setAnimateExecutor(AnimateExecutor animateExecutor) {

@@ -186,40 +186,6 @@ public final class ActivityLifeCycleDispatcher {
     }
 
     @CalledInternal
-    public void dispatchActivityOnSaveInstanceState(Activity activity,
-                                                    Bundle outState) {
-        final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
-        if (listeners.size() > 0) {
-            CopyOnWriteArray.Access<IActivityLifeCycleCallback> access = listeners.start();
-            try {
-                int count = access.size();
-                for (int i = 0; i < count; i++) {
-                    access.get(i).onActivitySaveInstanceState(activity, outState);
-                }
-            } finally {
-                listeners.end();
-            }
-        }
-    }
-
-    @CalledInternal
-    public void dispatchActivityOnRestoreInstanceState(
-            Activity activity, Bundle savedInstanceState) {
-        final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
-        if (listeners.size() > 0) {
-            CopyOnWriteArray.Access<IActivityLifeCycleCallback> access = listeners.start();
-            try {
-                int count = access.size();
-                for (int i = 0; i < count; i++) {
-                    access.get(i).onActivityRestoreInstanceState(activity, savedInstanceState);
-                }
-            } finally {
-                listeners.end();
-            }
-        }
-    }
-
-    @CalledInternal
     public void dispatchActivityOnUserLeaveHint(Activity activity) {
         final CopyOnWriteArray<IActivityLifeCycleCallback> listeners = mCallbacks;
         if (listeners.size() > 0) {

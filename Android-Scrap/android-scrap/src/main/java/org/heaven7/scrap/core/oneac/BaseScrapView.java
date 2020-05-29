@@ -24,7 +24,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.heaven7.adapter.util.ViewHelper2;
-import com.heaven7.core.util.MainWorker;
 import com.heaven7.core.util.Toaster;
 import com.heaven7.java.base.anno.CalledInternal;
 import com.heaven7.java.base.anno.NonNull;
@@ -221,7 +220,7 @@ public abstract class BaseScrapView {
 
 	/** post the runnable run on ui thread */
 	protected void runOnUiThread(Runnable r){
-		MainWorker.post(r);
+		((Activity)mContext).runOnUiThread(r);
 	}
 
 	//==================================//
@@ -242,7 +241,7 @@ public abstract class BaseScrapView {
 		return mInflater.inflate(getTopLayoutId(), null);
 	}
 	@CalledInternal
-	public  View getMiddleView(){
+	public View getMiddleView(){
 		if(getMiddleLayoutId() == 0)
 			return null;
 		return mInflater.inflate(getMiddleLayoutId(), null);
@@ -268,7 +267,7 @@ public abstract class BaseScrapView {
 	 * when the top/middle/bottom hide it's visibility,this will be called.
 	 * @param position  which scrap of activity
 	 * @see ActivityViewController#setVisibility(ScrapPosition, boolean)
-	 * @see ActivityViewController#toogleVisibility(ScrapPosition)
+	 * @see ActivityViewController#toggleVisibility(ScrapPosition)
 	 */
 	@CalledInternal
 	protected void onHide(ScrapPosition position){
@@ -285,7 +284,7 @@ public abstract class BaseScrapView {
 	 * when the top/middle/bottom show it's visibility,this will be called.
 	 * @param position  which scrap of activity
 	 * @see ActivityViewController#setVisibility(ScrapPosition, boolean)
-	 * @see ActivityViewController#toogleVisibility(ScrapPosition)
+	 * @see ActivityViewController#toggleVisibility(ScrapPosition)
 	 */
 	@CalledInternal
 	protected void onShow(ScrapPosition position){

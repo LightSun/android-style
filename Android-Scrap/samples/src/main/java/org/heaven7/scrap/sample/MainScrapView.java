@@ -39,9 +39,14 @@ public class MainScrapView extends BaseScrapView {
     @Override
     protected boolean onBackPressed() {
         if (ScrapHelper.isScrapViewAtBottom(this)) {
+            if(start == 0){
+                start = System.currentTimeMillis();
+                showToast("click again to exit MainScrapView!");
+                return true;
+            }
             long now = System.currentTimeMillis();
             if (now - start >= 500) {
-                showToast("you must click twice in 500 ms to exit CommonView");
+                showToast("click again to exit MainScrapView!");
                 start = now;
             } else {
                 ScrapHelper.finishCurrentActivity();

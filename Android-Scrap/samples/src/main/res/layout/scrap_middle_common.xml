@@ -21,6 +21,7 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="20dp"
         android:padding="5dp"
+        android:textAllCaps="false"
         android:text="click this button"
         android:id="@+id/button"
         android:layout_centerVertical="true"

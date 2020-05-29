@@ -17,10 +17,12 @@
 package org.heaven7.scrap.util;
 
 import android.content.Context;
+import android.content.res.Resources;
 
 import androidx.annotation.RestrictTo;
 
 import com.heaven7.core.util.ConfigUtil;
+import com.heaven7.core.util.DimenUtil;
 import com.heaven7.core.util.ResourceUtil;
 
 import java.util.Properties;
@@ -28,10 +30,24 @@ import java.util.Properties;
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 public final class Utils {
 
+	private static int sSystemUIHeight;
+
 	/** load properties which is under the raw (exclude extension )*/
 	public static Properties loadRawConfig(Context context,String rawResName) {
 		int resId = ResourceUtil.getResId(context, rawResName, ResourceUtil.ResourceType.Raw);
 		return ConfigUtil.loadRawConfig(context, resId);
 	}
 
+	public static int getSystemUIHeight(Context context) {
+		if (0 == sSystemUIHeight) {
+			Resources resources = context.getResources();
+			int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+			if (resourceId > 0) {
+				sSystemUIHeight = resources.getDimensionPixelSize(resourceId);
+			} else {
+				sSystemUIHeight = DimenUtil.dip2px(context, 56);
+			}
+		}
+		return sSystemUIHeight;
+	}
 }

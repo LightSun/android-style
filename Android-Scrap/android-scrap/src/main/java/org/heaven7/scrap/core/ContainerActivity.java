@@ -16,18 +16,28 @@
  */
 package org.heaven7.scrap.core;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.content.res.TypedArray;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import org.heaven7.scrap.core.delegate.AbstractUiDelegate;
 import org.heaven7.scrap.core.delegate.SingleActivityUiDelegate;
 import org.heaven7.scrap.core.event.ActivityEventCallbackGroup;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * the container activity.
@@ -40,6 +50,12 @@ public class ContainerActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        /*
+         * 修复部分 Android 8.0 手机在TargetSDK 大于 26 时，在透明主题时指定 Activity 方向时崩溃的问题
+         */
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O && isTranslucentOrFloating()) {
+            fixOrientation();
+        }
         super.onCreate(savedInstanceState);
 
         String cn = getIntent().getStringExtra(ScrapConstant.KEY_UI_DELEGATE);
@@ -52,15 +68,61 @@ public class ContainerActivity extends AppCompatActivity {
 				throw new RuntimeException(e);
 			}
 		}
-        setContentView(mDelegate.getLayoutId());
         mDelegate.setActivity(this);
+        mDelegate.onPreSetContentView();
+        mDelegate.clearAllFragments();
+        setContentView(mDelegate.getLayoutId());
+        mDelegate.setStatusBar();
 
         //on initialize
         mDelegate.onInitialize(getIntent(), savedInstanceState);
         //on-create
 		mDelegate.getLifeCycleDispatcher().dispatchActivityOnCreate(this, savedInstanceState);
     }
+    private boolean fixOrientation() {
+        try {
+            Field field = Activity.class.getDeclaredField("mActivityInfo");
+            field.setAccessible(true);
+            ActivityInfo o = (ActivityInfo) field.get(this);
+            o.screenOrientation = -1;
+            field.setAccessible(false);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    /**
+     * 清除所有已存在的 Fragment 防止因重建 Activity 时，前 Fragment 没有销毁和重新复用导致界面重复显示
+     * 如果有自己实现 Fragment 的复用，请复写此方法并不实现内容
+     */
+    protected void clearAllFragmentExistBeforeCreate() {
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        if (fragments.size() == 0) return;
 
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        for (Fragment fragment : fragments) {
+            fragmentTransaction.remove(fragment);
+        }
+        fragmentTransaction.commitNow();
+    }
+    /**
+     * 判断当前主题是否是透明悬浮
+     */
+    private boolean isTranslucentOrFloating() {
+        boolean isTranslucentOrFloating = false;
+        try {
+            int[] styleableRes = (int[]) Class.forName("com.android.internal.R$styleable").getField("Window").get(null);
+            final TypedArray ta = obtainStyledAttributes(styleableRes);
+            Method m = ActivityInfo.class.getMethod("isTranslucentOrFloating", TypedArray.class);
+            m.setAccessible(true);
+            isTranslucentOrFloating = (boolean) m.invoke(null, ta);
+            m.setAccessible(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return isTranslucentOrFloating;
+    }
 
 	@Override
     protected void onNewIntent(Intent intent) {
@@ -129,15 +191,13 @@ public class ContainerActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mDelegate.getLifeCycleDispatcher()
-                .dispatchActivityOnSaveInstanceState(this, outState);
+        mDelegate.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        mDelegate.getLifeCycleDispatcher()
-                .dispatchActivityOnRestoreInstanceState(this, savedInstanceState);
+        mDelegate.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override

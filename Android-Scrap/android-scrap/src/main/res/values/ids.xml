@@ -4,4 +4,5 @@
     <item name="lib_style_bottom" type="id"/>
     <item name="lib_style_content" type="id"/>
     <item name="lib_style_loading" type="id"/>
+    <item name="lib_style_pullToRefresh" type="id"/>
 </resources>

@@ -59,21 +59,11 @@ public  class ActivityLifeCycleAdapter implements IActivityLifeCycleCallback {
 		
 	}
 
-	@Override
-	public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-		
-	}
     @Override
     public void onActivityConfigurationChanged(Activity activity,
     		Configuration newConfig) {
     	
     }
-
-	@Override
-	public void onActivityRestoreInstanceState(Activity activity,
-			Bundle savedInstanceState) {
-		
-	}
 
 	@Override
 	public void onActivityUserLeaveHint(Activity activity) {

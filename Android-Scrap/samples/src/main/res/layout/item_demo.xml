@@ -12,6 +12,7 @@
         android:textColor="#88ff0000"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:textAllCaps="false"
         />
     <TextView
         android:id="@+id/tv_desc"

@@ -75,7 +75,7 @@ public final class ActivityViewController implements Transaction.IJumper {
     /**
      * the top middle of activity
      */
-    private ViewGroup mMiddleContainer;
+    private ViewGroup mContentContainer;
 
     /**
      * the top bottom of activity
@@ -143,9 +143,9 @@ public final class ActivityViewController implements Transaction.IJumper {
     }
 
     //============================//
-    void attachContainers(ViewGroup top, ViewGroup middle, ViewGroup bottom,ViewGroup loading) {
+    void attachContainers(ViewGroup top, ViewGroup content, ViewGroup bottom,ViewGroup loading) {
         this.mTopContainer = top;
-        this.mMiddleContainer = middle;
+        this.mContentContainer = content;
         this.mBottomContainer = bottom;
         this.mLoadingContainer = loading;
         //default loading is gone
@@ -171,10 +171,10 @@ public final class ActivityViewController implements Transaction.IJumper {
      * replace the middle view
      */
 	/*private*/ ActivityViewController middle(@Nullable View v) {
-        if (mMiddleContainer.getChildCount() > 0)
-            mMiddleContainer.removeAllViews();
+        if (mContentContainer.getChildCount() > 0)
+            mContentContainer.removeAllViews();
         if (v != null) {
-            mMiddleContainer.addView(v);
+            mContentContainer.addView(v);
         }
         return this;
     }
@@ -263,9 +263,9 @@ public final class ActivityViewController implements Transaction.IJumper {
             }
             break;
             case Middle: {
-                int visibility = mMiddleContainer.getVisibility();
+                int visibility = mContentContainer.getVisibility();
                 if (visibility != View.VISIBLE) {
-                    mMiddleContainer.setVisibility(View.VISIBLE);
+                    mContentContainer.setVisibility(View.VISIBLE);
                     if (mCurrentView != null)
                         mCurrentView.onShow(ScrapPosition.Middle);
                 }
@@ -290,7 +290,7 @@ public final class ActivityViewController implements Transaction.IJumper {
 
     /**
      * set one of the three scrap's visibility. if you want to toogle visibility.
-     * use {@link #toogleVisibility(ScrapPosition)}
+     * use {@link #toggleVisibility(ScrapPosition)}
      *
      * @param position the position of the scrap.can't be null.
      * @param visible  true to visible  false to gone
@@ -302,7 +302,7 @@ public final class ActivityViewController implements Transaction.IJumper {
     /**
      * hide to show  or show to hide the scrap.
      */
-    public ActivityViewController toogleVisibility(@NonNull ScrapPosition position) {
+    public ActivityViewController toggleVisibility(@NonNull ScrapPosition position) {
         switch (position) {
             case Top: {
                 int visibility = mTopContainer.getVisibility();
@@ -318,13 +318,13 @@ public final class ActivityViewController implements Transaction.IJumper {
             }
             break;
             case Middle: {
-                int visibility = mMiddleContainer.getVisibility();
+                int visibility = mContentContainer.getVisibility();
                 if (visibility == View.VISIBLE) {
-                    mMiddleContainer.setVisibility(View.GONE);
+                    mContentContainer.setVisibility(View.GONE);
                     if (mCurrentView != null)
                         mCurrentView.onHide(ScrapPosition.Middle);
                 } else {
-                    mMiddleContainer.setVisibility(View.VISIBLE);
+                    mContentContainer.setVisibility(View.VISIBLE);
                     if (mCurrentView != null)
                         mCurrentView.onShow(ScrapPosition.Middle);
                 }
@@ -364,9 +364,9 @@ public final class ActivityViewController implements Transaction.IJumper {
             }
             break;
             case Middle: {
-                int visibility = mMiddleContainer.getVisibility();
+                int visibility = mContentContainer.getVisibility();
                 if (visibility == View.VISIBLE) {
-                    mMiddleContainer.setVisibility(View.GONE);
+                    mContentContainer.setVisibility(View.GONE);
                     if (mCurrentView != null)
                         mCurrentView.onHide(ScrapPosition.Middle);
                 }
@@ -544,7 +544,7 @@ public final class ActivityViewController implements Transaction.IJumper {
     private void reset() {
         this.mWrfActivity = null;
         mBottomContainer = null;
-        mMiddleContainer = null;
+        mContentContainer = null;
         mTopContainer = null;
         mLoadingContainer = null;
         mDefaultLoadingView = null;
@@ -683,13 +683,13 @@ public final class ActivityViewController implements Transaction.IJumper {
                 mLoadingContainer.setVisibility(View.VISIBLE);
                 mTopContainer.setVisibility(param.showTop? View.VISIBLE:View.GONE);
                 mBottomContainer.setVisibility(param.showBottom? View.VISIBLE:View.GONE);
-                mMiddleContainer.setVisibility(View.GONE);
+                mContentContainer.setVisibility(View.GONE);
             }
         }else{
             //loading view : from show -> not show. show others
             if(mLoadingContainer.getVisibility() == View.VISIBLE){
                 mLoadingContainer.setVisibility(View.GONE);
-                mMiddleContainer.setVisibility(View.VISIBLE);
+                mContentContainer.setVisibility(View.VISIBLE);
                 mTopContainer.setVisibility(param.showTop? View.VISIBLE:View.GONE);
                 mBottomContainer.setVisibility(param.showBottom? View.VISIBLE:View.GONE);
             }

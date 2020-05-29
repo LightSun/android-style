@@ -25,10 +25,8 @@ import java.util.List;
  */
 public class EntryScrapView extends CommonView {
 
-    private long start;
-
     /**
-     * @param mContext
+     * @param mContext the context
      */
     public EntryScrapView(Context mContext) {
         super(mContext);
