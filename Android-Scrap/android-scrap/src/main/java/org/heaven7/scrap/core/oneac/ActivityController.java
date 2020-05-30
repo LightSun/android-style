@@ -109,7 +109,10 @@ public final class ActivityController {
         mSaveInstanceState = savedInstanceState != null ? new Bundle(savedInstanceState) : null;
         mViewController.attachActivity(activity);
         mViewController.attachContainers(top, content, bottom, loading);
-        jumpToMainScrapViewIfNeed(activity);
+        //if comes from save- State
+        if(!getViewController().onRestoreInstanceState(mSaveInstanceState)){
+            jumpToMainScrapViewIfNeed(activity);
+        }
     }
 
     /**

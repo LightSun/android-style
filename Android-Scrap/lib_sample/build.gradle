@@ -1,0 +1,41 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    def androidX_ver = '1.1.0'
+    implementation "androidx.appcompat:appcompat:$androidX_ver"
+    implementation "androidx.recyclerview:recyclerview:$androidX_ver"
+    implementation 'com.github.LightSun:SuperAdapter:2.1.7-x'
+    implementation('com.github.LightSun:util-v1:1.1.7-x') {
+        exclude module: 'android-component'
+    }
+
+    implementation 'com.heaven7.java.base:Java-base:1.2.1'
+
+    implementation project(":android-scrap")
+}

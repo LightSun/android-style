@@ -4,7 +4,7 @@ dependencies {
   implementation "androidx.appcompat:appcompat:$androidX_ver"
   implementation "androidx.recyclerview:recyclerview:$androidX_ver"
 
-  implementation 'com.heaven7.java.base:Java-base:1.2.0'
+  implementation 'com.heaven7.java.base:Java-base:1.2.1'
   implementation 'com.github.LightSun:Produce-consume:1.0.2-beta4'
   implementation 'com.heaven7.java.visitor:Visitor:1.3.5'
 

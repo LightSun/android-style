@@ -17,12 +17,15 @@
 package org.heaven7.scrap.core.oneac;
 
 import android.content.Context;
+import android.os.Bundle;
 
 import com.heaven7.java.base.util.Reflector;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 /**
@@ -37,13 +40,21 @@ import java.util.NoSuchElementException;
  */
 /* package */ final class CacheHelper {
 
+	private static final String KEY_STACK_PREFIX = "stack_";
+	private static final String KEY_CACHE_PREFIX = "cache_";
+	private static final String KEY_SIZE  = "size_";
+	private static final String KEY_CLASS = "class_";
+	private static final String KEY_DATA  = "data_";
+	private static final String KEY_MAP_KEY = "key_";
+	private static final String KEY_CUR_INDEX = "curIndex_";
+
 	final ExpandArrayList<BaseScrapView> mViewStack;
 	private final HashMap<String, BaseScrapView> mCachedViewMap;
 
     private static final Comparator<BaseScrapView> DEFAULT_COMPARATOR = new Comparator<BaseScrapView>() {
 		@Override
 		public int compare(BaseScrapView lhs, BaseScrapView rhs) {
-			return lhs.getClass() == rhs.getClass() ? 0 :1;
+			return lhs.compareTo(rhs);
 		}
 	};
 
@@ -65,7 +76,7 @@ import java.util.NoSuchElementException;
 		};
 		// set Comparator to prevent the same class
 		mViewStack.setComparator(DEFAULT_COMPARATOR);
-		mViewStack.setStackMode(StackMode.ClearPrevious);
+		mViewStack.setStackMode(StackMode.Normal);
 	}
 
 	/** restore the setting of back stack. */
@@ -73,12 +84,12 @@ import java.util.NoSuchElementException;
 		if(mViewStack.getComparator() != DEFAULT_COMPARATOR){
 		   mViewStack.setComparator(DEFAULT_COMPARATOR);
 		}
-		if(mViewStack.getMode() != StackMode.ClearPrevious)
-		   mViewStack.setStackMode(StackMode.ClearPrevious);
+		if(mViewStack.getMode() != StackMode.Normal)
+		   mViewStack.setStackMode(StackMode.Normal);
 	}
 
 	public List<BaseScrapView> getStackList() {
-		return mViewStack;
+		return Collections.unmodifiableList(mViewStack);
 	}
 
 	/**
@@ -133,11 +144,15 @@ import java.util.NoSuchElementException;
 	}
 
 	public BaseScrapView pollStackTail(){
-		return mViewStack.pollLast();
+		BaseScrapView view = mViewStack.pollLast();
+		view.setInBackStack(false);
+		return view;
 	}
 
 	public BaseScrapView pollStackHead(){
-		return mViewStack.pollFirst();
+		BaseScrapView view = mViewStack.pollFirst();
+		view.setInBackStack(false);
+		return view;
 	}
 
 	/** get the bottom of stack.*/
@@ -185,4 +200,67 @@ import java.util.NoSuchElementException;
 		addToStack(referencedView, target, before);
 	}
 
+	public void onSaveInstanceState(Bundle out, int curIndex) {
+		//save stack
+		int size = mViewStack.size();
+		out.putInt(KEY_STACK_PREFIX + KEY_SIZE, size);
+		out.putInt(KEY_STACK_PREFIX + KEY_CUR_INDEX, curIndex);
+		for (int i = 0 ; i < size ; i ++){
+			BaseScrapView view = mViewStack.get(i);
+			Bundle b = new Bundle();
+			view.onSaveInstanceState(b);
+			out.putBundle(KEY_STACK_PREFIX + KEY_DATA + i, b);
+			out.putString(KEY_STACK_PREFIX + KEY_CLASS + i, view.getClass().getName());
+		}
+        //save cache
+		size = mCachedViewMap.size();
+		out.putInt(KEY_CACHE_PREFIX + KEY_SIZE, size);
+		int i = 0;
+		for (Map.Entry<String, BaseScrapView> en : mCachedViewMap.entrySet()){
+			BaseScrapView view = en.getValue();
+
+			Bundle b = new Bundle();
+			view.onSaveInstanceState(b);
+			out.putBundle(KEY_CACHE_PREFIX + KEY_DATA + i, b);
+			out.putString(KEY_CACHE_PREFIX + KEY_CLASS + i, view.getClass().getName());
+			out.putString(KEY_CACHE_PREFIX + KEY_MAP_KEY + i, en.getKey());
+			i ++;
+		}
+	}
+	public int onRestoreInstanceState(Context context, Bundle in) {
+		int curIndex = -2;
+        if(in != null){
+			int size = in.getInt(KEY_STACK_PREFIX + KEY_SIZE);
+			curIndex = in.getInt(KEY_STACK_PREFIX + KEY_CUR_INDEX);
+			mViewStack.clear();
+			for (int i = 0 ; i < size ; i++){
+				String cn = in.getString(KEY_STACK_PREFIX + KEY_CLASS + i);
+				Bundle b = in.getBundle(KEY_STACK_PREFIX + KEY_DATA + i);
+				try {
+					BaseScrapView view = Reflector.from(Class.forName(cn)).constructor(Context.class).newInstance(context);
+					view.onRestoreInstanceState(b);
+					mViewStack.add(view);
+				} catch (ClassNotFoundException e) {
+					throw new IllegalStateException(e);
+				}
+			}
+			//restore cache
+			mCachedViewMap.clear();
+			size = in.getInt(KEY_CACHE_PREFIX + KEY_SIZE);
+			for (int i = 0 ; i < size ; i ++){
+				Bundle b = in.getBundle(KEY_CACHE_PREFIX + KEY_DATA + i);
+				String cn = in.getString(KEY_CACHE_PREFIX + KEY_CLASS + i);
+				String mapKey = in.getString(KEY_CACHE_PREFIX + KEY_MAP_KEY + i);
+
+				try {
+					BaseScrapView view = Reflector.from(Class.forName(cn)).constructor(Context.class).newInstance(context);
+					view.onRestoreInstanceState(b);
+					mCachedViewMap.put(mapKey, view);
+				} catch (ClassNotFoundException e) {
+					throw new IllegalStateException(e);
+				}
+			}
+		}
+        return curIndex;
+	}
 }

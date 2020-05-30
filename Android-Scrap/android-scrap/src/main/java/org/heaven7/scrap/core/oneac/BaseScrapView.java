@@ -26,12 +26,11 @@ import android.view.ViewGroup;
 
 import androidx.annotation.CallSuper;
 
-import com.heaven7.adapter.util.ViewHelper2;
 import com.heaven7.core.util.Toaster;
 import com.heaven7.java.base.anno.CalledInternal;
 import com.heaven7.java.base.anno.NonNull;
-import com.heaven7.java.base.anno.Nullable;
 
+import org.heaven7.scrap.core.event.ActivityEventAdapter;
 import org.heaven7.scrap.core.event.IActivityEventCallback;
 import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleAdapter;
 import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
@@ -48,7 +47,11 @@ import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
  * @see  ActivityViewController
  * @see  ActivityController
  */
-public abstract class BaseScrapView {
+public abstract class BaseScrapView implements Comparable<BaseScrapView>{
+
+	private static final String KEY_DATA = "data";
+	private static final String KEY_LOADING_PARAM = "loadingP";
+	private static final String KEY_IN_BACK_STACK = "inBackStack";
 
 	private Context mContext;
 	private LayoutInflater mInflater;
@@ -84,10 +87,18 @@ public abstract class BaseScrapView {
 		onPostInit();
 	}
 
-	/** the automatic callbed to do the final init.
+	/** the automatic called to do the final init.
 	 * if subclass want to init other please doing it here! */
 	protected void onPostInit() {
 
+	}
+
+	@Override
+	public int compareTo(BaseScrapView o) {
+		if( o != null){
+			return getClass().getName().compareTo(o.getClass().getName());
+		}
+		return 1;
 	}
 
 	public void showToast(String msg){
@@ -390,4 +401,17 @@ public abstract class BaseScrapView {
 		return mDefaultBackEventProcessor!=null && mDefaultBackEventProcessor.handleBackEvent();
 	}
 
+	public void onSaveInstanceState(Bundle out) {
+		out.putBundle(KEY_DATA, mBundle);
+		out.putParcelable(KEY_LOADING_PARAM, mLoadingParam);
+		out.putBoolean(KEY_IN_BACK_STACK, mInBackStack);
+	}
+	public void onRestoreInstanceState(Bundle in) {
+		setBundle(in.getBundle(KEY_DATA));
+		LoadingParam lp = in.getParcelable(KEY_LOADING_PARAM);
+		if(lp != null){
+			mLoadingParam.set(lp.showLoading, lp.showTop, lp.showBottom);
+		}
+		setInBackStack(in.getBoolean(KEY_IN_BACK_STACK));
+	}
 }

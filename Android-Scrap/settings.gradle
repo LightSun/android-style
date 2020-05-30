@@ -1,1 +1,1 @@
-include ':android-scrap', ':samples'
+include ':android-scrap', ':samples', ':lib_sample'

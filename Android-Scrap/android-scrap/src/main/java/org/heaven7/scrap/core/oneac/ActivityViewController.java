@@ -20,10 +20,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.heaven7.core.util.MainWorker;
 import com.heaven7.java.base.anno.CalledInternal;
 import com.heaven7.java.base.anno.NonNull;
 import com.heaven7.java.base.anno.Nullable;
@@ -64,7 +66,9 @@ import java.util.List;
  */
 public final class ActivityViewController implements Transaction.IJumper {
 
-    static boolean sDebug = false;
+    private static final String KEY_CUR_SCRAP_CLASS = "avc:cur_scrap_class";
+    private static final String KEY_CUR_SCRAP_HASH  = "avc:cur_scrap_hash";
+    private static boolean sDebug = false;
     /**
      * the top container of activity
      */
@@ -398,11 +402,11 @@ public final class ActivityViewController implements Transaction.IJumper {
     }
 
     public void jumpTo(@NonNull BaseScrapView v) {
-        jumpTo(v, null,mDefaultIntentExecutor,null);
+        jumpTo(v, null, mDefaultIntentExecutor,null);
     }
     @Override
     public void jumpTo(@NonNull BaseScrapView v, Bundle data, AnimateExecutor executor) {
-        jumpTo(v, data,mDefaultIntentExecutor,executor);
+        jumpTo(v, data,mDefaultIntentExecutor, executor);
     }
 
     /**
@@ -475,14 +479,6 @@ public final class ActivityViewController implements Transaction.IJumper {
         }
     }
 
-    private void beforeAttach(BaseScrapView next) {
-        synchronized (next) {
-            next.registerActivityLifeCycleCallbacks();
-            next.setDefaultBackEventProcessor(mBackProcessor);
-            next.setActivityViewProcessor(mViewProcessor);
-        }
-    }
-
     /**
      *  use the target view's 'top/middle/bottom' and replace with them.
      * @param target the target scrap view to replace.
@@ -508,6 +504,14 @@ public final class ActivityViewController implements Transaction.IJumper {
             executor.performAnimate(target.getView(), true, previous, target, null);
     }
 
+    private void beforeAttach(BaseScrapView next) {
+        synchronized (next) {
+            next.registerActivityLifeCycleCallbacks();
+            next.setDefaultBackEventProcessor(mBackProcessor);
+            next.setActivityViewProcessor(mViewProcessor);
+        }
+    }
+
     /**
      * detach the target BaseScrapView
      */
@@ -524,8 +528,7 @@ public final class ActivityViewController implements Transaction.IJumper {
 
     /**
      * attach the activity  when activity is launched .this will called.
-     *
-     * @param activity
+     * @param activity the activity
      */
 	/*public*/ void attachActivity(Activity activity) {
         if (activity == null) {
@@ -708,6 +711,35 @@ public final class ActivityViewController implements Transaction.IJumper {
             param.clear();
         }
     };
+
+    @CalledInternal
+    public void onSaveInstanceState(Bundle out) {
+        int mCurIndex = mCacheHelper.getStackList().indexOf(mCurrentView);
+        mCacheHelper.onSaveInstanceState(out, mCurIndex);
+    }
+
+    public boolean onRestoreInstanceState(Bundle in) {
+        if(in != null){
+            int curIndex = mCacheHelper.onRestoreInstanceState(mContentContainer.getContext(), in);
+            List<BaseScrapView> stackList = mCacheHelper.getStackList();
+            if(stackList.size() <= 0){
+                return false;
+            }
+            if(curIndex == -1) {
+                //not in stack, default first
+                curIndex = 0;
+            }
+            final BaseScrapView view = stackList.get(curIndex);
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    jumpTo(view, view.getBundle());
+                }
+            });
+            return true;
+        }
+        return false;
+    }
 
     private static class JumpParam{
         public BaseScrapView scrapView;

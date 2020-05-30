@@ -11,6 +11,7 @@ import org.heaven7.scrap.core.oneac.ActivityController;
 
 public class SingleActivityUiDelegate extends AbstractUiDelegate {
 
+    private static final String KEY_DATA = "__saud:data";
     private FrameLayout mFl_top;
     private FrameLayout mFl_content;
     private FrameLayout mFl_bottom;
@@ -52,5 +53,21 @@ public class SingleActivityUiDelegate extends AbstractUiDelegate {
 
         /* this must called after the container(top,middle,and bottom) is found ! */
         ActivityController.get().attach(getActivity(), mFl_top, mFl_content, mFl_bottom, mFl_loading, savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Bundle b = new Bundle();
+        ActivityController.get().getViewController().onSaveInstanceState(b);
+        outState.putBundle(KEY_DATA, b);
+    }
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if(savedInstanceState != null){
+            Bundle b = savedInstanceState.getBundle(KEY_DATA);
+            ActivityController.get().getViewController().onRestoreInstanceState(b);
+        }
     }
 }

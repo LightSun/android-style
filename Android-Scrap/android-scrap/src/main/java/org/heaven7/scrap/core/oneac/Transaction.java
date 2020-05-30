@@ -53,6 +53,7 @@ public final class Transaction {
 
 	private AnimateExecutor mAnimateExecutor;
 	private Bundle mBundle;
+	private boolean mModeSet;
 
 	/**
 	 * the jumper which can used to jump to the target BaseScrapView
@@ -82,6 +83,7 @@ public final class Transaction {
 	 * @param mode which mode you want to. default is {@link StackMode#ClearPrevious}
 	 * @see StackMode */
 	public Transaction stackMode(StackMode mode){
+		mModeSet = true;
 		mHelper.mViewStack.setStackMode(mode);
 		return this;
 	}
@@ -277,6 +279,12 @@ public final class Transaction {
 	 *  commit all operation ,you must call this or else my cause some problem.
 	 */
 	public void commit() {
+		//default mode
+		if(!mModeSet){
+			stackMode(StackMode.Normal);
+		}else {
+			mModeSet = false;
+		}
 		checkLastViewExist();
 		mHelper.resetStackSetting();
 		if (mNeedJump) {
