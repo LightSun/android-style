@@ -19,7 +19,6 @@ package org.heaven7.scrap.util;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -87,7 +86,6 @@ public final class Reflector{
 	public static<T>T[] newArray(Class<T> clazz,int len) {
 		return (T[]) Array.newInstance(clazz, len);
 	}
-	
 	@SuppressWarnings("unchecked")
 	public static <T> Constructor<T> constructor(Class<?> clazz,Class<?>...paramTypes){
 		try {
