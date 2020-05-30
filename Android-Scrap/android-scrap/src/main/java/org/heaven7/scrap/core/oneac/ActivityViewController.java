@@ -27,13 +27,13 @@ import android.view.ViewGroup;
 import com.heaven7.java.base.anno.CalledInternal;
 import com.heaven7.java.base.anno.NonNull;
 import com.heaven7.java.base.anno.Nullable;
+import com.heaven7.java.base.util.Reflector;
 
 import org.heaven7.scrap.R;
 import org.heaven7.scrap.core.ContainerActivity;
 import org.heaven7.scrap.core.anim.AnimateExecutor;
 import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleAdapter;
 import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
-import org.heaven7.scrap.util.Reflector;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -393,7 +393,7 @@ public final class ActivityViewController implements Transaction.IJumper {
      */
 	/* suspensive */ <T extends BaseScrapView> void jumpTo(Context ctx,
                                                            final Class<T> clazz, final Bundle data) {
-        T t = Reflector.from(clazz).constructor(Context.class).create(ctx);
+        T t = Reflector.from(clazz).constructor(Context.class).newInstance(ctx);
         jumpTo(t, data);
     }
 

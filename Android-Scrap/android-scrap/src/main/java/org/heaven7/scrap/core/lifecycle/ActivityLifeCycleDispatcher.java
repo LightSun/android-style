@@ -24,8 +24,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import com.heaven7.java.base.anno.CalledInternal;
-
-import org.heaven7.scrap.util.CopyOnWriteArray;
+import com.heaven7.java.base.util.CopyOnWriteArray;
 
 public final class ActivityLifeCycleDispatcher {
 

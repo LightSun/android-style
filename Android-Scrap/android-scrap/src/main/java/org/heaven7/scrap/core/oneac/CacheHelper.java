@@ -18,7 +18,7 @@ package org.heaven7.scrap.core.oneac;
 
 import android.content.Context;
 
-import org.heaven7.scrap.util.Reflector;
+import com.heaven7.java.base.util.Reflector;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -181,7 +181,7 @@ import java.util.NoSuchElementException;
                                boolean before) {
 		//create a simulate BaseScrapView to indexOf
 		BaseScrapView referencedView = Reflector.from(referencedClass).constructor(Context.class)
-				 .create(target.getContext());
+				 .newInstance(target.getContext());
 		addToStack(referencedView, target, before);
 	}
 

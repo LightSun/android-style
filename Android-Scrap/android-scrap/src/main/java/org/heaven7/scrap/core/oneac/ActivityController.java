@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import androidx.annotation.RestrictTo;
 
 import com.heaven7.java.base.anno.CalledInternal;
+import com.heaven7.java.base.util.Reflector;
 
 import org.heaven7.scrap.core.ScrapConstant;
 import org.heaven7.scrap.core.anim.AnimateExecutor;
@@ -32,7 +33,6 @@ import org.heaven7.scrap.core.event.ActivityEventAdapter;
 import org.heaven7.scrap.core.event.ActivityEventCallbackGroup;
 import org.heaven7.scrap.core.event.IActivityEventCallback;
 import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleDispatcher;
-import org.heaven7.scrap.util.Reflector;
 import org.heaven7.scrap.util.Utils;
 
 import java.util.Properties;
@@ -129,7 +129,7 @@ public final class ActivityController {
                 try {
                     String backStack = prop.getProperty(ScrapConstant.CONFIG_KEY_MAIN_SCRAP_VIEW_BACK_STACK);
                     BaseScrapView view = Reflector.from(Class.forName(classname)).constructor(Context.class)
-                            .create(activity);
+                            .newInstance(activity);
                     if (!Boolean.valueOf(backStack)) {
                         jumpTo(view);
                     } else {
