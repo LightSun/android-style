@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 apply from: '../lib.gradle'
-//indicate this is library'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.github.LightSun'
 
 // default have
 android {
