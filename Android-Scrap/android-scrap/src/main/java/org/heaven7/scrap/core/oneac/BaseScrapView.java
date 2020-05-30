@@ -39,8 +39,8 @@ import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
 /**
  * this is a base view for 'the scrap view'. it help you to fast use.
  * the  BaseScrapView contains 3 views( Top, Middle, and bottom) as the three scrap.
- * offen subclass must override {@link #getBottomLayoutId()}, {@link #getMiddleLayoutId()}, {@link #getTopLayoutId()}
- * if you want different , also you can override {@link #getTopView()}, {@link #getMiddleView()}, {@link #getBottomView()}
+ * often subclass must override {@link #getBottomLayoutId()}, {@link #getMiddleLayoutId()}, {@link #getTopLayoutId()}
+ * if you want different , also you can override {@link #getTopView(ViewGroup)}, {@link #getMiddleView(ViewGroup)}, {@link #getBottomView(ViewGroup)}
  * <p> if you want to jump to a child of BaseScrapView,please use {@link ScrapHelper}, it has some useful methods.
  *  </p>
  *  <li> if you want to replace view dynamic.please use {@link #replaceView(View, ScrapPosition)}</li>
