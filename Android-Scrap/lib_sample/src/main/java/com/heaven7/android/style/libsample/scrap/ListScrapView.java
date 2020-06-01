@@ -1,13 +1,17 @@
-package com.heaven7.android.style.libsample;
+package com.heaven7.android.style.libsample.scrap;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.heaven7.adapter.QuickRecycleViewAdapter;
 import com.heaven7.adapter.util.ViewHelper2;
+import com.heaven7.android.style.libsample.OnClickSampleItemListener;
+import com.heaven7.android.style.libsample.R;
+import com.heaven7.android.style.libsample.SampleConstants;
 import com.heaven7.android.style.libsample.module.SampleItem;
 import com.heaven7.java.base.util.Predicates;
 import com.heaven7.java.base.util.Reflector;
@@ -44,6 +48,7 @@ public class ListScrapView extends BaseScrapView {
         super.onAttach();
         ArrayList<SampleItem> items = getBundle().getParcelableArrayList(SampleConstants.KEY_LIST);
         String cn = getBundle().getString(SampleConstants.KEY_ITEM_LISTENER);
+        String title = getBundle().getString(SampleConstants.KEY_TITLE);
         if(Predicates.isEmpty(items)){
             throw new IllegalStateException("must set sample items");
         }
@@ -52,6 +57,11 @@ public class ListScrapView extends BaseScrapView {
              l = Reflector.from(Class.forName(cn)).newInstance();
         } catch (ClassNotFoundException e) {
            throw new RuntimeException(e);
+        }
+        TextView tv = getView(R.id.tv_title);
+        tv.setText(title);
+        if(title == null){
+            tv.setVisibility(View.GONE);
         }
 
         mRv = getView(R.id.rv);

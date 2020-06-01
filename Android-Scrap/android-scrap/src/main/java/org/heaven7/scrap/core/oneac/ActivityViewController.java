@@ -103,7 +103,7 @@ public final class ActivityViewController implements Transaction.IJumper {
     /**
      * the default intent executor to start activity
      */
-    private final IntentExecutor mDefaultIntentExecutor = new IntentExecutor() {
+    private IntentExecutor mDefaultIntentExecutor = new IntentExecutor() {
         @Override
         public void startActivity(Context context) {
             context.startActivity(new Intent(context, ContainerActivity.class)
@@ -391,11 +391,15 @@ public final class ActivityViewController implements Transaction.IJumper {
         return this;
     }
 
+    public void setDefaultIntentExecutor(IntentExecutor executor){
+        mDefaultIntentExecutor = executor;
+    }
+
     /**
      * jump to the target BaseScrapView and no care about cache and back stack.
      * <li>now this method is suspensive, because reflect is not good choice to use.
      */
-	/* suspensive */ <T extends BaseScrapView> void jumpTo(Context ctx,
+	 public <T extends BaseScrapView> void jumpTo(Context ctx,
                                                            final Class<T> clazz, final Bundle data) {
         T t = Reflector.from(clazz).constructor(Context.class).newInstance(ctx);
         jumpTo(t, data);
@@ -410,7 +414,7 @@ public final class ActivityViewController implements Transaction.IJumper {
     }
 
     /**
-     * jumto to target view  with data. if the activity isn't attached into this.
+     * jump to to target view  with data. if the activity isn't attached into this.
      * the executor will be called. and the target activity must like {@link ContainerActivity}
      *
      * @param v        the view to jump to
