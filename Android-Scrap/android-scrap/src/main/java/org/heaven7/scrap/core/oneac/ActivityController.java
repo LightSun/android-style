@@ -145,13 +145,6 @@ public final class ActivityController {
     }
 
     /**
-     * set the global loading view , this will be used if you call {@link BaseScrapView#setShowLoading(boolean)}
-     */
-    public void setLoadingView(View loading) {
-        mViewController.setLoadingView(loading);
-    }
-
-    /**
      * get the bundle data of activity's save instance.
      * this comes from Activity_onCreate(savedInstanceState).
      *
