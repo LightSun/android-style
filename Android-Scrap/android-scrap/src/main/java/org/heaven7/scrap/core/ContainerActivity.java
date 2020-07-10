@@ -31,6 +31,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.heaven7.core.util.AppUtils;
+
 import org.heaven7.scrap.core.delegate.AbstractUiDelegate;
 import org.heaven7.scrap.core.delegate.SingleActivityUiDelegate;
 import org.heaven7.scrap.core.event.ActivityEventCallbackGroup;

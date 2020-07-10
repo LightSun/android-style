@@ -10,7 +10,6 @@ public interface IActivityViewProcessor {
     /**
      * replace the position's view of activity.
      * @param view  the view to replace
-     * @param position the position to replace.
      */
-    void replaceView(View view, ScrapPosition position);
+    void replaceView(View view);
 }

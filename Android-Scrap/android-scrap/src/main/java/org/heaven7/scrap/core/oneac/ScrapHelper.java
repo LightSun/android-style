@@ -38,7 +38,7 @@ import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
 public final class ScrapHelper {
 
 	/** jump to the target view with no data. */
-	public static void jumpTo(BaseScrapView view ){
+	public static void jumpTo(BaseScrapView view){
 		ActivityController.get().jumpTo(view);
 	}
 
@@ -162,21 +162,18 @@ public final class ScrapHelper {
 		return ActivityController.get().getViewController();
 	}
 
-	/** set the visible of view which is indicate by the ScrapPosition.
-	 * @param  position  the scrap position.
+	/** set the visible of view .
 	 * @param  visible true to visible,false to gone.
-	 * @see  ActivityViewController#setVisibility(ScrapPosition, boolean)  */
-	public static void setVisibility(ScrapPosition position,boolean visible){
-		getActivityViewController().setVisibility(position,visible);
+	 * */
+	public static void setVisibility(boolean visible){
+		getActivityViewController().setVisibility(visible);
 	}
 
 	/**
-	 * toogle the visibility of view which is indicate by the ScrapPosition.
-	 * @param position the scrap position.
-	 * @see  ActivityViewController#toggleVisibility(ScrapPosition)
+	 * toggle the visibility of view .
 	 */
-	public static void toggleVisibility(ScrapPosition position) {
-		getActivityViewController().toggleVisibility(position);
+	public static void toggleVisibility() {
+		getActivityViewController().toggleVisibility();
 	}
 
 	/**

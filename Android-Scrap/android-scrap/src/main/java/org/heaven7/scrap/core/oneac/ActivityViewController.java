@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 
+ * Copyright (C) 2015
  *            heaven7(donshine723@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -67,24 +67,13 @@ import java.util.List;
 public final class ActivityViewController implements Transaction.IJumper {
 
     private static final String KEY_CUR_SCRAP_CLASS = "avc:cur_scrap_class";
-    private static final String KEY_CUR_SCRAP_HASH  = "avc:cur_scrap_hash";
+    private static final String KEY_CUR_SCRAP_HASH = "avc:cur_scrap_hash";
     private static boolean sDebug = false;
-    /**
-     * the top container of activity
-     */
-    private ViewGroup mTopContainer;
 
     /**
      * the top middle of activity
      */
     private ViewGroup mContentContainer;
-
-    /**
-     * the top bottom of activity
-     */
-    private ViewGroup mBottomContainer;
-    /** the loading container  */
-    private ViewGroup mLoadingContainer;
 
     /**
      * indicate the current BaseScrapView which is showing or the last operating  view
@@ -96,10 +85,12 @@ public final class ActivityViewController implements Transaction.IJumper {
      * the global animate executor
      */
     private AnimateExecutor mGlobalAnimateExecutor;
-    /**  used for back stack and cache scrap view. */
+    /**
+     * used for back stack and cache scrap view.
+     */
     private final CacheHelper mCacheHelper;
 
-    private final JumpParam mJumpPram  = new JumpParam();
+    private final JumpParam mJumpPram = new JumpParam();
     /**
      * the default intent executor to start activity
      */
@@ -107,29 +98,15 @@ public final class ActivityViewController implements Transaction.IJumper {
         @Override
         public void startActivity(Context context) {
             context.startActivity(new Intent(context, ContainerActivity.class)
-                           /* .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)*/
+                    /* .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)*/
             );
         }
     };
 
     private final IActivityViewProcessor mViewProcessor = new IActivityViewProcessor() {
         @Override
-        public void replaceView(View view, ScrapPosition position) {
-            if (position == null)
-                throw new NullPointerException();
-            switch (position) {
-                case Top:
-                    top(view);
-                    break;
-                case Middle:
-                    middle(view);
-                    break;
-                case Bottom:
-                    bottom(view);
-                    break;
-                default:
-                    throw new IllegalStateException();
-            }
+        public void replaceView(View view) {
+            addView(view, true);
         }
     };
     private final IBackEventProcessor mBackProcessor = new IBackEventProcessor() {
@@ -138,77 +115,22 @@ public final class ActivityViewController implements Transaction.IJumper {
             return onBackPressed();
         }
     };
-    private View mDefaultLoadingView;
 
     /* package */ ActivityViewController() {
         mCacheHelper = new CacheHelper();
     }
 
     //============================//
-    void attachContainers(ViewGroup top, ViewGroup content, ViewGroup bottom,ViewGroup loading) {
-        this.mTopContainer = top;
+    void attachContainers(ViewGroup content) {
         this.mContentContainer = content;
-        this.mBottomContainer = bottom;
-        this.mLoadingContainer = loading;
-        //default loading is gone
-        if(loading != null){
-            this.mDefaultLoadingView = loading.findViewById(R.id.pb);
-            loading.removeAllViews();
-            loading.setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * replace the top view
-     */
-    /*private*/ ActivityViewController top(@Nullable View v) {
-        if (mTopContainer.getChildCount() > 0)
-            mTopContainer.removeAllViews();
-        if (v != null)
-            mTopContainer.addView(v);
-        return this;
-    }
-
-    /**
-     * replace the middle view
-     */
-	/*private*/ ActivityViewController middle(@Nullable View v) {
-        if (mContentContainer.getChildCount() > 0)
-            mContentContainer.removeAllViews();
-        if (v != null) {
-            mContentContainer.addView(v);
-        }
-        return this;
-    }
-
-    /**
-     * replace the bottom view
-     */
-    private ActivityViewController bottom(@Nullable View v) {
-        if (mBottomContainer.getChildCount() > 0) {
-            mBottomContainer.removeAllViews();
-        }
-        if (v != null) {
-            mBottomContainer.addView(v);
-        }
-        return this;
-    }
-    private ActivityViewController loading(@Nullable View v) {
-        if (mLoadingContainer.getChildCount() > 0) {
-            mLoadingContainer.removeAllViews();
-        }
-        if (v != null) {
-            mLoadingContainer.addView(v);
-        }
-        return this;
     }
 
     /***
      * remove the mapping  of key in the cache.
-     * @param key
-     * @return  the mapping value
+     * @param key the key of view
+     * @return the mapping value
      */
-    public BaseScrapView removeCache(String key){
+    public BaseScrapView removeCache(String key) {
         return mCacheHelper.removeCacheView(key);
     }
 
@@ -253,100 +175,41 @@ public final class ActivityViewController implements Transaction.IJumper {
     /**
      * show the scrap of activity
      */
-    private ActivityViewController show(@NonNull ScrapPosition position) {
-        switch (position) {
-            case Top: {
-                int visibility = mTopContainer.getVisibility();
-                if (visibility != View.VISIBLE) {
-                    mTopContainer.setVisibility(View.VISIBLE);
-                    if (mCurrentView != null)
-                        mCurrentView.onShow(ScrapPosition.Top);
-                }
+    private ActivityViewController show() {
+        int visibility = mContentContainer.getVisibility();
+        if (visibility != View.VISIBLE) {
+            mContentContainer.setVisibility(View.VISIBLE);
+            if (mCurrentView != null){
+                mCurrentView.onShow();
             }
-            break;
-            case Middle: {
-                int visibility = mContentContainer.getVisibility();
-                if (visibility != View.VISIBLE) {
-                    mContentContainer.setVisibility(View.VISIBLE);
-                    if (mCurrentView != null)
-                        mCurrentView.onShow(ScrapPosition.Middle);
-                }
-            }
-            break;
-            case Bottom: {
-                int visibility = mBottomContainer.getVisibility();
-                if (visibility != View.VISIBLE) {
-                    mBottomContainer.setVisibility(View.VISIBLE);
-                    if (mCurrentView != null)
-                        mCurrentView.onShow(ScrapPosition.Bottom);
-                }
-            }
-            break;
-
-            default:
-                throw new RuntimeException("unsupprt");
         }
-
         return this;
     }
 
     /**
      * set one of the three scrap's visibility. if you want to toogle visibility.
-     * use {@link #toggleVisibility(ScrapPosition)}
      *
-     * @param position the position of the scrap.can't be null.
      * @param visible  true to visible  false to gone
      */
-    public ActivityViewController setVisibility(@NonNull ScrapPosition position, boolean visible) {
-        return visible ? show(position) : hide(position);
+    public ActivityViewController setVisibility(boolean visible) {
+        return visible ? show() : hide();
     }
 
     /**
      * hide to show  or show to hide the scrap.
      */
-    public ActivityViewController toggleVisibility(@NonNull ScrapPosition position) {
-        switch (position) {
-            case Top: {
-                int visibility = mTopContainer.getVisibility();
-                if (visibility == View.VISIBLE) {
-                    mTopContainer.setVisibility(View.GONE);
-                    if (mCurrentView != null)
-                        mCurrentView.onHide(ScrapPosition.Top);
-                } else {
-                    mTopContainer.setVisibility(View.VISIBLE);
-                    if (mCurrentView != null)
-                        mCurrentView.onShow(ScrapPosition.Top);
-                }
+    public ActivityViewController toggleVisibility() {
+        int visibility = mContentContainer.getVisibility();
+        if (visibility == View.VISIBLE) {
+            mContentContainer.setVisibility(View.GONE);
+            if (mCurrentView != null){
+                mCurrentView.onHide();
             }
-            break;
-            case Middle: {
-                int visibility = mContentContainer.getVisibility();
-                if (visibility == View.VISIBLE) {
-                    mContentContainer.setVisibility(View.GONE);
-                    if (mCurrentView != null)
-                        mCurrentView.onHide(ScrapPosition.Middle);
-                } else {
-                    mContentContainer.setVisibility(View.VISIBLE);
-                    if (mCurrentView != null)
-                        mCurrentView.onShow(ScrapPosition.Middle);
-                }
+        } else {
+            mContentContainer.setVisibility(View.VISIBLE);
+            if (mCurrentView != null){
+                mCurrentView.onShow();
             }
-            break;
-            case Bottom: {
-                int visibility = mBottomContainer.getVisibility();
-                if (visibility == View.VISIBLE) {
-                    mBottomContainer.setVisibility(View.GONE);
-                    if (mCurrentView != null)
-                        mCurrentView.onHide(ScrapPosition.Bottom);
-                } else {
-                    mBottomContainer.setVisibility(View.VISIBLE);
-                    if (mCurrentView != null)
-                        mCurrentView.onShow(ScrapPosition.Bottom);
-                }
-            }
-            break;
-            default:
-                throw new RuntimeException("unsupprt");
         }
         return this;
     }
@@ -354,44 +217,26 @@ public final class ActivityViewController implements Transaction.IJumper {
     /**
      * hide the scrap of activity
      */
-    private ActivityViewController hide(ScrapPosition position) {
-        switch (position) {
-            case Top: {
-                int visibility = mTopContainer.getVisibility();
-                if (visibility == View.VISIBLE) {
-                    mTopContainer.setVisibility(View.GONE);
-                    if (mCurrentView != null)
-                        mCurrentView.onHide(ScrapPosition.Top);
-                }
+    private ActivityViewController hide() {
+        int visibility = mContentContainer.getVisibility();
+        if (visibility == View.VISIBLE) {
+            mContentContainer.setVisibility(View.GONE);
+            if (mCurrentView != null){
+                mCurrentView.onHide();
             }
-            break;
-            case Middle: {
-                int visibility = mContentContainer.getVisibility();
-                if (visibility == View.VISIBLE) {
-                    mContentContainer.setVisibility(View.GONE);
-                    if (mCurrentView != null)
-                        mCurrentView.onHide(ScrapPosition.Middle);
-                }
-            }
-            break;
-            case Bottom: {
-                int visibility = mBottomContainer.getVisibility();
-                if (visibility == View.VISIBLE) {
-                    mBottomContainer.setVisibility(View.GONE);
-                    if (mCurrentView != null)
-                        mCurrentView.onHide(ScrapPosition.Bottom);
-                }
-            }
-            break;
-
-            default:
-                throw new RuntimeException("unsupprt");
         }
-
         return this;
     }
+    private void addView(View view, boolean removePrevious){
+        if(removePrevious){
+            mContentContainer.removeAllViews();
+        }
+        //may share a view
+        mContentContainer.removeView(view);
+        mContentContainer.addView(view);
+    }
 
-    public void setDefaultIntentExecutor(IntentExecutor executor){
+    public void setDefaultIntentExecutor(IntentExecutor executor) {
         mDefaultIntentExecutor = executor;
     }
 
@@ -399,37 +244,48 @@ public final class ActivityViewController implements Transaction.IJumper {
      * jump to the target BaseScrapView and no care about cache and back stack.
      * <li>now this method is suspensive, because reflect is not good choice to use.
      */
-	 public <T extends BaseScrapView> void jumpTo(Context ctx,
-                                                           final Class<T> clazz, final Bundle data) {
+    public <T extends BaseScrapView> void jumpTo(Context ctx,
+                                                 final Class<T> clazz, final Bundle data) {
         T t = Reflector.from(clazz).constructor(Context.class).newInstance(ctx);
         jumpTo(t, data);
     }
 
     public void jumpTo(@NonNull BaseScrapView v) {
-        jumpTo(v, null, mDefaultIntentExecutor,null);
+        jumpTo(v, null, mDefaultIntentExecutor, null);
     }
+
     @Override
     public void jumpTo(@NonNull BaseScrapView v, Bundle data, AnimateExecutor executor) {
-        jumpTo(v, data,mDefaultIntentExecutor, executor);
+        jumpTo(v, data, mDefaultIntentExecutor, executor);
+    }
+
+    /**
+     * jump to the target view with data.
+     * and start {@link ContainerActivity} if it not attached to this.
+     *
+     * @see BaseScrapView#setBundle(Bundle)
+     */
+    public void jumpTo(@NonNull BaseScrapView v, final Bundle data) {
+        jumpTo(v, data, mDefaultIntentExecutor, null);
     }
 
     /**
      * jump to to target view  with data. if the activity isn't attached into this.
      * the executor will be called. and the target activity must like {@link ContainerActivity}
      *
-     * @param v        the view to jump to
-     * @param data     the data to carry
-     * @param executor the startActivity executor if activity not attached to this or is finished..
-     * @param animExecutor  the animate executor to perform this jump.
+     * @param v            the view to jump to
+     * @param data         the data to carry
+     * @param executor     the startActivity executor if activity not attached to this or is finished..
+     * @param animExecutor the animate executor to perform this jump.
      */
     private void jumpTo(@NonNull BaseScrapView v, Bundle data, IntentExecutor executor,
                         AnimateExecutor animExecutor) {
         if (v == null)
             throw new NullPointerException();
-        if(sDebug)
-            Log.v("Scrap", "jumpTo ......" + v) ;
+        if (sDebug)
+            Log.v("Scrap", "jumpTo ......" + v);
 
-        if(data != null){
+        if (data != null) {
             v.setBundle(data);
         }
         final Activity activity = getActivity();
@@ -452,23 +308,14 @@ public final class ActivityViewController implements Transaction.IJumper {
     }
 
     /**
-     * jump to the target view with data.
-     * and start {@link ContainerActivity} if it not attached to this.
-     *
-     * @see BaseScrapView#setBundle(Bundle)
-     */
-    public void jumpTo(@NonNull BaseScrapView v, final Bundle data) {
-        jumpTo(v, data, mDefaultIntentExecutor, null);
-    }
-
-    /**
      * jump to the target view really with animation if need.
+     *
      * @param next the target view
-     * @param ae  the animate executor to perform this jump.
+     * @param ae   the animate executor to perform this jump.
      */
     private void jumpToImpl(final BaseScrapView next, AnimateExecutor ae) {
         beforeAttach(next);
-        final AnimateExecutor tempAnimExecutor = ae!=null ? ae :mGlobalAnimateExecutor;
+        final AnimateExecutor tempAnimExecutor = ae != null ? ae : mGlobalAnimateExecutor;
         if (mCurrentView == null || tempAnimExecutor == null) {
             replace(next, tempAnimExecutor);
         } else {
@@ -477,25 +324,26 @@ public final class ActivityViewController implements Transaction.IJumper {
                     new AnimateExecutor.OnAnimateEndListener() {
                         @Override
                         public void onAnimateEnd(View target) {
-                            replace(next,tempAnimExecutor);
+                            replace(next, tempAnimExecutor);
                         }
                     });
         }
     }
 
     /**
-     *  use the target view's 'top/middle/bottom' and replace with them.
-     * @param target the target scrap view to replace.
-     * @param animExecutor  the animate executor to perform current jump, if is null use the global
-     *                      animateExecutor{@link #mGlobalAnimateExecutor}
+     * use the target view's 'top/middle/bottom' and replace with them.
+     *
+     * @param target       the target scrap view to replace.
+     * @param animExecutor the animate executor to perform current jump, if is null use the global
+     *                     animateExecutor{@link #mGlobalAnimateExecutor}
      */
     private void replace(BaseScrapView target, AnimateExecutor animExecutor) {
+        final AnimateExecutor executor = animExecutor != null ? animExecutor : mGlobalAnimateExecutor;
         final BaseScrapView previous = mCurrentView;
-        final View topView = target.getTopView(mTopContainer);
-        final View middleView = target.getMiddleView(mContentContainer);
-        final View bottomView = target.getBottomView(mBottomContainer);
+        final View contentView = target.getContentView(mContentContainer);
 
-        top(topView).middle(middleView).bottom(bottomView);
+        mContentContainer.removeAllViews();
+        mContentContainer.addView(contentView);
 
         if (previous != null) {
             detachTarget(previous);
@@ -503,9 +351,9 @@ public final class ActivityViewController implements Transaction.IJumper {
         mCurrentView = target;
         target.onAttach();
 
-        AnimateExecutor executor = animExecutor!=null? animExecutor : mGlobalAnimateExecutor;
-        if (executor != null)
+        if (executor != null){
             executor.performAnimate(target.getView(), true, previous, target, null);
+        }
     }
 
     private void beforeAttach(BaseScrapView next) {
@@ -532,9 +380,10 @@ public final class ActivityViewController implements Transaction.IJumper {
 
     /**
      * attach the activity  when activity is launched .this will called.
+     *
      * @param activity the activity
      */
-	/*public*/ void attachActivity(Activity activity) {
+    /*public*/ void attachActivity(Activity activity) {
         if (activity == null) {
             //means clear all
             reset();
@@ -548,11 +397,7 @@ public final class ActivityViewController implements Transaction.IJumper {
      */
     private void reset() {
         this.mWrfActivity = null;
-        mBottomContainer = null;
         mContentContainer = null;
-        mTopContainer = null;
-        mLoadingContainer = null;
-        mDefaultLoadingView = null;
         if (mCurrentView != null) {
             detachTarget(mCurrentView);
             mCurrentView = null;
@@ -566,7 +411,9 @@ public final class ActivityViewController implements Transaction.IJumper {
         return mGlobalAnimateExecutor;
     }
 
-    /** set the global animate executor */
+    /**
+     * set the global animate executor
+     */
     public void setAnimateExecutor(@Nullable AnimateExecutor executor) {
         this.mGlobalAnimateExecutor = executor;
     }
@@ -600,27 +447,27 @@ public final class ActivityViewController implements Transaction.IJumper {
      * handle the default back behaviour of the activity's back event
      */
     @CalledInternal
-	/* package */ boolean onBackPressed() {
+    /* package */ boolean onBackPressed() {
         // current a bug occoured. if scrapview first is in back stack. when back to it.
         // removed it from backstack.
         //second it will not in back stack. already fixed it
-        if(sDebug){
+        if (sDebug) {
             System.out.println(mCacheHelper.getStackList());
         }
         BaseScrapView view = mCacheHelper.pollStackTail();
-        if(sDebug){
-            System.out.println("tail 1: "+view);
+        if (sDebug) {
+            System.out.println("tail 1: " + view);
         }
         if (view != null && view == mCurrentView) {
             detachTarget(mCurrentView);
             mCurrentView = null;
             view = mCacheHelper.pollStackTail();
-            if(sDebug){
-                System.out.println("tail 2: "+view);
+            if (sDebug) {
+                System.out.println("tail 2: " + view);
             }
         }
         if (view != null) {
-            if(view.isInBackStack()) {
+            if (view.isInBackStack()) {
                 //here ignore the mode to avoid problem ,so first change and restore
                 mCacheHelper.mViewStack.setStackMode(StackMode.Normal);
                 mCacheHelper.addToStackTop(view);
@@ -640,7 +487,7 @@ public final class ActivityViewController implements Transaction.IJumper {
     /**
      * finish the activity which is attached into controller.
      */
-	/* package */ void finishActivity() {
+    /* package */ void finishActivity() {
         Activity activity = getActivity();
         if (activity != null) {
             if (!activity.isFinishing()) {
@@ -662,8 +509,7 @@ public final class ActivityViewController implements Transaction.IJumper {
      * is the target scrap view at the bottom of stack.
      * <li>bottom means it will be last removed from back stack.</li>
      *
-     * @param target
-     * @return
+     * @param target the scrap view to judge
      */
     public boolean isScrapViewAtBottom(BaseScrapView target) {
         if (target == null)
@@ -671,38 +517,10 @@ public final class ActivityViewController implements Transaction.IJumper {
         return mCacheHelper.getStackHead() == target;
     }
 
-    /** set the global loading view , this will be used if you call {@link BaseScrapView#setShowLoading(boolean)}*/
-    public void setLoadingView(View loading) {
-        this.mDefaultLoadingView = loading;
-    }
-
-    /** set to show or hide loading view */
-    @CalledInternal
-    /*public*/ void showOrHideLoading(LoadingParam param) {
-        if(param.showLoading ){
-            //loading view : from not show -> show
-            if(mLoadingContainer.getVisibility() != View.VISIBLE){
-                if(mDefaultLoadingView.getParent() == null){
-                    loading(mDefaultLoadingView);
-                }
-                mLoadingContainer.setVisibility(View.VISIBLE);
-                mTopContainer.setVisibility(param.showTop? View.VISIBLE:View.GONE);
-                mBottomContainer.setVisibility(param.showBottom? View.VISIBLE:View.GONE);
-                mContentContainer.setVisibility(View.GONE);
-            }
-        }else{
-            //loading view : from show -> not show. show others
-            if(mLoadingContainer.getVisibility() == View.VISIBLE){
-                mLoadingContainer.setVisibility(View.GONE);
-                mContentContainer.setVisibility(View.VISIBLE);
-                mTopContainer.setVisibility(param.showTop? View.VISIBLE:View.GONE);
-                mBottomContainer.setVisibility(param.showBottom? View.VISIBLE:View.GONE);
-            }
-        }
-    }
-
-    /** internal life cycle callback.if the activity is not attached  ! */
-    private final IActivityLifeCycleCallback mLifeCycleCallback = new ActivityLifeCycleAdapter(){
+    /**
+     * internal life cycle callback.if the activity is not attached  !
+     */
+    private final IActivityLifeCycleCallback mLifeCycleCallback = new ActivityLifeCycleAdapter() {
         @Override
         public void onActivityPostCreate(Activity activity, Bundle savedInstanceState) {
             ScrapHelper.unregisterActivityLifeCycleCallback(this);
@@ -723,13 +541,13 @@ public final class ActivityViewController implements Transaction.IJumper {
     }
 
     public boolean onRestoreInstanceState(Bundle in) {
-        if(in != null){
+        if (in != null) {
             int curIndex = mCacheHelper.onRestoreInstanceState(mContentContainer.getContext(), in);
             List<BaseScrapView> stackList = mCacheHelper.getStackList();
-            if(stackList.size() <= 0){
+            if (stackList.size() <= 0) {
                 return false;
             }
-            if(curIndex == -1) {
+            if (curIndex == -1) {
                 //not in stack, default first
                 curIndex = 0;
             }
@@ -745,15 +563,16 @@ public final class ActivityViewController implements Transaction.IJumper {
         return false;
     }
 
-    private static class JumpParam{
+    private static class JumpParam {
         public BaseScrapView scrapView;
         public AnimateExecutor animateExecutor;
 
-        public void set(BaseScrapView scrapView, AnimateExecutor animateExecutor){
+        public void set(BaseScrapView scrapView, AnimateExecutor animateExecutor) {
             this.scrapView = scrapView;
             this.animateExecutor = animateExecutor;
         }
-        public void clear(){
+
+        public void clear() {
             scrapView = null;
             animateExecutor = null;
         }

@@ -104,11 +104,10 @@ public final class ActivityController {
      */
     @CalledInternal
     @RestrictTo(RestrictTo.Scope.LIBRARY)
-    public void attach(Activity activity, ViewGroup top, ViewGroup content,
-                       ViewGroup bottom, ViewGroup loading, Bundle savedInstanceState) {
+    public void attach(Activity activity, ViewGroup content, Bundle savedInstanceState) {
         mSaveInstanceState = savedInstanceState != null ? new Bundle(savedInstanceState) : null;
         mViewController.attachActivity(activity);
-        mViewController.attachContainers(top, content, bottom, loading);
+        mViewController.attachContainers(content);
         //if comes from save- State
         if(!getViewController().onRestoreInstanceState(mSaveInstanceState)){
             jumpToMainScrapViewIfNeed(activity);

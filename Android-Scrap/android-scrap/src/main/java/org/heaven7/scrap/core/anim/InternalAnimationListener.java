@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 
+ * Copyright (C) 2015
  *            heaven7(donshine723@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,25 +21,28 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 
 
- /* package */ class InternalAnimationListener implements AnimationListener{
-		
-		final View target;
-		final AnimateExecutor.OnAnimateEndListener l;
+/* package */ class InternalAnimationListener implements AnimationListener {
 
-		public InternalAnimationListener(View target, AnimateExecutor.OnAnimateEndListener l) {
-			super();
-			this.target = target;
-			this.l = l;
-		}
-		@Override
-		public void onAnimationStart(Animation animation) {
-		}
-		@Override
-		public void onAnimationEnd(Animation animation) {
-			l.onAnimateEnd(target);
-		}
-		@Override
-		public void onAnimationRepeat(Animation animation) {
-		}
-		
-	}
+    final View target;
+    final AnimateExecutor.OnAnimateEndListener l;
+
+    public InternalAnimationListener(View target, AnimateExecutor.OnAnimateEndListener l) {
+        super();
+        this.target = target;
+        this.l = l;
+    }
+
+    @Override
+    public void onAnimationStart(Animation animation) {
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+        l.onAnimateEnd(target);
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+    }
+
+}

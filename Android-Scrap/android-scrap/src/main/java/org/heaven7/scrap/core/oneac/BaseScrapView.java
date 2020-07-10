@@ -38,11 +38,11 @@ import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
 /**
  * this is a base view for 'the scrap view'. it help you to fast use.
  * the  BaseScrapView contains 3 views( Top, Middle, and bottom) as the three scrap.
- * often subclass must override {@link #getBottomLayoutId()}, {@link #getMiddleLayoutId()}, {@link #getTopLayoutId()}
- * if you want different , also you can override {@link #getTopView(ViewGroup)}, {@link #getMiddleView(ViewGroup)}, {@link #getBottomView(ViewGroup)}
+ * often subclass must override {@link #getLayoutId()} ()},
+ * if you want different , also you can override {@link #getContentView(ViewGroup)}.
  * <p> if you want to jump to a child of BaseScrapView,please use {@link ScrapHelper}, it has some useful methods.
  *  </p>
- *  <li> if you want to replace view dynamic.please use {@link #replaceView(View, ScrapPosition)}</li>
+ *  <li> if you want to replace view dynamic.please use {@link #replaceView(View)}</li>
  * @author heaven7
  * @see  ActivityViewController
  * @see  ActivityController
@@ -50,7 +50,6 @@ import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
 public abstract class BaseScrapView implements Comparable<BaseScrapView>{
 
 	private static final String KEY_DATA = "data";
-	private static final String KEY_LOADING_PARAM = "loadingP";
 	private static final String KEY_IN_BACK_STACK = "inBackStack";
 
 	private Context mContext;
@@ -74,9 +73,6 @@ public abstract class BaseScrapView implements Comparable<BaseScrapView>{
 	/** when set to true , this ScrapView will be stack.
 	 * but if it can be replaced or cleared by another same classname of this.  */
 	private boolean mInBackStack;
-
-	/** whether show the loading view if you need */
-	private final LoadingParam mLoadingParam = new LoadingParam(false,true,true);
 
 	/**
 	 */
@@ -212,28 +208,6 @@ public abstract class BaseScrapView implements Comparable<BaseScrapView>{
 	public void setDefaultBackEventProcessor(IBackEventProcessor processor) {
        this.mDefaultBackEventProcessor = processor;
 	}
-
-	/**
-	 * set whether or not to show the loading .
-	 */
-	protected void setShowLoading(boolean showLoading) {
-		if(this.mLoadingParam.showLoading != showLoading) {
-			this.mLoadingParam.showLoading = showLoading;
-			ScrapHelper.getActivityViewController().showOrHideLoading(this.mLoadingParam);
-		}
-	}
-
-	/**
-	 *  set whether or not to show the loading
-	 * @see  #setShowLoading(boolean)
-	 */
-	protected void setShowLoading(LoadingParam loadingParam) {
-		if(mLoadingParam.showLoading != loadingParam.showLoading) {
-			this.mLoadingParam.set(loadingParam.showLoading, loadingParam.showTop, loadingParam.showBottom);
-			ScrapHelper.getActivityViewController().showOrHideLoading(this.mLoadingParam);
-		}
-	}
-
 	/** post the runnable run on ui thread */
 	protected void runOnUiThread(Runnable r){
 		((Activity)mContext).runOnUiThread(r);
@@ -243,92 +217,40 @@ public abstract class BaseScrapView implements Comparable<BaseScrapView>{
 
 	/** replace the view of this which is indicate by the scrap.
 	 *  @param view  the view to replace
-	 *  @param  scrap  the position of the view
 	 */
-	protected void replaceView(@NonNull View view,@NonNull ScrapPosition scrap){
+	protected void replaceView(@NonNull View view){
 		if(view == null)
 			throw new NullPointerException("view cann't be null");
-        mViewProcessor.replaceView(view, scrap);
+        mViewProcessor.replaceView(view);
 	}
 
-	/**
-	 * get the top view, often as title-bar
-	 * @return the top view
-	 */
-	@CalledInternal
-	public View getTopView(ViewGroup parent){
-		if(getTopLayoutId() == 0)
-			return null;
-		return mInflater.inflate(getTopLayoutId(), parent, false);
-	}
 
 	/**
 	 * get the middle view as content view
 	 * @return the content view
 	 */
 	@CalledInternal
-	public View getMiddleView(ViewGroup parent){
-		if(getMiddleLayoutId() == 0)
-			return null;
-		return mInflater.inflate(getMiddleLayoutId(), parent, false);
+	public View getContentView(ViewGroup parent){
+		return mInflater.inflate(getLayoutId(), parent, false);
 	}
 
-	/**
-	 * get the bottom view
-	 * @return the bottom view
-	 */
-	@CalledInternal
-	public View getBottomView(ViewGroup parent){
-		if(getBottomLayoutId() == 0)
-			return null;
-		return mInflater.inflate(getBottomLayoutId(), parent, false);
-	}
-	/** get the layout id of the top . called by {@link #getTopView(ViewGroup)}*/
-	protected abstract int getTopLayoutId();
-
-	/** get the layout id of the middle .called by {@link #getMiddleView(ViewGroup)}*/
-	protected abstract int getMiddleLayoutId();
-
-	/** get the layout id of the bottom . called by {@link #getBottomView(ViewGroup)}*/
-	protected int getBottomLayoutId(){
-		return 0;
-	}
+	/** get the layout id of the middle .called by {@link #getContentView(ViewGroup)}*/
+	protected abstract int getLayoutId();
 
 	//===========life cycle ===================//
 
 	/**
 	 * when the top/middle/bottom hide it's visibility,this will be called.
-	 * @param position  which scrap of activity
-	 * @see ActivityViewController#setVisibility(ScrapPosition, boolean)
-	 * @see ActivityViewController#toggleVisibility(ScrapPosition)
 	 */
 	@CalledInternal
-	protected void onHide(ScrapPosition position){
-		switch (position){
-			case Top:
-                mLoadingParam.showTop = false;
-				break;
-			case Bottom:
-				mLoadingParam.showBottom = false;
-				break;
-		}
+	protected void onHide(){
 	}
 	/**
 	 * when the top/middle/bottom show it's visibility,this will be called.
-	 * @param position  which scrap of activity
-	 * @see ActivityViewController#setVisibility(ScrapPosition, boolean)
-	 * @see ActivityViewController#toggleVisibility(ScrapPosition)
 	 */
 	@CalledInternal
-	protected void onShow(ScrapPosition position){
-		switch (position){
-			case Top:
-				mLoadingParam.showTop = true;
-				break;
-			case Bottom:
-				mLoadingParam.showBottom = true;
-				break;
-		}
+	protected void onShow(){
+
 	}
 	/**
 	 * when this view is attached done to the activity. this will be called.
@@ -349,15 +271,14 @@ public abstract class BaseScrapView implements Comparable<BaseScrapView>{
 	/*
 	 note:  if activity is created and attached. some method will not called.such as: onActivityCreate()
 	 */
-
 	/**
-	 * comes from {@link Activity#onCreate(Bundle)}
+	 * comes from 'Activity#onCreate(Bundle)'
 	 * @param saveInstanceState
 	 */
 	protected void onActivityCreate(Bundle saveInstanceState) {
 	}
 	/**
-	 * comes from {@link Activity#onPostCreate(Bundle)}
+	 * comes from 'Activity#onPostCreate(Bundle)'
 	 * @param saveInstanceState
 	 */
 	protected void onActivityPostCreate(Bundle saveInstanceState){
@@ -403,15 +324,10 @@ public abstract class BaseScrapView implements Comparable<BaseScrapView>{
 
 	public void onSaveInstanceState(Bundle out) {
 		out.putBundle(KEY_DATA, mBundle);
-		out.putParcelable(KEY_LOADING_PARAM, mLoadingParam);
 		out.putBoolean(KEY_IN_BACK_STACK, mInBackStack);
 	}
 	public void onRestoreInstanceState(Bundle in) {
 		setBundle(in.getBundle(KEY_DATA));
-		LoadingParam lp = in.getParcelable(KEY_LOADING_PARAM);
-		if(lp != null){
-			mLoadingParam.set(lp.showLoading, lp.showTop, lp.showBottom);
-		}
 		setInBackStack(in.getBoolean(KEY_IN_BACK_STACK));
 	}
 }
