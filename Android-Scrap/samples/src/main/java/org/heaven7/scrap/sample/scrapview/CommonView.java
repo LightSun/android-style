@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.heaven7.adapter.BaseSelector;
 import com.heaven7.adapter.QuickRecycleViewAdapter;
 import com.heaven7.adapter.util.ViewHelper2;
+import com.heaven7.core.util.Toaster;
 
 import org.heaven7.scrap.core.oneac.BaseScrapView;
 import org.heaven7.scrap.sample.R;
@@ -33,19 +34,11 @@ public class CommonView extends BaseScrapView {
     }
 
     @Override
-    protected int getTopLayoutId() {
-        return R.layout.scrap_page_1_top;
+    protected int getLayoutId() {
+        //TODO test KeyEvent. LifeCycle,
+        return 0;
     }
 
-    @Override
-    protected int getMiddleLayoutId() {
-        return R.layout.scrap_page_1_middle;
-    }
-
-    @Override
-    protected int getBottomLayoutId() {
-        return R.layout.scrap_page_1_bottom;
-    }
     @Override
     protected void onAttach() {
         super.onAttach();
@@ -55,32 +48,19 @@ public class CommonView extends BaseScrapView {
         //use QuickAdapter to fast set adapter.
         showGirl();
     }
-
+    public void showToast(String msg) {
+        Toaster.show(getContext(), msg);
+    }
     @Optional
     @OnClick(R.id.iv_back)
     public void onClickBack(View view){
         onBackPressed();
     }
-    @Optional
-    @OnClick(R.id.bt_1)
-    public void onClickBt1(View view){
-        showToast("button1 was clicked");
-    }
-    @Optional
-    @OnClick(R.id.bt_2)
-    public void onClickBt2(View view){
-        showToast("button2 was clicked");
-    }
-    @Optional
-    @OnClick(R.id.bt_3)
-    public void onClickBt3(View view){
-        showToast("button3 was clicked");
-    }
 
     protected void showGirl() {
         addGirlDatas();
 
-        RecyclerView view = getView(R.id.lv);
+        RecyclerView view = null; //getView(R.id.lv);
         view.setLayoutManager(new LinearLayoutManager(getContext()));
         view.setAdapter(new QuickRecycleViewAdapter<GirlData>(R.layout.item_girl,mGirlData) {
             @Override

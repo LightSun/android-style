@@ -180,9 +180,9 @@ public final class ScrapHelper {
 	 * set the animate executor when jump from one ScrapView to another.
 	 * @note this animate executor is used as  the global .
 	 * @param animateExecutor the animate executor
-	 * @see  AnimateExecutor
+	 * @see  AnimateExecutor the animate executor
 	 */
-	public static void setAnimateExecutor(AnimateExecutor animateExecutor) {
+	public static void setGlobalAnimateExecutor(AnimateExecutor animateExecutor) {
 		ActivityController.get().setAnimateExecutor(animateExecutor);
 	}
 }

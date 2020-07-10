@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 
 import org.heaven7.scrap.core.oneac.ScrapHelper;
-import org.heaven7.scrap.core.oneac.ScrapPosition;
 import org.heaven7.scrap.sample.R;
 
 /**
@@ -22,7 +21,7 @@ public class TestVisivilityScrapView extends CommonView {
     }
 
     @Override
-    protected int getMiddleLayoutId() {
+    protected int getLayoutId() {
         return R.layout.scrap_middle_test_visibile;
     }
 
@@ -32,19 +31,13 @@ public class TestVisivilityScrapView extends CommonView {
         getView(R.id.bt_test1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ScrapHelper.setVisibility(ScrapPosition.Bottom, true);
+                ScrapHelper.setVisibility(true);
             }
         });
         getView(R.id.bt_test2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ScrapHelper.setVisibility(ScrapPosition.Bottom, false);
-            }
-        });
-        getView(R.id.bt_test3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ScrapHelper.toggleVisibility(ScrapPosition.Bottom);
+                ScrapHelper.setVisibility(false);
             }
         });
     }

@@ -25,13 +25,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.heaven7.core.util.MainWorker;
 import com.heaven7.java.base.anno.CalledInternal;
 import com.heaven7.java.base.anno.NonNull;
 import com.heaven7.java.base.anno.Nullable;
 import com.heaven7.java.base.util.Reflector;
 
-import org.heaven7.scrap.R;
 import org.heaven7.scrap.core.ContainerActivity;
 import org.heaven7.scrap.core.anim.AnimateExecutor;
 import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleAdapter;
@@ -100,13 +98,6 @@ public final class ActivityViewController implements Transaction.IJumper {
             context.startActivity(new Intent(context, ContainerActivity.class)
                     /* .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)*/
             );
-        }
-    };
-
-    private final IActivityViewProcessor mViewProcessor = new IActivityViewProcessor() {
-        @Override
-        public void replaceView(View view) {
-            addView(view, true);
         }
     };
     private final IBackEventProcessor mBackProcessor = new IBackEventProcessor() {
@@ -185,9 +176,8 @@ public final class ActivityViewController implements Transaction.IJumper {
         }
         return this;
     }
-
     /**
-     * set one of the three scrap's visibility. if you want to toogle visibility.
+     * set one of the three scrap's visibility. if you want to toggle visibility.
      *
      * @param visible  true to visible  false to gone
      */
@@ -227,12 +217,13 @@ public final class ActivityViewController implements Transaction.IJumper {
         }
         return this;
     }
-    private void addView(View view, boolean removePrevious){
+    private void addContentView(View view, boolean removePrevious){
         if(removePrevious){
             mContentContainer.removeAllViews();
+        }else {
+            //may share a view
+            mContentContainer.removeView(view);
         }
-        //may share a view
-        mContentContainer.removeView(view);
         mContentContainer.addView(view);
     }
 
@@ -298,11 +289,11 @@ public final class ActivityViewController implements Transaction.IJumper {
             //may is finishing. check it
             if (activity.isFinishing()) {
                 attachActivity(null);
-                jumpTo(v, data);
+                //start next time
+                jumpTo(v, data, executor, animExecutor);
                 return;
             }
             v.setContext(activity);
-            v.setView(activity.getWindow().getDecorView());
             jumpToImpl(v, animExecutor);
         }
     }
@@ -342,8 +333,7 @@ public final class ActivityViewController implements Transaction.IJumper {
         final BaseScrapView previous = mCurrentView;
         final View contentView = target.getContentView(mContentContainer);
 
-        mContentContainer.removeAllViews();
-        mContentContainer.addView(contentView);
+        addContentView(contentView, true);
 
         if (previous != null) {
             detachTarget(previous);
@@ -360,7 +350,7 @@ public final class ActivityViewController implements Transaction.IJumper {
         synchronized (next) {
             next.registerActivityLifeCycleCallbacks();
             next.setDefaultBackEventProcessor(mBackProcessor);
-            next.setActivityViewProcessor(mViewProcessor);
+            //next.setActivityViewProcessor(mViewProcessor);
         }
     }
 
@@ -370,9 +360,8 @@ public final class ActivityViewController implements Transaction.IJumper {
     private void detachTarget(BaseScrapView target) {
         synchronized (target) {
             target.onDetach();
-            target.setView(null);
             target.unregisterActivityLifeCycleCallbacks();
-            target.setActivityViewProcessor(null);
+           // target.setActivityViewProcessor(null);
             target.setDefaultBackEventProcessor(null);
             target.setContext(null); //else may cause problem
         }
@@ -527,7 +516,6 @@ public final class ActivityViewController implements Transaction.IJumper {
             final JumpParam param = mJumpPram;
             BaseScrapView view = param.scrapView;
             view.setContext(activity);
-            view.setView(activity.getWindow().getDecorView());
             jumpToImpl(view, param.animateExecutor);
             // clear param to avoid memory leak.
             param.clear();

@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
  */
 public class ScrapView extends CommonView {
 
-    @BindView(R.id.tv_title)
+    //@BindView(R.id.tv_title)
     TextView mTv_title;
     @BindView(R.id.tv_middle)
     TextView mTv_middle;
@@ -40,7 +40,7 @@ public class ScrapView extends CommonView {
     }
 
     @Override
-    protected int getMiddleLayoutId() {
+    protected int getLayoutId() {
         return R.layout.scrap_middle_common;
     }
 

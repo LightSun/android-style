@@ -3,6 +3,8 @@ package org.heaven7.scrap.sample;
 import android.content.Context;
 import android.view.View;
 
+import com.heaven7.core.util.Toaster;
+
 import org.heaven7.scrap.core.oneac.BaseScrapView;
 import org.heaven7.scrap.core.oneac.ScrapHelper;
 import org.heaven7.scrap.sample.scrapview.EntryScrapView;
@@ -20,20 +22,13 @@ public class MainScrapView extends BaseScrapView {
         super(mContext);
     }
 
-    //return 0 indicate don't need top
-    @Override
-    protected int getTopLayoutId() {
-        return 0;
+    public void showToast(String msg) {
+        Toaster.show(getContext(), msg);
     }
 
     @Override
-    protected int getMiddleLayoutId() {
+    protected int getLayoutId() {
         return R.layout.scrap_middle_main;
-    }
-    //return 0 indicate don't need bottom
-    @Override
-    protected int getBottomLayoutId() {
-        return 0;
     }
 
     @Override

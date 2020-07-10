@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 
+ * Copyright (C) 2015
  *            heaven7(donshine723@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,13 +24,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.CallSuper;
-
-import com.heaven7.core.util.Toaster;
 import com.heaven7.java.base.anno.CalledInternal;
-import com.heaven7.java.base.anno.NonNull;
 
-import org.heaven7.scrap.core.event.ActivityEventAdapter;
 import org.heaven7.scrap.core.event.IActivityEventCallback;
 import org.heaven7.scrap.core.lifecycle.ActivityLifeCycleAdapter;
 import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
@@ -41,293 +36,310 @@ import org.heaven7.scrap.core.lifecycle.IActivityLifeCycleCallback;
  * often subclass must override {@link #getLayoutId()} ()},
  * if you want different , also you can override {@link #getContentView(ViewGroup)}.
  * <p> if you want to jump to a child of BaseScrapView,please use {@link ScrapHelper}, it has some useful methods.
- *  </p>
- *  <li> if you want to replace view dynamic.please use {@link #replaceView(View)}</li>
+ * </p>
+ *
  * @author heaven7
- * @see  ActivityViewController
- * @see  ActivityController
+ * @see ActivityViewController
+ * @see ActivityController
  */
-public abstract class BaseScrapView implements Comparable<BaseScrapView>{
+public abstract class BaseScrapView implements Comparable<BaseScrapView> {
 
-	private static final String KEY_DATA = "data";
-	private static final String KEY_IN_BACK_STACK = "inBackStack";
+    private static final String KEY_DATA = "data";
+    private static final String KEY_IN_BACK_STACK = "inBackStack";
 
-	private Context mContext;
-	private LayoutInflater mInflater;
-	/** the bundle data if you want to pass data from one BaseScrapView to another */
-	private Bundle mBundle;
-	/**
-	 * the root view
-	 */
-	private View mRootView;
-	/**
-	 * the processor of activity's view
-	 */
-	private IActivityViewProcessor mViewProcessor;
-	/** the default back event processor it will be autonomic set by framework */
-	private IBackEventProcessor mDefaultBackEventProcessor;
+    private Context mContext;
+    private LayoutInflater mInflater;
+    /**
+     * the bundle data if you want to pass data from one BaseScrapView to another
+     */
+    private Bundle mBundle;
+    /**
+     * the content view
+     */
+    private View mContentView;
+    /**
+     * the default back event processor it will be autonomic set by framework
+     */
+    private IBackEventProcessor mDefaultBackEventProcessor;
 
-	/** the callback used to same as the Activity's common life cycle */
-	private IActivityLifeCycleCallback mLifecycleCallback;
+    /**
+     * the callback used to same as the Activity's common life cycle
+     */
+    private IActivityLifeCycleCallback mLifecycleCallback;
 
-	/** when set to true , this ScrapView will be stack.
-	 * but if it can be replaced or cleared by another same classname of this.  */
-	private boolean mInBackStack;
+    /**
+     * when set to true , this ScrapView will be stack.
+     * but if it can be replaced or cleared by another same classname of this.
+     */
+    private boolean mInBackStack;
 
-	/**
-	 */
-	public BaseScrapView(Context mContext) {
-		super();
-		this.mContext = mContext;
-		this.mInflater = LayoutInflater.from(mContext);
-		onPostInit();
+    /**
+     *
+     */
+    public BaseScrapView(Context mContext) {
+        super();
+        this.mContext = mContext;
+        this.mInflater = LayoutInflater.from(mContext);
+        onPostInit();
+    }
+
+    /**
+     * the automatic called to do the final init.
+     * if subclass want to init other please doing it here!
+     */
+    protected void onPostInit() {
+
+    }
+
+    @Override
+    public int compareTo(BaseScrapView o) {
+        if (o != null) {
+            return getClass().getName().compareTo(o.getClass().getName());
+        }
+        return 1;
+    }
+    /**
+     * automatic called by framework,when this view is prepared to attach.
+     */
+    @CalledInternal
+    //"when this abstract view is prepared to attach and before attached!"
+    /*public*/ void registerActivityLifeCycleCallbacks() {
+        if (mLifecycleCallback == null) {
+            mLifecycleCallback = new ActivityLifeCycleAdapter() {
+                @Override
+                public void onActivityCreate(Activity activity, Bundle savedInstanceState) {
+                    BaseScrapView.this.onActivityCreate(savedInstanceState);
+                }
+
+                public void onActivityPostCreate(Activity activity, Bundle savedInstanceState) {
+                    BaseScrapView.this.onActivityPostCreate(savedInstanceState);
+                }
+
+                public void onActivityStart(Activity activity) {
+                    BaseScrapView.this.onActivityStart();
+                }
+
+                public void onActivityResume(Activity activity) {
+                    BaseScrapView.this.onActivityResume();
+                }
+
+                public void onActivityPause(Activity activity) {
+                    BaseScrapView.this.onActivityPause();
+                }
+
+                public void onActivityStop(Activity activity) {
+                    BaseScrapView.this.onActivityStop();
+                }
+
+                public void onActivityDestroy(Activity activity) {
+                    BaseScrapView.this.onActivityDestroy();
+                }
+            };
+        }
+        ScrapHelper.registerActivityLifeCycleCallback(mLifecycleCallback);
+    }
+
+    /**
+     * automatic called by framework,when this view is prepared to detach.
+     */
+    @CalledInternal
+//("when this abstract view is prepared to detach and before detached!")
+    /*public*/ void unregisterActivityLifeCycleCallbacks() {
+        if (mLifecycleCallback != null) {
+            ScrapHelper.unregisterActivityLifeCycleCallback(mLifecycleCallback);
+        }
+    }
+    public final View getDecorView() {
+        Activity ac = (Activity) getContext();
+        return ac.getWindow().getDecorView();
+    }
+
+    /*public*/ final View getContentView(ViewGroup group) {
+        if (mContentView == null) {
+            mContentView = onCreateView(group);
+        }
+        return mContentView;
+    }
+    public final View getView(){
+    	return mContentView;
 	}
 
-	/** the automatic called to do the final init.
-	 * if subclass want to init other please doing it here! */
-	protected void onPostInit() {
+    public final <T extends View> T getView(int id) {
+        return getView().findViewById(id);
+    }
+    public void setContext(Context ctx) {
+        this.mContext = ctx;
+    }
+    public Context getContext() {
+        return mContext;
+    }
 
-	}
+    public final LayoutInflater getLayoutInflater() {
+        return mInflater;
+    }
 
-	@Override
-	public int compareTo(BaseScrapView o) {
-		if( o != null){
-			return getClass().getName().compareTo(o.getClass().getName());
-		}
-		return 1;
-	}
+    public void setBundle(Bundle data) {
+        this.mBundle = data;
+    }
+    public Bundle getBundle() {
+        return mBundle;
+    }
 
-	public void showToast(String msg){
-		Toaster.show(mContext.getApplicationContext(), msg);
-	}
+    /**
+     * same as {@link View#getResources()}
+     */
+    public Resources getResources() {
+        return getContext().getResources();
+    }
 
-	/**
-	 * automatic called by framework,when this view is prepared to attach.
-	 */
-	@CalledInternal //"when this abstract view is prepared to attach and before attached!"
-	/*public*/ void registerActivityLifeCycleCallbacks() {
-		if(mLifecycleCallback == null) {
-			mLifecycleCallback = new ActivityLifeCycleAdapter() {
-				@Override
-				public void onActivityCreate(Activity activity, Bundle savedInstanceState) {
-					BaseScrapView.this.onActivityCreate(savedInstanceState);
-				}
+    /**
+     * this is used if scrap view is backed from back stack.
+     */
+    public boolean isInBackStack() {
+        return mInBackStack;
+    }
 
-				public void onActivityPostCreate(Activity activity, Bundle savedInstanceState) {
-					BaseScrapView.this.onActivityPostCreate(savedInstanceState);
-				}
+    /**
+     * set whether or not in back stack  ,often called by framework
+     */
+    @CalledInternal
+    /*public*/ void setInBackStack(boolean mInBackStack) {
+        this.mInBackStack = mInBackStack;
+    }
 
-				public void onActivityStart(Activity activity) {
-					BaseScrapView.this.onActivityStart();
-				}
+    /***
+     *  set the default back event processor.
+     * @param processor the back processor
+     */
+    public void setDefaultBackEventProcessor(IBackEventProcessor processor) {
+        this.mDefaultBackEventProcessor = processor;
+    }
 
-				public void onActivityResume(Activity activity) {
-					BaseScrapView.this.onActivityResume();
-				}
+    /**
+     * post the runnable run on ui thread
+     */
+    protected void runOnUiThread(Runnable r) {
+        ((Activity) mContext).runOnUiThread(r);
+    }
 
-				public void onActivityPause(Activity activity) {
-					BaseScrapView.this.onActivityPause();
-				}
+    /**
+     * get the middle view as content view
+     *
+     * @return the content view
+     */
+    protected View onCreateView(ViewGroup parent) {
+        return mInflater.inflate(getLayoutId(), parent, false);
+    }
+    /**
+     * get the layout id of the middle .called by {@link #getContentView(ViewGroup)}
+     */
+    protected abstract int getLayoutId();
 
-				public void onActivityStop(Activity activity) {
-					BaseScrapView.this.onActivityStop();
-				}
+    //===========life cycle ===================//
 
-				public void onActivityDestroy(Activity activity) {
-					BaseScrapView.this.onActivityDestroy();
-				}
-			};
-		}
-		ScrapHelper.registerActivityLifeCycleCallback(mLifecycleCallback);
-	}
-	/**
-	 * automatic called by framework,when this view is prepared to detach.
-	 */
-	@CalledInternal//("when this abstract view is prepared to detach and before detached!")
-	/*public*/ void unregisterActivityLifeCycleCallbacks(){
-		if(mLifecycleCallback != null) {
-			ScrapHelper.unregisterActivityLifeCycleCallback(mLifecycleCallback);
-		}
-	}
-	@CallSuper
-	protected void setView(View view){
-		this.mRootView = view;
-	}
+    /**
+     * when the top/middle/bottom hide it's visibility,this will be called.
+     */
+    @CalledInternal
+    protected void onHide() {
+    }
 
-	public View getView(){
-		return mRootView;
-	}
-	public <T extends View >T getView(int id){
-		return mRootView.findViewById(id);
-	}
+    /**
+     * when the top/middle/bottom show it's visibility,this will be called.
+     */
+    @CalledInternal
+    protected void onShow() {
 
-	public void setContext(Context ctx){
-		this.mContext = ctx;
-	}
-	public Context getContext(){
-		return mContext;
-	}
-	public LayoutInflater getLayoutInflater(){
-		return mInflater;
-	}
+    }
 
-	public void setBundle(Bundle data){
-		this.mBundle = data;
-	}
+    /**
+     * when this view is attached done to the activity. this will be called.
+     */
+    @CalledInternal
+    protected void onAttach() {
+    }
 
-	public Bundle getBundle() {
-		return mBundle;
-	}
+    /**
+     * when this view is detach done to the activity. this will be called.
+     * after call this, the context will set to null to avoid memory leak!
+     */
+    @CalledInternal
+    protected void onDetach() {
 
-	@CalledInternal//("set the activity's view processor")
-	/*package*/ void setActivityViewProcessor(IActivityViewProcessor processor) {
-		this.mViewProcessor = processor;
-	}
+    }
 
-	/** same as {@link View#getResources()} */
-	public Resources getResources(){
-		return getContext().getResources();
-	}
-
-	/**
-	 * this is used if scrap view is backed from back stack.
-	  */
-	public boolean isInBackStack() {
-		return mInBackStack;
-	}
-	/** set whether or not in back stack  ,often called by framework*/
-	@CalledInternal
-	/*public*/ void setInBackStack(boolean mInBackStack) {
-		this.mInBackStack = mInBackStack;
-	}
-
-	/***
-	 *  set the default back event processor.
-	 * @param processor the back processor
-	 */
-	public void setDefaultBackEventProcessor(IBackEventProcessor processor) {
-       this.mDefaultBackEventProcessor = processor;
-	}
-	/** post the runnable run on ui thread */
-	protected void runOnUiThread(Runnable r){
-		((Activity)mContext).runOnUiThread(r);
-	}
-
-	//==================================//
-
-	/** replace the view of this which is indicate by the scrap.
-	 *  @param view  the view to replace
-	 */
-	protected void replaceView(@NonNull View view){
-		if(view == null)
-			throw new NullPointerException("view cann't be null");
-        mViewProcessor.replaceView(view);
-	}
-
-
-	/**
-	 * get the middle view as content view
-	 * @return the content view
-	 */
-	@CalledInternal
-	public View getContentView(ViewGroup parent){
-		return mInflater.inflate(getLayoutId(), parent, false);
-	}
-
-	/** get the layout id of the middle .called by {@link #getContentView(ViewGroup)}*/
-	protected abstract int getLayoutId();
-
-	//===========life cycle ===================//
-
-	/**
-	 * when the top/middle/bottom hide it's visibility,this will be called.
-	 */
-	@CalledInternal
-	protected void onHide(){
-	}
-	/**
-	 * when the top/middle/bottom show it's visibility,this will be called.
-	 */
-	@CalledInternal
-	protected void onShow(){
-
-	}
-	/**
-	 * when this view is attached done to the activity. this will be called.
-	 */
-	@CalledInternal
-	protected void onAttach() {
-	}
-	/**
-	 * when this view is detach done to the activity. this will be called.
-	 * after call this, the context will set to null to avoid memory leak!
-	 */
-	@CalledInternal
-	protected void onDetach() {
-
-	}
-
-	//======================  life cycle from activity   ========================//
+    //======================  life cycle from activity   ========================//
 	/*
 	 note:  if activity is created and attached. some method will not called.such as: onActivityCreate()
 	 */
-	/**
-	 * comes from 'Activity#onCreate(Bundle)'
-	 * @param saveInstanceState
-	 */
-	protected void onActivityCreate(Bundle saveInstanceState) {
-	}
-	/**
-	 * comes from 'Activity#onPostCreate(Bundle)'
-	 * @param saveInstanceState
-	 */
-	protected void onActivityPostCreate(Bundle saveInstanceState){
 
-	}
-	/**
-	 * comes from 'Activity#onStart()'
-	 */
-	protected void onActivityStart() {
-	}
-	/**
-	 * comes from 'Activity#onResume()'
-	 */
-	protected void onActivityResume() {
-	}
-	/**
-	 * comes from 'Activity#onPause()'
-	 */
-	protected void onActivityPause() {
-	}
-	/**
-	 * comes from 'Activity#onStop()'
-	 */
-	protected void onActivityStop() {
-	}
-	/**
-	 * comes from 'Activity#onDestroy()'
-	 */
-	protected void onActivityDestroy() {
-	}
+    /**
+     * comes from 'Activity#onCreate(Bundle)'
+     *
+     * @param saveInstanceState the state
+     */
+    protected void onActivityCreate(Bundle saveInstanceState) {
+    }
 
-	/**
-	 * handle the back event if you don't consume the back event previous.
-	 * <li> default this called before {@link ActivityViewController#onBackPressed()}.so
-	 * if this onBackPressed() return true. The ActivityViewController will not receive this back event.
-	 * @return  true to consume the back event
-	 * @see org.heaven7.scrap.core.event.ActivityEventCallbackGroup#registerActivityEventListener(IActivityEventCallback...)
-	 * @see  IActivityEventCallback#onBackPressed()
-	 */
-	protected boolean onBackPressed() {
-		return mDefaultBackEventProcessor!=null && mDefaultBackEventProcessor.handleBackEvent();
-	}
+    /**
+     * comes from 'Activity#onPostCreate(Bundle)'
+     *
+     * @param saveInstanceState the state
+     */
+    protected void onActivityPostCreate(Bundle saveInstanceState) {
 
-	public void onSaveInstanceState(Bundle out) {
-		out.putBundle(KEY_DATA, mBundle);
-		out.putBoolean(KEY_IN_BACK_STACK, mInBackStack);
-	}
-	public void onRestoreInstanceState(Bundle in) {
-		setBundle(in.getBundle(KEY_DATA));
-		setInBackStack(in.getBoolean(KEY_IN_BACK_STACK));
-	}
+    }
+
+    /**
+     * comes from 'Activity#onStart()'
+     */
+    protected void onActivityStart() {
+    }
+
+    /**
+     * comes from 'Activity#onResume()'
+     */
+    protected void onActivityResume() {
+    }
+
+    /**
+     * comes from 'Activity#onPause()'
+     */
+    protected void onActivityPause() {
+    }
+
+    /**
+     * comes from 'Activity#onStop()'
+     */
+    protected void onActivityStop() {
+    }
+
+    /**
+     * comes from 'Activity#onDestroy()'
+     */
+    protected void onActivityDestroy() {
+    }
+
+    /**
+     * handle the back event if you don't consume the back event previous.
+     * <li> default this called before {@link ActivityViewController#onBackPressed()}.so
+     * if this onBackPressed() return true. The ActivityViewController will not receive this back event.
+     *
+     * @return true to consume the back event
+     * @see org.heaven7.scrap.core.event.ActivityEventCallbackGroup#registerActivityEventListener(IActivityEventCallback...)
+     * @see IActivityEventCallback#onBackPressed()
+     */
+    protected boolean onBackPressed() {
+        return mDefaultBackEventProcessor != null && mDefaultBackEventProcessor.handleBackEvent();
+    }
+
+    public void onSaveInstanceState(Bundle out) {
+        out.putBundle(KEY_DATA, mBundle);
+        out.putBoolean(KEY_IN_BACK_STACK, mInBackStack);
+    }
+
+    public void onRestoreInstanceState(Bundle in) {
+        setBundle(in.getBundle(KEY_DATA));
+        setInBackStack(in.getBoolean(KEY_IN_BACK_STACK));
+    }
 }

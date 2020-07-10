@@ -35,11 +35,7 @@ public class ListScrapView extends BaseScrapView {
     }
 
     @Override
-    protected int getTopLayoutId() {
-        return 0;
-    }
-    @Override
-    protected int getMiddleLayoutId() {
+    protected int getLayoutId() {
         return R.layout.lib_sample_list;
     }
 
