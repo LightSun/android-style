@@ -364,27 +364,27 @@ public abstract class BaseScrapView implements Comparable<BaseScrapView>{
 
 	}
 	/**
-	 * comes from {@link Activity#onStart()}
+	 * comes from 'Activity#onStart()'
 	 */
 	protected void onActivityStart() {
 	}
 	/**
-	 * comes from {@link Activity#onResume()}
+	 * comes from 'Activity#onResume()'
 	 */
 	protected void onActivityResume() {
 	}
 	/**
-	 * comes from {@link Activity#onPause()}
+	 * comes from 'Activity#onPause()'
 	 */
 	protected void onActivityPause() {
 	}
 	/**
-	 * comes from {@link Activity#onStop()}
+	 * comes from 'Activity#onStop()'
 	 */
 	protected void onActivityStop() {
 	}
 	/**
-	 * comes from {@link Activity#onDestroy()}
+	 * comes from 'Activity#onDestroy()'
 	 */
 	protected void onActivityDestroy() {
 	}
