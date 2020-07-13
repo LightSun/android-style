@@ -52,7 +52,7 @@ public abstract class BaseScrapView implements Comparable<BaseScrapView> {
     /**
      * the bundle data if you want to pass data from one BaseScrapView to another
      */
-    private Bundle mBundle;
+    private Bundle mArguments;
     /**
      * the content view
      */
@@ -177,12 +177,11 @@ public abstract class BaseScrapView implements Comparable<BaseScrapView> {
     public final LayoutInflater getLayoutInflater() {
         return mInflater;
     }
-
-    public void setBundle(Bundle data) {
-        this.mBundle = data;
+    public void setArguments(Bundle data) {
+        this.mArguments = data;
     }
-    public Bundle getBundle() {
-        return mBundle;
+    public Bundle getArguments() {
+        return mArguments;
     }
 
     /**
@@ -334,12 +333,12 @@ public abstract class BaseScrapView implements Comparable<BaseScrapView> {
     }
 
     public void onSaveInstanceState(Bundle out) {
-        out.putBundle(KEY_DATA, mBundle);
+        out.putBundle(KEY_DATA, mArguments);
         out.putBoolean(KEY_IN_BACK_STACK, mInBackStack);
     }
 
     public void onRestoreInstanceState(Bundle in) {
-        setBundle(in.getBundle(KEY_DATA));
+        setArguments(in.getBundle(KEY_DATA));
         setInBackStack(in.getBoolean(KEY_IN_BACK_STACK));
     }
 }

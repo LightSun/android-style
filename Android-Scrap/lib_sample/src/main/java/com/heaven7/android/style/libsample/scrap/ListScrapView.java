@@ -42,9 +42,9 @@ public class ListScrapView extends BaseScrapView {
     @Override
     protected void onAttach() {
         super.onAttach();
-        ArrayList<SampleItem> items = getBundle().getParcelableArrayList(SampleConstants.KEY_LIST);
-        String cn = getBundle().getString(SampleConstants.KEY_ITEM_LISTENER);
-        String title = getBundle().getString(SampleConstants.KEY_TITLE);
+        ArrayList<SampleItem> items = getArguments().getParcelableArrayList(SampleConstants.KEY_LIST);
+        String cn = getArguments().getString(SampleConstants.KEY_ITEM_LISTENER);
+        String title = getArguments().getString(SampleConstants.KEY_TITLE);
         if(Predicates.isEmpty(items)){
             throw new IllegalStateException("must set sample items");
         }

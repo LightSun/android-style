@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
  */
 public class EntryScrapView extends CommonView {
 
-    @BindView(R.id.tv_title)
+//    @BindView(R.id.tv_title)
     TextView mTv_title;
 
     /**

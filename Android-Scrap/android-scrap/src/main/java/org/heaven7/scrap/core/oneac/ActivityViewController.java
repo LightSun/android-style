@@ -277,7 +277,7 @@ public final class ActivityViewController implements Transaction.IJumper {
             Log.v("Scrap", "jumpTo ......" + v);
 
         if (data != null) {
-            v.setBundle(data);
+            v.setArguments(data);
         }
         final Activity activity = getActivity();
         //not attached
@@ -543,7 +543,7 @@ public final class ActivityViewController implements Transaction.IJumper {
             new Handler().post(new Runnable() {
                 @Override
                 public void run() {
-                    jumpTo(view, view.getBundle());
+                    jumpTo(view, view.getArguments());
                 }
             });
             return true;
