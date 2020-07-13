@@ -115,7 +115,7 @@ public class EntryScrapView extends CommonView {
                     break;
 
                 case 6:
-                    ScrapHelper.jumpTo(new TestLoadingScrapView(context));
+                   // ScrapHelper.jumpTo(new TestLoadingScrapView(context));
             }
         }
     };
