@@ -88,7 +88,7 @@ public class TestLifeCycleScrapView extends CommonView {
     @Override
     protected void onAttach() {
         // use dialog to help you test it, or else you will see nothing it this.
-        TextView mBt1 = getView(R.id.bt_1);
+      /*  TextView mBt1 = getView(R.id.bt_1);
         getView(R.id.bt_1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,7 +98,7 @@ public class TestLifeCycleScrapView extends CommonView {
 
         getView(R.id.bt_2).setVisibility(View.GONE);
         getView(R.id.bt_3).setVisibility(View.GONE);
-        mBt1.setText("Click this button to show auto Dialog and test life cycle");
+        mBt1.setText("Click this button to show auto Dialog and test life cycle");*/
     }
 
     @Override

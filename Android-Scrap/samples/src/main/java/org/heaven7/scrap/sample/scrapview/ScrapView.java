@@ -49,7 +49,7 @@ public class ScrapView extends CommonView {
     protected void onAttach() {
         ButterKnife.bind(this, getView());
 
-        this.id = getBundle() == null ? 0 : getBundle().getInt("id");
+        this.id = getArguments() == null ? 0 : getArguments().getInt("id");
         if(id == 4){
             setIsLastScrapView(true);
         }

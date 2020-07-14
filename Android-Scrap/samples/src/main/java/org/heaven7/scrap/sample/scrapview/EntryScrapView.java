@@ -47,7 +47,7 @@ public class EntryScrapView extends CommonView {
 
         mTv_title.setText("Scrap_Demos");
 
-        RecyclerView view = getView(R.id.lv);
+        RecyclerView view = null;//TODO = getView(R.id.lv);
         view.setLayoutManager(new LinearLayoutManager(getContext()));
         view.setAdapter(new QuickRecycleViewAdapter<ActionData>(R.layout.item_demo, getDatas()) {
             @Override
