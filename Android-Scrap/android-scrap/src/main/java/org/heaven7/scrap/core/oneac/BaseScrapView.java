@@ -74,7 +74,8 @@ public abstract class BaseScrapView implements Comparable<BaseScrapView> {
     private boolean mInBackStack;
 
     /**
-     *
+     * create scrap-view with context
+     * @param mContext the context
      */
     public BaseScrapView(Context mContext) {
         super();

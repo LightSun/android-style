@@ -254,7 +254,7 @@ public final class ActivityViewController implements Transaction.IJumper {
      * jump to the target view with data.
      * and start {@link ContainerActivity} if it not attached to this.
      *
-     * @see BaseScrapView#setBundle(Bundle)
+     * @see BaseScrapView#setArguments(Bundle)
      */
     public void jumpTo(@NonNull BaseScrapView v, final Bundle data) {
         jumpTo(v, data, mDefaultIntentExecutor, null);
@@ -306,43 +306,70 @@ public final class ActivityViewController implements Transaction.IJumper {
      */
     private void jumpToImpl(final BaseScrapView next, AnimateExecutor ae) {
         beforeAttach(next);
-        final AnimateExecutor tempAnimExecutor = ae != null ? ae : mGlobalAnimateExecutor;
-        if (mCurrentView == null || tempAnimExecutor == null) {
-            replace(next, tempAnimExecutor);
-        } else {
-            View root = mCurrentView.getView();
-            tempAnimExecutor.performAnimate(root, false, mCurrentView, next,
-                    new AnimateExecutor.OnAnimateEndListener() {
-                        @Override
-                        public void onAnimateEnd(View target) {
-                            replace(next, tempAnimExecutor);
-                        }
-                    });
+
+        BaseScrapView previous = getCurrentView();
+        //add view ,then prepare view-data, at last start animation
+        final View contentView = next.getContentView(mContentContainer);
+        addContentView(contentView, false);
+        contentView.setVisibility(View.INVISIBLE);
+        //attach
+        mCurrentView = next;
+        next.onAttach();
+        //anim
+        final AnimateExecutor animateExecutor = ae != null ? ae : mGlobalAnimateExecutor;
+        if(previous == null || animateExecutor == null){
+            detachAndShowCurrent(previous, null);
+        }else {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    View root = previous.getView();
+                    animateExecutor.performAnimate(root, false, previous, next,
+                            new AnimateExecutor.OnAnimateEndListener() {
+                                @Override
+                                public void onAnimateEnd(View target) {
+                                    detachAndShowCurrent(previous, animateExecutor);
+                                }
+                            });
+                }
+            });
         }
     }
 
-    /**
-     * use the target view's 'top/middle/bottom' and replace with them.
-     *
-     * @param target       the target scrap view to replace.
-     * @param animExecutor the animate executor to perform current jump, if is null use the global
-     *                     animateExecutor{@link #mGlobalAnimateExecutor}
-     */
-    private void replace(BaseScrapView target, AnimateExecutor animExecutor) {
-        final AnimateExecutor executor = animExecutor != null ? animExecutor : mGlobalAnimateExecutor;
-        final BaseScrapView previous = mCurrentView;
-        final View contentView = target.getContentView(mContentContainer);
-
-        addContentView(contentView, true);
-
-        if (previous != null) {
+    private void detachAndShowCurrent(BaseScrapView previous, AnimateExecutor animateExecutor) {
+        BaseScrapView currentView = getCurrentView();
+        if(previous != null){
+            //make previous invisible
+            if(previous.getView() != currentView.getView()){
+                previous.getView().setVisibility(View.INVISIBLE);
+            }
             detachTarget(previous);
-        }
-        mCurrentView = target;
-        target.onAttach();
+            //visible current
+            currentView.getView().setVisibility(View.VISIBLE);
 
-        if (executor != null){
-            executor.performAnimate(target.getView(), true, previous, target, null);
+            //enter anim
+            if(animateExecutor != null){
+                animateExecutor.performAnimate(currentView.getView(), true, previous, currentView,
+                        new AnimateExecutor.OnAnimateEndListener() {
+                            @Override
+                            public void onAnimateEnd(View target) {
+                                //detach previous
+                                if(previous.getView() != currentView.getView()){
+                                    mContentContainer.removeView(previous.getView());
+                                }
+                                detachTarget(previous);
+                            }
+                        });
+            }else {
+                //detach previous
+                if(previous.getView() != currentView.getView()){
+                    mContentContainer.removeView(previous.getView());
+                }
+                detachTarget(previous);
+            }
+        }else {
+            //visible current
+            currentView.getView().setVisibility(View.VISIBLE);
         }
     }
 

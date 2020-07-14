@@ -46,18 +46,20 @@ public abstract class AnimateExecutor {
      * @return a AnimateCategoryType , can be null.if you don't need animation
      * @see #prepareAnimation(View, boolean, BaseScrapView, BaseScrapView)
      */
-    protected abstract byte getType(boolean enter, BaseScrapView previous,
-                                    BaseScrapView current);
+    protected byte getType(boolean enter, BaseScrapView previous,
+                                    BaseScrapView current){
+        return TYPE_ANIMATOR;
+    }
 
     /**
      * prepare an Animation  which will be start by framework. it will be start only if
      * {@link #getType(boolean, BaseScrapView, BaseScrapView)} return {@link #TYPE_ANIMATION}
      *
-     * @param target   the target to animate,offen is the root view of activity
+     * @param target   the target to animate,often is the view of BaseScrapView
      * @param enter    true means is the enter animation,false is the exit animation!
      * @param previous the previous BaseScrapView which will perform exit animation!
      * @param current  the current BaseScrapView which will perform enter animation!
-     * @return an prepared animarion but not start.can be null.if you don't need this animation
+     * @return an prepared animation but not start.can be null.if you don't need this animation
      */
     protected Animation prepareAnimation(View target, boolean enter, BaseScrapView previous,
                                         BaseScrapView current) {
@@ -70,10 +72,8 @@ public abstract class AnimateExecutor {
      * @return an prepared animator but not start.can be null.if you don't need this animation
      * @see #prepareAnimation(View, boolean, BaseScrapView, BaseScrapView)
      */
-    protected Animator prepareAnimator(View target, boolean enter, BaseScrapView previous,
-                                       BaseScrapView current) {
-        return null;
-    }
+    protected abstract Animator prepareAnimator(View target, boolean enter, BaseScrapView previous,
+                                       BaseScrapView current);
 
     /**
      * same as {@link #prepareAnimation(View, boolean, BaseScrapView, BaseScrapView)}
@@ -89,7 +89,7 @@ public abstract class AnimateExecutor {
     /***
      * perform the concrete animation/animator/ViewPropertyAnimator when cross two 'BaseScrapView'.
      * the is called by the frame work!
-     * @param target  the target to animate,often is the root view of activity
+     * @param target  the target to animate,often is the view of BaseScrapView
      * @param enter   true means is the enter animation,false is the exit animation!
      * @param previous  the previous BaseScrapView which will perform exit animation!
      * @param current  the current BaseScrapView which will perform enter animation!

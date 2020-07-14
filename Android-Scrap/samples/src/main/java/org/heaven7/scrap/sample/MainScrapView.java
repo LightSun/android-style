@@ -7,7 +7,7 @@ import com.heaven7.core.util.Toaster;
 
 import org.heaven7.scrap.core.oneac.BaseScrapView;
 import org.heaven7.scrap.core.oneac.ScrapHelper;
-import org.heaven7.scrap.sample.scrapview.EntryScrapView;
+import org.heaven7.scrap.sample.scrapview.TestTransitionScrapView_exit;
 
 /**
  * similar as the Main Activity: so this is used as the Splash scrap view.
@@ -28,7 +28,7 @@ public class MainScrapView extends BaseScrapView {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.scrap_middle_main;
+        return R.layout.scrap_main;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class MainScrapView extends BaseScrapView {
             @Override
             public void onClick(View v) {
                 ScrapHelper.beginTransaction()
-                        .addBackAsTop(new EntryScrapView(v.getContext()))
+                        .addBackAsTop(new TestTransitionScrapView_exit(v.getContext()))
                         .jump()
                         .commit();
             }
