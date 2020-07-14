@@ -1,8 +1,7 @@
 package org.heaven7.scrap.sample.scrapview;
 
 import android.content.Context;
-
-import com.heaven7.core.util.MainWorker;
+import android.view.View;
 
 import org.heaven7.scrap.core.anim.TransitionAnimateExecutor;
 import org.heaven7.scrap.core.oneac.BaseScrapView;
@@ -23,9 +22,10 @@ public class TestTransitionScrapView_exit extends BaseScrapView {
     @Override
     protected void onAttach() {
         super.onAttach();
-        MainWorker.postDelay(1000, new Runnable() {
+
+        getView(R.id.iv_trans).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
+            public void onClick(View v) {
                 ScrapHelper.beginTransaction()
                         .addBackAsTop(new TestTransitionScrapView_enter(getContext()))
                         .animateExecutor(new TransitionAnimateExecutor(R.id.iv_trans))

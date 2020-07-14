@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import org.heaven7.scrap.core.oneac.BaseScrapView;
+import org.heaven7.scrap.util.SpringUtil;
 
 public class TransitionAnimateExecutor extends AnimateExecutor {
 
@@ -55,17 +57,27 @@ public class TransitionAnimateExecutor extends AnimateExecutor {
         previous.getView().setVisibility(View.INVISIBLE);
         iv.setPivotX(lastView.getWidth()*1f / 2);
         iv.setPivotY(lastView.getHeight()*1f / 2);
-        ObjectAnimator sx = ObjectAnimator.ofFloat(iv, View.SCALE_X, 1f, curView.getWidth() * 1f/ lastView.getWidth());
-        ObjectAnimator sy = ObjectAnimator.ofFloat(iv, View.SCALE_Y, 1f, curView.getHeight() * 1f/ lastView.getHeight());
+        float targetSX = curView.getWidth() * 1f / lastView.getWidth();
+        float targetSY = curView.getHeight() * 1f / lastView.getHeight();
+
+        ObjectAnimator sx = ObjectAnimator.ofFloat(iv, View.SCALE_X, 1f, targetSX);
+        ObjectAnimator sy = ObjectAnimator.ofFloat(iv, View.SCALE_Y, 1f, targetSY);
         //todo
         ObjectAnimator tx = ObjectAnimator.ofFloat(iv, View.X,
-                (arr[0] - pArr[0]) + lastView.getWidth() * 1f/2,
-                curArr[0] - pArr[0] + curView.getWidth() * 1f/ 2
+                (arr[0] - pArr[0]),
+                curArr[0] - pArr[0]
         );
         ObjectAnimator ty = ObjectAnimator.ofFloat(iv, View.Y,
-                arr[1] - pArr[1] + lastView.getHeight() * 1f/2,
-                curArr[1] - pArr[1] + curView.getHeight()*1f/2
+                arr[1] - pArr[1],
+                curArr[1] - pArr[1]
         );
+        tx.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                Object val = animation.getAnimatedValue();
+            }
+        });
+
         AnimatorSet set = new AnimatorSet();
         set.setDuration(2000);
         set.playTogether(sx, sy, tx, ty);

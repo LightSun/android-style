@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.heaven7.java.base.anno.CalledInternal;
 import com.heaven7.java.base.anno.NonNull;
@@ -320,7 +321,22 @@ public final class ActivityViewController implements Transaction.IJumper {
         if(previous == null || animateExecutor == null){
             detachAndShowCurrent(previous, null);
         }else {
-            getActivity().runOnUiThread(new Runnable() {
+            contentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    contentView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                    View root = previous.getView();
+                    animateExecutor.performAnimate(root, false, previous, next,
+                            new AnimateExecutor.OnAnimateEndListener() {
+                                @Override
+                                public void onAnimateEnd(View target) {
+                                    detachAndShowCurrent(previous, animateExecutor);
+                                }
+                            });
+                }
+            });
+           /* getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     View root = previous.getView();
@@ -332,7 +348,7 @@ public final class ActivityViewController implements Transaction.IJumper {
                                 }
                             });
                 }
-            });
+            });*/
         }
     }
 
